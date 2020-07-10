@@ -12,6 +12,8 @@ enum Returns
 	RT_OK = 0,
 	RT_FAILED_OPEN_DOS,
 	RT_FAILED_OPEN_GFX,
+	RT_NOT_ENOUGH_CHIP_MEM,
+	RT_NOT_ENOUGH_ANY_MEM,
 };
 
 /*--------------------------------------------------------------------------*/

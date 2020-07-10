@@ -1,28 +1,58 @@
-#include "libs.h"
+#include "alterego.h"
 
-static void mainLoop(void);
+#include "error.h"
+#include "libs.h"
+#include "memory.h"
+
 /*--------------------------------------------------------------------------*/
 
-int main(void)
+static ULONG AlterEgoInit(void)
 {
         ULONG result = LibsOpen();
 
-        if (RT_OK == result)
+        if (RT_OK != result)
         {
-                mainLoop();
+                return result;
         }
-        
-        LibsClose();
 
-        return 0;
+        result = MemoryAllocateAll();
+
+        return result;
 }
 
 /*--------------------------------------------------------------------------*/
 
-static void mainLoop(void)
+static void AlterEgoKill(void)
 {
+        MemoryReleaseAll();
+
+        LibsClose();
+}
+
+/*--------------------------------------------------------------------------*/
+
+static void AlterEgoLoop(void)
+{
+
 
 }
 
+/*--------------------------------------------------------------------------*/
+
+void AlterEgo(void)
+{
+        ULONG result = AlterEgoInit();
+
+        if (RT_OK == result)
+        {
+                AlterEgoLoop();
+        }
+        else
+        {
+                ErrorShow(result);                
+        }
+        
+        AlterEgoKill();
+}
 
 /*--------------------------------------------------------------------------*/
