@@ -1,4 +1,4 @@
 # AlterEgo ignore
 .vscode
-obj
-exe 
+obj/*.o
+exe/AlterEgo

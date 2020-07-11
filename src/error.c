@@ -17,6 +17,7 @@ Error Errors[] =
 };
 
 /*--------------------------------------------------------------------------*/
+
 static const char* FindErrorMsg(ULONG code)
 {
         ULONG i = ARRAY_SIZE(Errors);
@@ -42,6 +43,11 @@ static const char* FindErrorMsg(ULONG code)
 
 void ErrorShow(ULONG errorCode)
 {
+        if (RT_OK == errorCode || RT_FAILED_OPEN_DOS == errorCode)
+        {
+                return;
+        }
+
         BPTR out = Output();
 
         if (0 != out)
