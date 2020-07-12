@@ -5,24 +5,25 @@
 
 typedef struct 
 {
-        ULONG code;
+        const ULONG code;
         const char* msg;
 } Error;
 
-Error Errors[] =
+static Error Errors[] =
 {
-        {RT_FAILED_OPEN_GFX, "Cannot oper graphics.library"},
+        {RT_FAILED_OPEN_GFX, "Cannot open graphics.library"},
         {RT_NOT_ENOUGH_CHIP_MEM, "Not enough CHIP memory"},
         {RT_NOT_ENOUGH_ANY_MEM, "Not enough any memory"},
 };
 
+static const char* unknownError = "Unknown error";
 /*--------------------------------------------------------------------------*/
 
 static const char* FindErrorMsg(ULONG code)
 {
         ULONG i = ARRAY_SIZE(Errors);
 
-        Error* error = Errors;
+        Error const * error = Errors;
 
         do
         {
@@ -36,7 +37,7 @@ static const char* FindErrorMsg(ULONG code)
 
         } while (0 != i);
 
-        return "Unknown error";
+        return unknownError;
 }
 
 /*--------------------------------------------------------------------------*/
@@ -48,7 +49,7 @@ void ErrorShow(ULONG errorCode)
                 return;
         }
 
-        BPTR out = Output();
+        const BPTR out = Output();
 
         if (0 != out)
         {

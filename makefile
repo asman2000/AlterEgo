@@ -30,3 +30,16 @@ $(BIN): $(OBJECTS)
 aec:	$(BIN)
 cls:
 	$(RM) $(OBJECTS) $(BIN)
+
+#tests
+
+TESTOBJDIR = obj
+TESTOBJECTS = $(patsubst test/%.c, obj/%.o, $(wildcard test/*.c))
+TESTLINK = vlink -nostdlib -bamigahunk -Bstatic -Cvbcc C:/vbcc/targets/m68k-amigaos/lib/startup.o
+
+
+$(TESTOBJDIR)/%.o: test/%.c
+	$(CC) $(CFLAGS) $< -o $@
+
+tests: $(TESTOBJECTS)
+	$(TESTLINK) $(TESTOBJECTS) -o $@ $(LIBS)
