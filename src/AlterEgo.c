@@ -3,30 +3,33 @@
 #include "error.h"
 #include "libs.h"
 #include "memory.h"
+#include "io.h"
 
 /*--------------------------------------------------------------------------*/
 
 static ULONG AlterEgoInit(void)
 {
-        ULONG result = LibsOpen();
+	ULONG result = LibsOpen();
 
-        if (RT_OK != result)
-        {
-                return result;
-        }
+	if (RT_OK != result)
+	{
+		return result;
+	}
 
-        result = MemoryAllocateAll();
+	IoFlush();
 
-        return result;
+	result = MemoryAllocateAll();
+
+	return result;
 }
 
 /*--------------------------------------------------------------------------*/
 
 static void AlterEgoKill(void)
 {
-        MemoryReleaseAll();
+	MemoryReleaseAll();
 
-        LibsClose();
+	LibsClose();
 }
 
 /*--------------------------------------------------------------------------*/
@@ -41,18 +44,18 @@ static void AlterEgoLoop(void)
 
 void AlterEgo(void)
 {
-        ULONG result = AlterEgoInit();
+	ULONG result = AlterEgoInit();
 
-        if (RT_OK == result)
-        {
-                AlterEgoLoop();
-        }
-        else
-        {
-                ErrorShow(result);                
-        }
-        
-        AlterEgoKill();
+	if (RT_OK == result)
+	{
+		AlterEgoLoop();
+	}
+	else
+	{
+		ErrorShow(result);
+	}
+	
+	AlterEgoKill();
 }
 
 /*--------------------------------------------------------------------------*/

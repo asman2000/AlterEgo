@@ -1,13 +1,12 @@
-#ifndef ALETEREGO_MEMORY_H
-#define ALETEREGO_MEMORY_H
+#ifndef ALETEREGO_IO_H
+#define ALETEREGO_IO_H
 
 #include "types.h"
 
 /*--------------------------------------------------------------------------*/
 
-ULONG MemoryAllocateAll(void);
-void MemoryReleaseAll(void);
+void IoFlush(void);
 
 /*--------------------------------------------------------------------------*/
 
-#endif /* ALETEREGO_MEMORY_H */
+#endif /* ALETEREGO_IO_H */
