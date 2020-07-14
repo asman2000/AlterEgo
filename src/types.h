@@ -2,6 +2,10 @@
 #define ALTEREGO_TYPES_H
 
 /*--------------------------------------------------------------------------*/
+#ifdef _WINDOWS
+#define __reg(string)
+#endif
+
 
 #include <exec/types.h>
 

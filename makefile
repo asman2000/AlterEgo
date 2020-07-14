@@ -7,10 +7,14 @@ BIN = exe/AlterEgo
 CC = vc
 CFLAGS =-quiet -c -O2 -sc -c99 -IC:/vbcc/targets/m68k-amigaos/include/ -IC:/vbcc/include_h/
 
+AS = vasmm68k_mot.exe
+AFLAGS =-quiet -Fvobj -x -IC:/vbcc/include_i/ 
+
 SRCDIR = src
 OBJDIR = obj
 
-OBJECTS = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(wildcard $(SRCDIR)/*.c))
+OBJECTS = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(wildcard $(SRCDIR)/*.c)) \
+	$(OBJDIR)/shrinkler.o
 HEADERS = $(wildcard $(SRCDIR)/*.h)
 
 LIBS = -LC:/VBCC/targets/m68k-amigaos/lib -lvc -lamiga
@@ -24,6 +28,11 @@ $(OBJDIR)/%.o: src/%.c $(HEADERS)
 $(BIN): $(OBJECTS)
 	$(LINK) $(OBJECTS) -o $@ $(LIBS)
 
+$(OBJDIR)/shrinkler.o: $(SRCDIR)/asm/shrinkler.s
+	$(AS) $(AFLAGS) $(SRCDIR)/asm/shrinkler.s -o $(OBJDIR)/shrinkler.o
+
+
+
 
 .PHONY: cls aec
 
@@ -34,7 +43,9 @@ cls:
 #tests
 
 TESTOBJDIR = obj
-TESTOBJECTS = $(patsubst test/%.c, obj/%.o, $(wildcard test/*.c))
+TESTOBJECTS = $(patsubst test/%.c, obj/%.o, $(wildcard test/*.c)) \
+	$(OBJDIR)/shrinkler.o
+
 TESTLINK = vlink -nostdlib -bamigahunk -Bstatic -Cvbcc C:/vbcc/targets/m68k-amigaos/lib/startup.o
 
 

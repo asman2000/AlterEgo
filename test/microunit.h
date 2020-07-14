@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 extern int testsRun;
 extern int testsFailed;
 

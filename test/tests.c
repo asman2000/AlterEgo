@@ -1,34 +1,20 @@
 #include <stdio.h>
 #include "microunit.h"
-
-#include "../src/error.c"
+#include "errorTest.h"
+#include "decompressTest.h"
 
 int testsRun = 0;
 int testsFailed = 0;
 
-static void testFindErrorMsg0(void)
-{
-	const char* result = FindErrorMsg(RT_FAILED_OPEN_DOS);
-	muAssert(result == unknownError, "bad result");
-}
-
-static void testFindErrorMsg1(void)
-{
-	const char* result = FindErrorMsg(0xffffffff);
-	muAssert(result == unknownError, "bad result");
-}
-
-static void testFindErrorMsg2(void)
-{
-	const char* result = FindErrorMsg(RT_OK);
-	muAssert(result == unknownError, "bad result");
-}
-
 int main(void)
 {
+	// error tests
 	muRun(testFindErrorMsg0);
 	muRun(testFindErrorMsg1);
 	muRun(testFindErrorMsg2);
+
+	// decompress tests
+	muRun(testDecompress);
 
 	printf("total: %d, ", testsRun);
 	printf("passed: %d, ", testsRun-testsFailed);

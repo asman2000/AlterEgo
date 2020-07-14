@@ -4,6 +4,7 @@
 #include "libs.h"
 #include "memory.h"
 #include "io.h"
+#include "decompress.h"
 
 /*--------------------------------------------------------------------------*/
 
@@ -36,7 +37,6 @@ static void AlterEgoKill(void)
 
 static void AlterEgoLoop(void)
 {
-
 
 }
 

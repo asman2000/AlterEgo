@@ -1,5 +1,5 @@
 # AlterEgo ignore
 .vscode
 obj/*.o
-exe/AlterEgo
+exe/*
 tests

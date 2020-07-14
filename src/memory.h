@@ -8,6 +8,9 @@
 ULONG MemoryAllocateAll(void);
 void MemoryReleaseAll(void);
 
+ULONG MemoryGetAny(ULONG size);
+ULONG MemoryGetChip(ULONG size);
+
 /*--------------------------------------------------------------------------*/
 
 #endif /* ALETEREGO_MEMORY_H */
