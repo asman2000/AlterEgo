@@ -8,8 +8,11 @@
 ULONG MemoryAllocateAll(void);
 void MemoryReleaseAll(void);
 
-ULONG MemoryGetAny(ULONG size);
+ULONG MemoryAnyGet(ULONG size);
 ULONG MemoryGetChip(ULONG size);
+
+void MemoryAnyReset(void);
+void MemoryAnySetTo(ULONG origin);
 
 /*--------------------------------------------------------------------------*/
 

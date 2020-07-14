@@ -54,3 +54,20 @@ void IoFlush(void)
 }
 
 /*----------------------------------------------------------------------------*/
+
+ULONG IoFileLoad(const char* name, ULONG buffer, ULONG length)
+{
+	const BPTR file = Open(name, MODE_OLDFILE);
+
+	if (0 == file)
+	{
+		return RT_FAILED_LOAD_DATA;
+	}
+
+	Read(file, (APTR)buffer, length);
+	Close(file);
+
+	return 0;
+}
+
+/*----------------------------------------------------------------------------*/

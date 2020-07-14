@@ -7,7 +7,10 @@
 static ULONG memoryChip = NULL;
 static ULONG memoryAny = NULL;
 
+
 static ULONG memoryAnyCurrent;
+static ULONG memoryAnyOrigin;
+
 static ULONG memoryChipCurrent;
 /*--------------------------------------------------------------------------*/
 
@@ -28,7 +31,7 @@ ULONG MemoryAllocateAll(void)
 	}
 
 	memoryChipCurrent = memoryChip;
-	memoryAnyCurrent = memoryAny;
+	MemoryAnySetTo(memoryAny);
 
 	return RT_OK;
 }
@@ -50,7 +53,7 @@ void MemoryReleaseAll(void)
 
 /*--------------------------------------------------------------------------*/
 
-ULONG MemoryGetAny(ULONG size)
+ULONG MemoryAnyGet(ULONG size)
 {
 	ULONG result = memoryAnyCurrent;
 	memoryAnyCurrent -= size;
@@ -69,3 +72,19 @@ ULONG MemoryGetChip(ULONG size)
 }
 
 /*--------------------------------------------------------------------------*/
+
+void MemoryAnyReset(void)
+{
+	memoryAnyCurrent = memoryAnyOrigin;
+}
+
+/*--------------------------------------------------------------------------*/
+
+void MemoryAnySetTo(ULONG origin)
+{
+	memoryAnyOrigin = origin;
+	MemoryAnyReset();
+}
+
+/*--------------------------------------------------------------------------*/
+

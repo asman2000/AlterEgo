@@ -14,7 +14,7 @@ static Error Errors[] =
 	{RT_FAILED_OPEN_GFX, "Cannot open graphics.library"},
 	{RT_NOT_ENOUGH_CHIP_MEM, "Not enough CHIP memory"},
 	{RT_NOT_ENOUGH_ANY_MEM, "Not enough any memory"},
-	{RT_FAILED_FILEDATA, "Cannot open/read data.bin"},
+	{RT_FAILED_LOAD_DATA, "Cannot open/read data.bin"},
 };
 
 static const char* unknownError = "Unknown error";

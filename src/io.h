@@ -7,6 +7,8 @@
 
 void IoFlush(void);
 
+ULONG IoFileLoad(const char* name, ULONG buffer, ULONG length);
+
 /*--------------------------------------------------------------------------*/
 
 #endif /* ALETEREGO_IO_H */
