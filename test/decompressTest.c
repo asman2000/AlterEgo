@@ -1,5 +1,5 @@
 #include "microunit.h"
-#include "../src/decompress.c"
+#include "../src/decompress.h"
 
 #include <proto/exec.h>
 #include <proto/dos.h>

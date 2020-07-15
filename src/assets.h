@@ -3,9 +3,18 @@
 
 #include "types.h"
 
+typedef enum 
+{
+	ASSET_FONTS8,
+
+	OFFSET_AMOUNT
+} AssetsOffset;
+
 /*--------------------------------------------------------------------------*/
 
-ULONG AssetsLoad(void);
+ULONG AssetsLoad(const char* name);
+
+ULONG AssetsGet(AssetsOffset number);
 
 /*--------------------------------------------------------------------------*/
 

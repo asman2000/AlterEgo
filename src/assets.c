@@ -3,15 +3,14 @@
 #include "io.h"
 #include "memory.h"
 
-#define ASSETS_SIZE (288)
+#define ASSETS_SIZE (288+4)
 
 static ULONG assetsAddress;
-
-static const char* name = "data.bin";
+static ULONG* offsets;
 
 /*--------------------------------------------------------------------------*/
 
-ULONG AssetsLoad(void)
+ULONG AssetsLoad(const char* name)
 {
 	MemoryAnyReset();
 	assetsAddress = MemoryAnyGet(ASSETS_SIZE);
@@ -25,7 +24,16 @@ ULONG AssetsLoad(void)
 		return result;
 	}
 
+	offsets = (ULONG*)assetsAddress;
+
 	return RT_OK;
+}
+
+/*--------------------------------------------------------------------------*/
+
+ULONG AssetsGet(AssetsOffset number)
+{
+	return assetsAddress + offsets[number];
 }
 
 /*--------------------------------------------------------------------------*/

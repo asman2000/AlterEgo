@@ -1,7 +1,6 @@
 #include "alterego.h"
 
 #include "error.h"
-#include "libs.h"
 #include "memory.h"
 #include "io.h"
 #include "decompress.h"
@@ -10,16 +9,9 @@
 
 static ULONG AlterEgoInit(void)
 {
-	ULONG result = LibsOpen();
-
-	if (RT_OK != result)
-	{
-		return result;
-	}
-
 	IoFlush();
 
-	result = MemoryAllocateAll();
+	ULONG result = MemoryAllocateAll();
 
 	return result;
 }
@@ -29,8 +21,6 @@ static ULONG AlterEgoInit(void)
 static void AlterEgoKill(void)
 {
 	MemoryReleaseAll();
-
-	LibsClose();
 }
 
 /*--------------------------------------------------------------------------*/

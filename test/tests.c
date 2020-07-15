@@ -1,17 +1,18 @@
 #include <stdio.h>
 #include "microunit.h"
-#include "errorTest.h"
+
 #include "decompressTest.h"
+#include "assetsTest.h"
+
 
 int testsRun = 0;
 int testsFailed = 0;
 
 int main(void)
 {
-	// error tests
-	muRun(testFindErrorMsg0);
-	muRun(testFindErrorMsg1);
-	muRun(testFindErrorMsg2);
+	//assets tests
+	muRun(testAssets);
+	muRun(testAssetFonts8);
 
 	// decompress tests
 	muRun(testDecompress);

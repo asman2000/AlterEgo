@@ -43,8 +43,12 @@ cls:
 #tests
 
 TESTOBJDIR = obj
-TESTOBJECTS = $(patsubst test/%.c, obj/%.o, $(wildcard test/*.c)) \
-	$(OBJDIR)/shrinkler.o
+TESTOBJECTS = $(patsubst test/%.c, obj/%.o, $(wildcard test/*.c))
+#	$(OBJDIR)/shrinkler.o
+
+OBJ-OUT = obj/main.o
+TEST-MAIN-OBJ = $(filter-out $(OBJ-OUT), $(OBJECTS))
+
 
 TESTLINK = vlink -nostdlib -bamigahunk -Bstatic -Cvbcc C:/vbcc/targets/m68k-amigaos/lib/startup.o
 
@@ -52,5 +56,5 @@ TESTLINK = vlink -nostdlib -bamigahunk -Bstatic -Cvbcc C:/vbcc/targets/m68k-amig
 $(TESTOBJDIR)/%.o: test/%.c
 	$(CC) $(CFLAGS) $< -o $@
 
-tests: $(TESTOBJECTS)
-	$(TESTLINK) $(TESTOBJECTS) -o $@ $(LIBS)
+tests: $(TESTOBJECTS) $(TEST-MAIN-OBJ)
+	$(TESTLINK) $(TESTOBJECTS) $(TEST-MAIN-OBJ) -o $@ $(LIBS)

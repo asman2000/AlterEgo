@@ -19,3 +19,10 @@ extern int testsFailed;
 		test();\
 		testsRun++;\
 	} while(0)
+
+#define muFail(msg) \
+	do\
+	{\
+		printf("%s %s\n", __func__, msg);\
+		testsFailed++;\
+	} while (0)
