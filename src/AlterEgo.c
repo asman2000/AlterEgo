@@ -3,7 +3,8 @@
 #include "error.h"
 #include "memory.h"
 #include "io.h"
-#include "decompress.h"
+#include "os.h"
+#include "input.h"
 
 /*--------------------------------------------------------------------------*/
 
@@ -12,6 +13,11 @@ static ULONG AlterEgoInit(void)
 	IoFlush();
 
 	ULONG result = MemoryAllocateAll();
+
+	if (RT_OK == result)
+	{
+		OsStore();
+	}
 
 	return result;
 }
@@ -27,7 +33,13 @@ static void AlterEgoKill(void)
 
 static void AlterEgoLoop(void)
 {
-
+		while (TRUE)
+		{
+			if (InputMouseLeftButton())
+			{
+				break;
+			}
+		}
 }
 
 /*--------------------------------------------------------------------------*/
@@ -39,6 +51,8 @@ void AlterEgo(void)
 	if (RT_OK == result)
 	{
 		AlterEgoLoop();
+
+		OsRestore();
 	}
 	else
 	{
