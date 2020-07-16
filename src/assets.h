@@ -5,6 +5,7 @@
 
 typedef enum 
 {
+	ASSET_COPPER,
 	ASSET_FONTS8,
 
 	OFFSET_AMOUNT

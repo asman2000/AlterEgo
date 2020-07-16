@@ -1,4 +1,6 @@
 #include <stdio.h>
+
+#include <proto/exec.h>
 #include "microunit.h"
 
 #include "decompressTest.h"
@@ -8,11 +10,16 @@
 int testsRun = 0;
 int testsFailed = 0;
 
+struct GfxBase* GfxBase;
+static const char* gfxName = "graphics.library";
+
 int main(void)
 {
+	GfxBase = (struct GfxBase*)OldOpenLibrary(gfxName);
 	//assets tests
 	muRun(testAssets);
 	muRun(testAssetFonts8);
+	muRun(testAssetCopper);
 
 	// decompress tests
 	muRun(testDecompress);

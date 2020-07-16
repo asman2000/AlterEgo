@@ -65,3 +65,34 @@ void testAssetFonts8(void)
 }
 
 /*--------------------------------------------------------------------------*/
+
+void testAssetCopper(void)
+{
+	ULONG result = MemoryAllocateAll();
+
+	if (RT_OK == result)
+	{
+		result = AssetsLoad("exe/data.bin");
+
+		if (RT_OK == result)
+		{
+			ULONG* offset = (ULONG*)AssetsGet(ASSET_COPPER);
+
+			muAssert(*offset == 0xff8fffc2, "wrong content");
+		}
+		else
+		{
+			muFail("Cannot load assets");
+		}
+
+	}
+	else
+	{
+		muFail("can't alloc memory");
+	}
+
+
+	MemoryReleaseAll();
+}
+
+/*--------------------------------------------------------------------------*/

@@ -3,7 +3,7 @@
 #include "io.h"
 #include "memory.h"
 
-#define ASSETS_SIZE (288+4)
+#define ASSETS_SIZE (344)
 
 static ULONG assetsAddress;
 static ULONG* offsets;

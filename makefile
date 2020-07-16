@@ -38,7 +38,7 @@ $(OBJDIR)/shrinkler.o: $(SRCDIR)/asm/shrinkler.s
 
 aec:	$(BIN)
 cls:
-	$(RM) $(OBJECTS) $(BIN)
+	$(RM) $(OBJECTS) $(TESTOBJECTS) $(BIN)
 
 #tests
 

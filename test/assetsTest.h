@@ -5,6 +5,7 @@
 
 void testAssets(void);
 void testAssetFonts8(void);
+void testAssetCopper(void);
 
 /*--------------------------------------------------------------------------*/
 
