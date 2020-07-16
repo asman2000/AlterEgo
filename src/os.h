@@ -7,12 +7,6 @@
 void OsStore(void);
 void OsRestore(void);
 
-void OsOwnBlitter(void);
-void OsDisownBlitter(void);
-
-void OsStoreHardwareRegs(void);
-void OsRestoreHardwareRegs(void);
-
 
 /*--------------------------------------------------------------------------*/
 

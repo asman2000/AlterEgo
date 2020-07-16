@@ -16,6 +16,13 @@ static UWORD osDma;
 
 static void OsViewLoad(struct View* view);
 
+void OsOwnBlitter(void);
+void OsDisownBlitter(void);
+
+void OsStoreHardwareRegs(void);
+void OsRestoreHardwareRegs(void);
+
+
 /*--------------------------------------------------------------------------*/
 
 static void StopDmaAndInts(void)
