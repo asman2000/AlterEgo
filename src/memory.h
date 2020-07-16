@@ -9,10 +9,13 @@ ULONG MemoryAllocateAll(void);
 void MemoryReleaseAll(void);
 
 ULONG MemoryAnyGet(ULONG size);
-ULONG MemoryGetChip(ULONG size);
-
 void MemoryAnyReset(void);
 void MemoryAnySetTo(ULONG origin);
+
+ULONG MemoryChipGet(ULONG size);
+void MemoryChipReset(void);
+void MemoryChipSetTo(ULONG origin);
+
 
 /*--------------------------------------------------------------------------*/
 
