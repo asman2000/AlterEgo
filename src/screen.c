@@ -39,7 +39,7 @@ void ScreenClear(ScreenInfo* screen)
 
 	do
 	{
-		*scr++ = 0xffffffff;
+		*scr++ = 0x0;
 		--i;
 	} while (i > 0);
 }
@@ -70,6 +70,7 @@ void ScreenStart()
 	CopperSetFalseSprites(SpriteGetFalse());
 
 	ScreenBlackColors();
+	ScreenSetUp();
 
 	ScreenWaitForVerticallBlank();
 	CopperStart();
@@ -169,6 +170,24 @@ void ScreenWaitForVerticallBlank(void)
 
 	do { ; } while(303<<8 != (*vposr & 0x1ff00));
 	do { ; } while(303<<8 == (*vposr & 0x1ff00));
+}
+
+/*--------------------------------------------------------------------------*/
+
+void ScreenSetUp(void)
+{
+	custom->diwstrt = 0x2c81;
+	custom->diwstop = 0x2cc1;
+	custom->ddfstrt = 0x0038;
+	custom->ddfstop = 0x00d0;
+
+	custom->bplcon0 = screen.bpl * 0x1000 + 0x200;
+	custom->bplcon1 = 0;
+	custom->bplcon2 = 0x24;
+	
+	UWORD modulo = (screen.bpl - 1) * screen.brow;
+	custom->bpl1mod = modulo;
+	custom->bpl2mod = modulo;
 }
 
 /*--------------------------------------------------------------------------*/

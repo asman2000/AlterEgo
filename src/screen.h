@@ -21,6 +21,7 @@ void ScreenWaitForFrame(void);
 void ScreenOff(void);
 void ScreenOn(void);
 void ScreenStart(void);
+void ScreenSetUp(void);
 
 void ScreenWaitForVerticallBlank(void);
 
