@@ -2,6 +2,7 @@
 
 #include "copper.h"
 #include "memory.h"
+#include "sprite.h"
 
 #include <hardware/custom.h>
 #include <hardware/dmabits.h>
@@ -62,7 +63,9 @@ void ScreenOn(void)
 void ScreenStart()
 {
 	CopperInit();
+	SpriteInit();
 	CopperSetScreen(&screen);
+	CopperSetFalseSprites(SpriteGetFalse());
 
 	ScreenBlackColors();
 

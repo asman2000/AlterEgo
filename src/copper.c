@@ -58,7 +58,7 @@ void CopperSetScreen(ScreenInfo* screen)
 void CopperSetFalseSprites(const ULONG falseSprite)
 {
 	ULONG amount = 8;
-	UWORD* cp = (UWORD*)copper + 20;
+	UWORD* cp = (UWORD*)copper + 19;
 
 	do
 	{
