@@ -4,17 +4,17 @@
 #include "memory.h"
 #include "sizes.h"
 
-static ULONG spriteData;
+static ULONG spriteGfxData;
 static ULONG spriteFake;
 
 /*--------------------------------------------------------------------------*/
 
 void SpriteInit(void)
 {
-	spriteData = MemoryChipGet(SPRITES_SIZE + 8);
-	spriteFake = spriteData + SPRITES_SIZE;
+	spriteGfxData = MemoryAnyGet(GFX_SPRITES_SIZE);
+	AssetsGet(spriteGfxData, ASSET_SPRITES);
 
-	AssetsGet(spriteData, ASSET_SPRITES);
+	spriteFake = MemoryChipGet(SPRITES_SIZE);
 
 	ULONG* fake =(ULONG*)(spriteFake);
 	*fake++ = 0;
@@ -29,6 +29,7 @@ ULONG SpriteGetFalse(void)
 }
 
 /*--------------------------------------------------------------------------*/
+
 void SpriteDraw(Sprite* sprite)
 {
 	const UWORD startX = 128;
