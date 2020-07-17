@@ -1,5 +1,5 @@
-#ifndef ALETEREGO_ERROR_H
-#define ALETEREGO_ERROR_H
+#ifndef ALTEREGO_ERROR_H
+#define ALTEREGO_ERROR_H
 
 #include "types.h"
 
@@ -9,4 +9,4 @@ void ErrorShow(ULONG errorCode);
 
 /*--------------------------------------------------------------------------*/
 
-#endif /* ALETEREGO_ERROR_H */
+#endif /* ALTEREGO_ERROR_H */

@@ -1,22 +1,27 @@
 #include "alterego.h"
 
+#include "assets.h"
 #include "error.h"
 #include "memory.h"
-#include "io.h"
 #include "os.h"
 #include "input.h"
+#include "copper.h"
+#include "screen.h"
 
 /*--------------------------------------------------------------------------*/
 
 static ULONG AlterEgoInit(void)
 {
-	IoFlush();
-
 	ULONG result = MemoryAllocateAll();
 
 	if (RT_OK == result)
 	{
-		OsStore();
+		result = AssetsLoad("data.bin");
+
+		if (RT_OK == result)
+		{
+			OsStore();
+		}
 	}
 
 	return result;
@@ -33,13 +38,20 @@ static void AlterEgoKill(void)
 
 static void AlterEgoLoop(void)
 {
-		while (TRUE)
+	//CopperInit();
+	//CopperStart();
+	ScreenInit();
+	ScreenStart();
+
+	while (TRUE)
+	{
+		if (InputMouseLeftButton())
 		{
-			if (InputMouseLeftButton())
-			{
-				break;
-			}
+			break;
 		}
+	}
+
+	
 }
 
 /*--------------------------------------------------------------------------*/

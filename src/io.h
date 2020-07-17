@@ -1,5 +1,5 @@
-#ifndef ALETEREGO_IO_H
-#define ALETEREGO_IO_H
+#ifndef ALTEREGO_IO_H
+#define ALTEREGO_IO_H
 
 #include "types.h"
 
@@ -11,4 +11,4 @@ ULONG IoFileLoad(const char* name, ULONG buffer, ULONG length);
 
 /*--------------------------------------------------------------------------*/
 
-#endif /* ALETEREGO_IO_H */
+#endif /* ALTEREGO_IO_H */

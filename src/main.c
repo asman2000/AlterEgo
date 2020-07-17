@@ -43,7 +43,6 @@ static void LibsClose(void)
 	{
 		CloseLibrary((struct Library*)DOSBase);
 	}
-
 }
 
 /*--------------------------------------------------------------------------*/

@@ -19,7 +19,7 @@ NUM_CONTEXTS		=	1536
 ; a3 - (future) now null
 ; a4 - stack
 _ShrinklerDecompress:
-		movem.l	a1-a4,-(sp)
+		movem.l	a0-a4,-(sp)
 
 		sub.l	a2,a2
 		sub.l	a3,a3
@@ -28,7 +28,7 @@ _ShrinklerDecompress:
 		bsr	.decompress
 		move.l	a4,a7
 
-		movem.l	(sp)+,a1-a4
+		movem.l	(sp)+,a0-a4
 		rts
 
 ; Decompress Shrinkler-compressed data produced with the --data option.
@@ -75,7 +75,7 @@ _ShrinklerDecompress:
 	addx.b	d6,d6
 	bcc.b	.getlit
 	move.b	d6,(a5)+
-	bsr.b	ReportProgress
+	;bsr.b	ReportProgress
 .switch:
 	; After literal
 	bsr.b	GetKind
@@ -91,7 +91,7 @@ _ShrinklerDecompress:
 	move.b	(a5,d5.l),(a5)+
 	subq.l	#1,d7
 	bne.b	.copyloop
-	bsr.b	ReportProgress
+	;bsr.b	ReportProgress
 	; After reference
 	bsr.b	GetKind
 	bcc.b	.lit

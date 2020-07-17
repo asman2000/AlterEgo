@@ -1,5 +1,5 @@
-#ifndef ALETEREGO_ASSETS_H
-#define ALETEREGO_ASSETS_H
+#ifndef ALTEREGO_ASSETS_H
+#define ALTEREGO_ASSETS_H
 
 #include "types.h"
 
@@ -15,8 +15,10 @@ typedef enum
 
 ULONG AssetsLoad(const char* name);
 
-ULONG AssetsGet(AssetsOffset number);
+ULONG AssetsPackedGet(AssetsOffset number);
+
+void AssetsGet(ULONG address, AssetsOffset number);
 
 /*--------------------------------------------------------------------------*/
 
-#endif /* ALETEREGO_ASSETS_H */
+#endif /* ALTEREGO_ASSETS_H */

@@ -1,5 +1,5 @@
-#ifndef ALETEREGO_MEMORY_H
-#define ALETEREGO_MEMORY_H
+#ifndef ALTEREGO_MEMORY_H
+#define ALTEREGO_MEMORY_H
 
 #include "types.h"
 
@@ -19,4 +19,4 @@ void MemoryChipSetTo(ULONG origin);
 
 /*--------------------------------------------------------------------------*/
 
-#endif /* ALETEREGO_MEMORY_H */
+#endif /* ALTEREGO_MEMORY_H */

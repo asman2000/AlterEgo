@@ -15,7 +15,7 @@ void testAssets(void)
 
 		if (RT_OK == result)
 		{
-			ULONG offset = AssetsGet(ASSET_FONTS8);
+			ULONG offset = AssetsPackedGet(ASSET_FONTS8);
 
 			muAssert(offset != 0, "wrong offset address");
 		}
@@ -45,7 +45,7 @@ void testAssetFonts8(void)
 
 		if (RT_OK == result)
 		{
-			ULONG* offset = (ULONG*)AssetsGet(ASSET_FONTS8);
+			ULONG* offset = (ULONG*)AssetsPackedGet(ASSET_FONTS8);
 
 			muAssert(*offset == 0xff61e80b, "wrong content");
 		}
@@ -76,7 +76,7 @@ void testAssetCopper(void)
 
 		if (RT_OK == result)
 		{
-			ULONG* offset = (ULONG*)AssetsGet(ASSET_COPPER);
+			ULONG* offset = (ULONG*)AssetsPackedGet(ASSET_COPPER);
 
 			muAssert(*offset == 0xff8fffc2, "wrong content");
 		}

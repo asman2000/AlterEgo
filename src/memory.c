@@ -4,8 +4,8 @@
 
 #include "sizes.h"
 
-static ULONG memoryChip = NULL;
-static ULONG memoryAny = NULL;
+static ULONG memoryChip;
+static ULONG memoryAny;
 
 
 static ULONG memoryAnyCurrent;
@@ -13,20 +13,21 @@ static ULONG memoryAnyOrigin;
 
 static ULONG memoryChipCurrent;
 static ULONG memoryChipOrigin;
+
 /*--------------------------------------------------------------------------*/
 
 ULONG MemoryAllocateAll(void)
 {
 	memoryChip = (ULONG)AllocMem(MEMORY_CHIP_SIZE, MEMF_CHIP);
 
-	if (NULL == memoryChip)
+	if (0 == memoryChip)
 	{
 		return RT_NOT_ENOUGH_CHIP_MEM;
 	}
 
 	memoryAny = (ULONG)AllocMem(MEMORY_OTHER_SIZE, MEMF_ANY);
 
-	if (NULL == memoryAny)
+	if (0 == memoryAny)
 	{
 		return RT_NOT_ENOUGH_ANY_MEM;
 	}
@@ -41,12 +42,12 @@ ULONG MemoryAllocateAll(void)
 
 void MemoryReleaseAll(void)
 {
-	if (NULL != memoryAny)
+	if (0 != memoryAny)
 	{
 		FreeMem((APTR)memoryAny, MEMORY_OTHER_SIZE);
 	}
 
-	if (NULL != memoryChip)
+	if (0 != memoryChip)
 	{
 		FreeMem((APTR)memoryChip, MEMORY_CHIP_SIZE);
 	}
@@ -57,7 +58,7 @@ void MemoryReleaseAll(void)
 ULONG MemoryAnyGet(ULONG size)
 {
 	ULONG result = memoryAnyCurrent;
-	memoryAnyCurrent -= size;
+	memoryAnyCurrent += size;
 
 	return result;
 }
@@ -82,7 +83,7 @@ void MemoryAnySetTo(ULONG origin)
 ULONG MemoryChipGet(ULONG size)
 {
 	ULONG result = memoryChipCurrent;
-	memoryChipCurrent -= size;
+	memoryChipCurrent += size;
 
 	return result;
 }

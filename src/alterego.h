@@ -1,5 +1,5 @@
-#ifndef ALETEREGO_H
-#define ALETEREGO_H
+#ifndef ALTEREGO_H
+#define ALTEREGO_H
 
 #include "types.h"
 
@@ -9,4 +9,4 @@ void AlterEgo(void);
 
 /*--------------------------------------------------------------------------*/
 
-#endif /* ALETEREGO_H */
+#endif /* ALTEREGO_H */

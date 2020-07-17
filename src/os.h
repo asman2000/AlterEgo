@@ -1,5 +1,5 @@
-#ifndef ALETEREGO_OS_H
-#define ALETEREGO_OS_H
+#ifndef ALTEREGO_OS_H
+#define ALTEREGO_OS_H
 
 #include "types.h"
 /*--------------------------------------------------------------------------*/
@@ -10,4 +10,4 @@ void OsRestore(void);
 
 /*--------------------------------------------------------------------------*/
 
-#endif /* ALETEREGO_OS_H */
+#endif /* ALTEREGO_OS_H */

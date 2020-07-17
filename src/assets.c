@@ -1,5 +1,6 @@
 #include "assets.h"
 
+#include "decompress.h"
 #include "io.h"
 #include "memory.h"
 
@@ -14,7 +15,9 @@ ULONG AssetsLoad(const char* name)
 {
 	MemoryAnyReset();
 	assetsAddress = MemoryAnyGet(ASSETS_SIZE);
-	MemoryAnySetTo(assetsAddress + ASSETS_SIZE);
+	DecompressSetStack(MemoryAnyGet(3072));
+
+	MemoryAnySetTo(assetsAddress + ASSETS_SIZE + 3072);
 
 	ULONG result = IoFileLoad(name, assetsAddress, ASSETS_SIZE);
 	IoFlush();
@@ -31,7 +34,16 @@ ULONG AssetsLoad(const char* name)
 
 /*--------------------------------------------------------------------------*/
 
-ULONG AssetsGet(AssetsOffset number)
+void AssetsGet(ULONG address, AssetsOffset number)
+{
+	ULONG src = assetsAddress + offsets[number];
+
+	Decompress(src, address);
+}
+
+/*--------------------------------------------------------------------------*/
+
+ULONG AssetsPackedGet(AssetsOffset number)
 {
 	return assetsAddress + offsets[number];
 }
