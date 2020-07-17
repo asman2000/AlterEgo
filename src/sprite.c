@@ -1,23 +1,31 @@
 #include "sprite.h"
 
+#include "assets.h"
 #include "memory.h"
+#include "sizes.h"
 
 static ULONG spriteData;
-
-#define SPRITES_SIZE (8)
+static ULONG spriteFake;
 
 /*--------------------------------------------------------------------------*/
 
 void SpriteInit(void)
 {
-	spriteData = MemoryChipGet(SPRITES_SIZE);
+	spriteData = MemoryChipGet(SPRITES_SIZE + 8);
+	spriteFake = spriteData + SPRITES_SIZE;
+
+	AssetsGet(spriteData, ASSET_SPRITES);
+
+	ULONG* fake =(ULONG*)(spriteFake);
+	*fake++ = 0;
+	*fake++ = 0;
 }
 
 /*--------------------------------------------------------------------------*/
 
 ULONG SpriteGetFalse(void)
 {
-	return spriteData;
+	return spriteFake;
 }
 
 /*--------------------------------------------------------------------------*/

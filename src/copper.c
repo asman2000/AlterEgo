@@ -5,12 +5,14 @@
 #include "memory.h"
 #include "screen.h"
 
+#include "sizes.h"
+
 #include <hardware/custom.h>
 #include <hardware/dmabits.h>
 
 extern struct Custom* custom;
 
-#define COPPER_SIZE 104
+
 
 ULONG copper;
 

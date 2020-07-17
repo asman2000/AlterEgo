@@ -4,10 +4,12 @@
 #include "memory.h"
 #include "sprite.h"
 
+#include "sizes.h"
+
 #include <hardware/custom.h>
 #include <hardware/dmabits.h>
 
-#define SCREEN_SIZE (40960)
+
 
 extern struct Custom* custom;
 

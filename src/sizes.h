@@ -6,10 +6,12 @@
 /*--------------------------------------------------------------------------*/
 // CHIP SIZES
 #define SCREEN_SIZE (40960)
-#define COPPER_SIZE (1024)
+
+#define COPPER_SIZE 104
+
 #define MUSIC_SIZE (61594)
 #define SFX_SIZE (67735)
-#define SPRITES (1864)
+#define SPRITES_SIZE 1856
 #define BOBS (1024)
 
 #define MEMORY_CHIP_SIZE (200*1024)
@@ -29,6 +31,11 @@
 #define PACKED_LVL (20480)
 
 #define MEMORY_OTHER_SIZE (150*1024)
+
+
+// ASSETS
+
+#define ASSETS_SIZE 636
 
 /*--------------------------------------------------------------------------*/
 
