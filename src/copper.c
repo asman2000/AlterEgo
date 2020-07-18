@@ -75,3 +75,15 @@ void CopperSetFalseSprites(const ULONG falseSprite)
 }
 
 /*--------------------------------------------------------------------------*/
+
+void CopperUpdatSprite(ULONG sprite, int n)
+{
+	UWORD* cp = (UWORD*)copper + 19;
+	cp += n * 4;
+
+	*cp = (sprite >> 16);
+	cp += 2;
+	*cp = sprite & 0xffff;
+}
+
+/*--------------------------------------------------------------------------*/

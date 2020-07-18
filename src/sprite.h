@@ -18,6 +18,8 @@ ULONG SpriteGetFalse(void);
 
 void SpriteDraw(Sprite* sprite);
 
+void SpriteDrawHero(UWORD x, UWORD y);
+
 
 
 /*--------------------------------------------------------------------------*/

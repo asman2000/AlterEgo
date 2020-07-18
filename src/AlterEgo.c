@@ -2,11 +2,12 @@
 
 #include "assets.h"
 #include "error.h"
+#include "hero.h"
+#include "input.h"
 #include "memory.h"
 #include "os.h"
-#include "input.h"
-#include "copper.h"
 #include "screen.h"
+
 
 /*--------------------------------------------------------------------------*/
 
@@ -36,12 +37,14 @@ static void AlterEgoKill(void)
 
 /*--------------------------------------------------------------------------*/
 
+
 static void AlterEgoLoop(void)
 {
-	//CopperInit();
-	//CopperStart();
 	ScreenInit();
 	ScreenStart();
+
+	HeroDraw();
+
 
 	while (TRUE)
 	{
@@ -50,8 +53,6 @@ static void AlterEgoLoop(void)
 			break;
 		}
 	}
-
-	
 }
 
 /*--------------------------------------------------------------------------*/

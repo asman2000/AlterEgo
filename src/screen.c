@@ -75,6 +75,10 @@ void ScreenStart()
 	ScreenWaitForVerticallBlank();
 	CopperStart();
 
+	custom->color[16] = 0x777;
+	custom->color[17] = 0x707;
+	custom->color[18] = 0x077;
+
 	custom->dmacon = DMAF_SETCLR|DMAF_MASTER|DMAF_RASTER|DMAF_COPPER|DMAF_SPRITE;
 }
 

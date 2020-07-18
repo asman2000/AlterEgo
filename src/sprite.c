@@ -1,12 +1,15 @@
 #include "sprite.h"
 
 #include "assets.h"
+#include "hero.h"
 #include "memory.h"
 #include "sizes.h"
+#include "copper.h"
 
 static ULONG spriteGfxData;
 static ULONG spriteFake;
 
+static ULONG spriteHero;
 /*--------------------------------------------------------------------------*/
 
 void SpriteInit(void)
@@ -19,6 +22,8 @@ void SpriteInit(void)
 	ULONG* fake =(ULONG*)(spriteFake);
 	*fake++ = 0;
 	*fake++ = 0;
+
+	spriteHero = spriteFake + 8;
 }
 
 /*--------------------------------------------------------------------------*/
@@ -55,6 +60,20 @@ void SpriteDraw(Sprite* sprite)
 		*dst++ = *src++;
 		--i;
 	} while (i != 0);
+}
+
+/*--------------------------------------------------------------------------*/
+static Sprite spr;
+
+void SpriteDrawHero(UWORD x, UWORD y)
+{
+	spr.x = x;
+	spr.y = y;
+	spr.src = spriteGfxData;
+	spr.dst = spriteHero;
+	SpriteDraw(&spr);
+
+	CopperUpdatSprite(spriteHero, 0);
 }
 
 /*--------------------------------------------------------------------------*/

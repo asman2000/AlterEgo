@@ -11,6 +11,7 @@ void CopperStart();
 
 void CopperSetScreen(ScreenInfo* screen);
 void CopperSetFalseSprites(const ULONG falseSprite);
+void CopperUpdatSprite(ULONG sprite, int n);
 
 /*--------------------------------------------------------------------------*/
 
