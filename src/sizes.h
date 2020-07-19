@@ -30,15 +30,18 @@
 
 #define PACKED_MUSIC (62864)
 
-#define PACKED_SFX (29088)
+#define PACKED_SFX (28624)
 #define PACKED_LVL (20480)
 
-#define MEMORY_OTHER_SIZE (150*1024)
 
 
 // ASSETS
 
-#define ASSETS_SIZE 29920
+#define ASSETS_SIZE 29400
+
+
+#define MEMORY_OTHER_SIZE (150*1024)
+
 
 /*--------------------------------------------------------------------------*/
 

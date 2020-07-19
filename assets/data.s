@@ -1,7 +1,7 @@
 
 	incdir	'wrk:AlterEgo/assets'
 
-	wb data.bin
+	auto	wb data.bin
 
 
 assetsBeg:
