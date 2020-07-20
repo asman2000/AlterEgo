@@ -18,7 +18,6 @@ static ScreenInfo screen =
 	4,40,256,0
 };
 
-
 UWORD ScreenFadeColor(UWORD color, UWORD step);
 
 /*--------------------------------------------------------------------------*/
@@ -26,22 +25,28 @@ UWORD ScreenFadeColor(UWORD color, UWORD step);
 void ScreenInit(void)
 {
 	screen.address = MemoryChipGet(SCREEN_SIZE);
-	ScreenClear(&screen);
+	ScreenClear();
+	ScreenStart();
 }
-
 
 /*--------------------------------------------------------------------------*/
 
-void ScreenClear(ScreenInfo* screen)
+ScreenInfo* ScreenGet(void)
 {
-	ULONG* scr = (ULONG*)screen->address;
-	ULONG i = (screen->height * screen->bpl * screen->brow) / 4;
+	return &screen;
+}
+
+/*--------------------------------------------------------------------------*/
+
+void ScreenClear()
+{
+	ULONG* scr = (ULONG*)screen.address;
+	ULONG i = (screen.height * screen.bpl * screen.brow) / 4;
 
 	do
 	{
 		*scr++ = 0x0;
-		--i;
-	} while (i > 0);
+	} while (--i, i > 0);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -75,10 +80,6 @@ void ScreenStart()
 	ScreenWaitForVerticallBlank();
 	CopperStart();
 
-	custom->color[16] = 0x777;
-	custom->color[17] = 0x707;
-	custom->color[18] = 0x077;
-
 	custom->dmacon = DMAF_SETCLR|DMAF_MASTER|DMAF_RASTER|DMAF_COPPER|DMAF_SPRITE;
 }
 
@@ -92,8 +93,7 @@ void ScreenBlackColors(void)
 	do
 	{
 		*col++ = 0x0000;
-		--i;
-	} while (i > 0);
+	} while (--i, i > 0);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -106,8 +106,7 @@ void ScreenSetPalette(const UWORD* palette, ULONG size)
 	do
 	{
 		*col++ = *palette++;
-		--i;
-	} while (i > 0);
+	} while (--i, i > 0);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -189,7 +188,7 @@ void ScreenSetUp(void)
 	custom->bplcon1 = 0;
 	custom->bplcon2 = 0x24;
 	
-	UWORD modulo = (screen.bpl - 1) * screen.brow;
+	const UWORD modulo = (screen.bpl - 1) * screen.brow;
 	custom->bpl1mod = modulo;
 	custom->bpl2mod = modulo;
 }

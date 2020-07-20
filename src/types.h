@@ -21,6 +21,18 @@ enum Returns
 	RT_FAILED_LOAD_DATA,
 };
 
+struct State;
+typedef void (*StateFunction)(struct State*);
+
+struct State
+{
+	StateFunction run;
+
+	UBYTE exitToOs;
+};
+
+
+
 /*--------------------------------------------------------------------------*/
 
 #endif /* ALTEREGO_TYPES_H */

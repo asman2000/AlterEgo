@@ -16,8 +16,7 @@ typedef struct
 
 void ScreenInit(void);
 
-void ScreenClear(ScreenInfo* screen);
-void ScreenWaitForFrame(void);
+void ScreenClear();
 void ScreenOff(void);
 void ScreenOn(void);
 void ScreenStart(void);
@@ -25,6 +24,7 @@ void ScreenSetUp(void);
 
 void ScreenWaitForVerticallBlank(void);
 
+ScreenInfo* ScreenGet(void);
 
 void ScreenBlackColors(void);
 void ScreenSetPalette(const UWORD* palette, ULONG size);

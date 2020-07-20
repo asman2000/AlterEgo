@@ -7,6 +7,7 @@
 #include "memory.h"
 #include "os.h"
 #include "screen.h"
+#include "credits.h"
 
 
 /*--------------------------------------------------------------------------*/
@@ -22,6 +23,7 @@ static ULONG AlterEgoInit(void)
 		if (RT_OK == result)
 		{
 			OsStore();
+			ScreenInit();
 		}
 	}
 
@@ -37,17 +39,27 @@ static void AlterEgoKill(void)
 
 /*--------------------------------------------------------------------------*/
 
+static struct State state;
 
 static void AlterEgoLoop(void)
 {
-	ScreenInit();
-	ScreenStart();
+	struct State* gameState = &state;
 
-	HeroDraw();
+	gameState->run = Credits;
+	gameState->exitToOs = FALSE;
 
+	//HeroDraw();
 
 	while (TRUE)
 	{
+		gameState->run(gameState);
+
+		if (TRUE == gameState->exitToOs)
+		{
+			break;
+		}
+
+		//temprorary
 		if (InputMouseLeftButton())
 		{
 			break;

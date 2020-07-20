@@ -20,8 +20,13 @@
 #define MEMORY_CHIP_SIZE (200*1024)
 
 //ANY MEMORY SIZES
-#define PALETTE (64)
-#define FONTS8 (656)
+
+#define CREDITS_COLORS_SIZE 32
+#define CREDITS_TEXTS_SIZE 124
+
+
+#define PALETTE_SIZE (64)
+#define FONTS8_SIZE (656)
 #define FONTS16 (864)
 #define TILES (8192)
 #define FREE4KB (4096)
