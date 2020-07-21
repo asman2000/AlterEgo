@@ -8,6 +8,7 @@
 #include "screen.h"
 #include "sizes.h"
 #include "smallfont.h"
+#include "sprite.h"
 
 
 static UBYTE worldNumber;
@@ -61,6 +62,8 @@ static void GameLoop(struct State* gameState)
 	while (TRUE)
 	{
 		ScreenWaitForVerticallBlank();
+
+		SpriteDrawHero(100, 100);
 
 		if (InputMouseLeftButton())
 		{

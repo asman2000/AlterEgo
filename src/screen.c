@@ -182,6 +182,10 @@ void ScreenWaitForVerticallBlank(void)
 
 void ScreenSetUp(void)
 {
+	//TODO add AGA check
+	custom->fmode = 0;
+	custom->bplcon3 = 0x0c00;
+
 	custom->diwstrt = 0x2c81;
 	custom->diwstop = 0x2cc1;
 	custom->ddfstrt = 0x0038;
@@ -194,6 +198,8 @@ void ScreenSetUp(void)
 	const UWORD modulo = (screen.bpl - 1) * screen.brow;
 	custom->bpl1mod = modulo;
 	custom->bpl2mod = modulo;
+
+	
 }
 
 /*--------------------------------------------------------------------------*/

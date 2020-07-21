@@ -19,9 +19,13 @@ void SpriteInit(void)
 
 	spriteFake = MemoryChipGet(SPRITES_SIZE);
 
-	ULONG* fake =(ULONG*)(spriteFake);
-	*fake++ = 0;
-	*fake++ = 0;
+	ULONG i = SPRITES_SIZE / 4;
+	ULONG* data = (ULONG*)spriteFake;
+	do
+	{
+		*data++ = 0;
+
+	} while (--i, 0 != i);
 
 	spriteHero = spriteFake + 8;
 }
@@ -69,7 +73,7 @@ void SpriteDrawHero(UWORD x, UWORD y)
 {
 	spr.x = x;
 	spr.y = y;
-	spr.src = spriteGfxData;
+	spr.src = spriteGfxData + 12 * 16 * 4;
 	spr.dst = spriteHero;
 	SpriteDraw(&spr);
 
