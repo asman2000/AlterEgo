@@ -42,7 +42,7 @@
 
 // ASSETS
 
-#define ASSETS_SIZE 32036
+#define ASSETS_SIZE 36740
 
 
 #define MEMORY_OTHER_SIZE (150*1024)
