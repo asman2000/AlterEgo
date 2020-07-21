@@ -8,6 +8,7 @@
 #include "os.h"
 #include "screen.h"
 #include "credits.h"
+#include "game.h"
 
 
 /*--------------------------------------------------------------------------*/
@@ -24,6 +25,8 @@ static ULONG AlterEgoInit(void)
 		{
 			OsStore();
 			ScreenInit();
+			MemoryAnySetToCurrent();
+			MemoryChipSetToCurrent();
 		}
 	}
 
@@ -45,7 +48,8 @@ static void AlterEgoLoop(void)
 {
 	struct State* gameState = &state;
 
-	gameState->run = Credits;
+	//gameState->run = Credits;
+	gameState->run = Game;
 	gameState->exitToOs = FALSE;
 
 	//HeroDraw();

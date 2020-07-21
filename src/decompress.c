@@ -17,7 +17,15 @@ void Decompress(ULONG src, ULONG dst)
 
 void DecompressSetStack(ULONG adr)
 {
-	stack = adr + 3072;
+	stack = adr + DECOMPRESS_STACK_SIZE;
+
+	ULONG i = DECOMPRESS_STACK_SIZE / 4;
+	ULONG* src = (ULONG*)adr;
+	do
+	{
+		*src++ = 0;
+
+	} while (--i, 0 != i);
 }
 
 /*--------------------------------------------------------------------------*/

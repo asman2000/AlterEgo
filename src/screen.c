@@ -31,9 +31,12 @@ void ScreenInit(void)
 
 /*--------------------------------------------------------------------------*/
 
-ScreenInfo* ScreenGet(void)
+void ScreenCopyInformation(ScreenInfo* scr)
 {
-	return &screen;
+	scr->address = screen.address;
+	scr->bpl = screen.bpl;
+	scr->brow = screen.brow;
+	scr->height = screen.height;
 }
 
 /*--------------------------------------------------------------------------*/

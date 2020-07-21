@@ -3,6 +3,7 @@
 
 #include "types.h"
 
+#define DECOMPRESS_STACK_SIZE (1024*5)
 /*--------------------------------------------------------------------------*/
 
 void Decompress(ULONG src, ULONG dst);

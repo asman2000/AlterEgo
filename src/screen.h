@@ -24,7 +24,7 @@ void ScreenSetUp(void);
 
 void ScreenWaitForVerticallBlank(void);
 
-ScreenInfo* ScreenGet(void);
+void ScreenCopyInformation(ScreenInfo* screen);
 
 void ScreenBlackColors(void);
 void ScreenSetPalette(const UWORD* palette, ULONG size);

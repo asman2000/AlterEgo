@@ -8,6 +8,7 @@
 #include "smallfont.h"
 
 
+
 static UWORD* palette;
 
 static ULONG texts;

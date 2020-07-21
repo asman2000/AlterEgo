@@ -11,10 +11,12 @@ void MemoryReleaseAll(void);
 ULONG MemoryAnyGet(ULONG size);
 void MemoryAnyReset(void);
 void MemoryAnySetTo(ULONG origin);
+void MemoryAnySetToCurrent(void);
 
 ULONG MemoryChipGet(ULONG size);
 void MemoryChipReset(void);
 void MemoryChipSetTo(ULONG origin);
+void MemoryChipSetToCurrent(void);
 
 
 /*--------------------------------------------------------------------------*/

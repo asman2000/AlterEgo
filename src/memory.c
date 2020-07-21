@@ -72,6 +72,13 @@ void MemoryAnyReset(void)
 
 /*--------------------------------------------------------------------------*/
 
+void MemoryAnySetToCurrent(void)
+{
+	MemoryAnySetTo(memoryAnyCurrent);
+}
+
+/*--------------------------------------------------------------------------*/
+
 void MemoryAnySetTo(ULONG origin)
 {
 	memoryAnyOrigin = origin;
@@ -97,6 +104,12 @@ void MemoryChipReset(void)
 
 /*--------------------------------------------------------------------------*/
 
+void MemoryChipSetToCurrent(void)
+{
+	MemoryChipSetTo(memoryChipCurrent);
+}
+
+/*--------------------------------------------------------------------------*/
 void MemoryChipSetTo(ULONG origin)
 {
 	memoryChipOrigin = origin;

@@ -20,6 +20,7 @@ int main(void)
 	muRun(testAssets);
 	muRun(testAssetFonts8);
 	muRun(testAssetCopper);
+	muRun(testAssetWorld0Colors);
 
 	// decompress tests
 	muRun(testDecompress);

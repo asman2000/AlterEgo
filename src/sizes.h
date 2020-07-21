@@ -28,9 +28,9 @@
 #define PALETTE_SIZE (64)
 #define FONTS8_SIZE (656)
 #define FONTS16 (864)
-#define TILES (8192)
+#define TILES_SIZE (8192)
 #define FREE4KB (4096)
-#define LEVEL (2562)
+#define LEVEL_SIZE (2562)
 #define GFX_SPRITES_SIZE 1856
 
 #define PACKED_MUSIC (62864)
@@ -42,7 +42,7 @@
 
 // ASSETS
 
-#define ASSETS_SIZE 29400
+#define ASSETS_SIZE 32036
 
 
 #define MEMORY_OTHER_SIZE (150*1024)

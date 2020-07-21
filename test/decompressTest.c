@@ -9,7 +9,7 @@
 
 void testDecompress(void)
 {
-	ULONG mem = (ULONG)AllocMem(3072+288+656, MEMF_ANY);
+	ULONG mem = (ULONG)AllocMem(DECOMPRESS_STACK_SIZE+288+656, MEMF_ANY);
 
 	if (0 == mem)
 	{
@@ -17,7 +17,7 @@ void testDecompress(void)
 	}
 
 	ULONG stack = mem;
-	ULONG src = mem + 3072;
+	ULONG src = mem + DECOMPRESS_STACK_SIZE;
 	ULONG dst = src + 288;
 
 	BPTR file = Open("assets/raw-packed/fonts8x8x2.shr", MODE_OLDFILE);
@@ -36,7 +36,7 @@ void testDecompress(void)
 
 	muAssert(*value == 0, "wrong depacked ulong");
 
-	FreeMem((APTR)mem, 3072+288+656);
+	FreeMem((APTR)mem, DECOMPRESS_STACK_SIZE+288+656);
 }
 
 /*--------------------------------------------------------------------------*/

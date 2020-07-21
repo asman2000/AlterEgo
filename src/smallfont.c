@@ -18,12 +18,7 @@ void SmallFontInit(void)
 	fontsData = MemoryAnyGet(FONTS8_SIZE);
 	AssetsGet(fontsData, ASSET_FONTS8);
 
-	ScreenInfo* si = ScreenGet();
-
-	screen.address = si->address;
-	screen.brow = si->brow;
-	screen.bpl = si->bpl;
-	screen.height = si->height;
+	ScreenCopyInformation(&screen);
 }
 
 /*--------------------------------------------------------------------------*/

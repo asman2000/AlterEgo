@@ -16,9 +16,9 @@ ULONG AssetsLoad(const char* name)
 {
 	MemoryAnyReset();
 	assetsAddress = MemoryAnyGet(ASSETS_SIZE);
-	DecompressSetStack(MemoryAnyGet(3072));
+	DecompressSetStack(MemoryAnyGet(DECOMPRESS_STACK_SIZE));
 
-	MemoryAnySetTo(assetsAddress + ASSETS_SIZE + 3072);
+	MemoryAnySetTo(assetsAddress + ASSETS_SIZE + DECOMPRESS_STACK_SIZE);
 
 	ULONG result = IoFileLoad(name, assetsAddress, ASSETS_SIZE);
 	IoFlush();
