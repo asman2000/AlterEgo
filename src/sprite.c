@@ -77,7 +77,7 @@ void SpriteDrawHero(UWORD x, UWORD y)
 	spr.dst = spriteHero;
 	SpriteDraw(&spr);
 
-	CopperUpdatSprite(spriteHero, 0);
+	CopperUpdatSprite(spriteHero, 4);
 }
 
 /*--------------------------------------------------------------------------*/
