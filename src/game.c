@@ -94,8 +94,6 @@ UBYTE worldLevels[] =
 
 static void GameLoop(struct State* gameState)
 {
-
-	//AssetsGet((ULONG)palette, ASSET_WORLD0_COLORS);
 	AssetsGet((ULONG)palette, worldColors[worldNumber]);
 	UBYTE number = levelNumber + worldNumber * 5;
 	AssetsGet((ULONG)level, worldLevels[number]);
@@ -110,7 +108,7 @@ static void GameLoop(struct State* gameState)
 	{
 		ScreenWaitForVerticallBlank();
 
-		SpriteDrawHero(0, 0);
+		SpriteDrawHero(128, 245);
 
 		if (InputMouseLeftButton())
 		{

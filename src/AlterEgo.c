@@ -43,11 +43,11 @@ static void AlterEgoKill(void)
 /*--------------------------------------------------------------------------*/
 
 static struct State state;
-static struct State* gameState = &state;
+
 
 static void AlterEgoLoop(void)
 {
-
+	struct State* gameState = &state;
 	//gameState->run = Credits;
 	gameState->run = Game;
 	gameState->exitToOs = FALSE;

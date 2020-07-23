@@ -53,7 +53,7 @@ void SpriteDraw(Sprite* sprite)
 	UWORD s = y + height;
 
 	*pos = (y << 8) + (x >> 1);
-	*ctl = (s << 8) + x & 1 + (y >> 6 & 4) + (s >> 7 & 2);
+	*ctl = (s << 8) + (x & 1) + (y >> 6 & 4) + (s >> 7 & 2);
 
 	ULONG* dst = (ULONG*)sprite->dst + 1;
 	ULONG* src = (ULONG*)sprite->src;
