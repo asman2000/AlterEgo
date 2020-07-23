@@ -2,6 +2,7 @@
 
 #include "assets.h"
 #include "gfxtile.h"
+#include "hero.h"
 #include "input.h"
 #include "map.h"
 #include "memory.h"
@@ -41,7 +42,11 @@ void GameInit(void)
 
 	GfxTileInit();
 
+
 	level = (Lvl*)MemoryAnyGet(LEVEL_SIZE);
+
+
+	HeroInit(HERO_ONE);
 
 	ScreenOff();
 	ScreenClear();
@@ -108,7 +113,9 @@ static void GameLoop(struct State* gameState)
 	{
 		ScreenWaitForVerticallBlank();
 
-		SpriteDrawHero(128, 245);
+		UBYTE joy = InputJoystickGetState();
+
+		HeroProcess(joy);
 
 		if (InputMouseLeftButton())
 		{
