@@ -69,11 +69,11 @@ void SpriteDraw(Sprite* sprite)
 /*--------------------------------------------------------------------------*/
 static Sprite spr;
 
-void SpriteDrawHero(UWORD x, UWORD y)
+void SpriteDrawHero(UWORD x, UWORD y, UBYTE frame)
 {
 	spr.x = x;
 	spr.y = y;
-	spr.src = spriteGfxData + 12 * 16 * 4;
+	spr.src = spriteGfxData + frame * 16 * 4;
 	spr.dst = spriteHero;
 	SpriteDraw(&spr);
 

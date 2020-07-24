@@ -4,6 +4,14 @@
 #include "input.h"
 /*--------------------------------------------------------------------------*/
 
+#define HERO_SPR_IDLE		12
+#define HERO_SPR_WALK_LEFT	13
+#define HERO_SPR_WALK_RIGHT	17
+#define HERO_SPR_LADDER		21
+#define HERO_SPR_FALL		23
+#define HERO_SPR_ALTER		25
+
+
 #define DIR_NONE			0
 #define DIR_LEFT			1
 #define DIR_RIGHT			2
@@ -19,6 +27,8 @@ struct Hero
 
 	UWORD dir;
 	UWORD steps;
+
+	UBYTE frame;
 };
 
 
@@ -45,12 +55,13 @@ void HeroInit(HeroNumber number)
 	hero->dst = 0;	//spriteHero;
 
 	hero->steps = 8;
+	hero->frame = HERO_SPR_IDLE;
 }
 
 void HeroDraw(void)
 {
 	//just for test
-	SpriteDrawHero(100,100);
+	//SpriteDrawHero(100,100);
 }
 
 void HeroProcess(UBYTE joy)
@@ -61,7 +72,6 @@ void HeroProcess(UBYTE joy)
 		{
 			hero->dir = DIR_LEFT;
 			hero->steps = 8;
-			hero->x--;
 		}
 		else if (JOY_RIGHT & joy)
 		{
@@ -69,12 +79,23 @@ void HeroProcess(UBYTE joy)
 			hero->steps = 8;
 			
 		}
+
+		if (JOY_UP & joy)
+		{
+			hero->dir = DIR_UP;
+			hero->steps = 8;
+		}
+		else if (JOY_DOWN & joy)
+		{
+			hero->dir = DIR_DOWN;
+			hero->steps = 8;
+		}
 	}
 
 	HeroMove();
 
 
-	SpriteDrawHero(hero->x, hero->y);
+	SpriteDrawHero(hero->x, hero->y, hero->frame);
 }
 
 void HeroMove(void)
@@ -87,10 +108,23 @@ void HeroMove(void)
 	if (DIR_LEFT == hero->dir)
 	{
 		hero->x--;
+		hero->frame = HERO_SPR_WALK_LEFT + (3 - ((hero->x >> 1) & 3));
 	}
 	else if (DIR_RIGHT == hero->dir)
 	{
 		hero->x++;
+		hero->frame = HERO_SPR_WALK_RIGHT + ((hero->x >> 1) & 3);
+	}
+
+	if (DIR_UP == hero->dir)
+	{
+		hero->y--;
+		hero->frame = HERO_SPR_LADDER + ((hero->y >> 2) & 1);
+	}
+	else if (DIR_DOWN == hero->dir)
+	{
+		hero->y++;
+		hero->frame = HERO_SPR_LADDER + ((hero->y >> 2) & 1);
 	}
 
 	hero->steps--;
