@@ -10,6 +10,7 @@ typedef struct
 	UWORD y;
 	ULONG src;
 	ULONG dst;
+	UWORD frame;
 } Sprite;
 
 void SpriteInit(void);
@@ -18,7 +19,7 @@ ULONG SpriteGetFalse(void);
 
 void SpriteDraw(Sprite* sprite);
 
-void SpriteDrawHero(UWORD x, UWORD y, UBYTE frame);
+void SpriteDrawHero(Sprite* sprite);
 
 
 

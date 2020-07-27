@@ -2,6 +2,7 @@
 
 #include "sprite.h"
 #include "input.h"
+
 /*--------------------------------------------------------------------------*/
 
 #define HERO_SPR_IDLE		12
@@ -18,25 +19,32 @@
 #define DIR_UP				3
 #define DIR_DOWN			4
 
-struct Hero
-{
-	UWORD x;
-	UWORD y;
-	UWORD src;
-	UWORD dst;
-
-	UWORD dir;
-	UWORD steps;
-
-	UBYTE frame;
-};
-
 
 static struct Hero heroes[2];
 
 static struct Hero* hero;
 
+typedef enum
+{
+	HERO_STATE_IDLE,
+	HERO_STATE_CLIMB_UP,
+	HERO_STATE_CLIMB_DOWN,
+	HERO_STATE_WALK_RIGHT,
+	HERO_STATE_WALK_LEFT,
 
+} HeroStates;
+
+// struct HeroState;
+// typedef void (*HeroStateFunc)(struct HeroState*);
+
+// struct HeroState
+// {
+// 	HeroStateFunc next;
+
+// 	UBYTE joy;
+// };
+
+/*--------------------------------------------------------------------------*/
 
 void HeroInit(HeroNumber number)
 {
@@ -48,15 +56,18 @@ void HeroInit(HeroNumber number)
 	}
 
 	hero->dir = DIR_NONE;
-	hero->x = 64;
-	hero->y = 128;
+	hero->man.x = 64;
+	hero->man.y = 128;
 	//TODO
-	hero->src = 0;	// spriteGfxData + 12 * 16 * 4;
-	hero->dst = 0;	//spriteHero;
+	hero->man.src = 0;	// spriteGfxData + 12 * 16 * 4;
+	hero->man.dst = 0;	//spriteHero;
 
-	hero->steps = 8;
-	hero->frame = HERO_SPR_IDLE;
+	hero->steps = 0;
+	hero->man.frame = HERO_SPR_IDLE;
+	hero->state = HERO_STATE_IDLE;
 }
+
+/*--------------------------------------------------------------------------*/
 
 void HeroDraw(void)
 {
@@ -64,75 +75,155 @@ void HeroDraw(void)
 	//SpriteDrawHero(100,100);
 }
 
-void HeroProcess(UBYTE joy)
+/*--------------------------------------------------------------------------*/
+
+static void HeroStateIdle(UBYTE joy)
 {
-	if (DIR_NONE == hero->dir)
+	if (JOY_LEFT & joy)
 	{
-		if (JOY_LEFT & joy)
-		{
-			hero->dir = DIR_LEFT;
-			hero->steps = 8;
-		}
-		else if (JOY_RIGHT & joy)
-		{
-			hero->dir = DIR_RIGHT;
-			hero->steps = 8;
-			
-		}
-
-		if (JOY_UP & joy)
-		{
-			hero->dir = DIR_UP;
-			hero->steps = 8;
-		}
-		else if (JOY_DOWN & joy)
-		{
-			hero->dir = DIR_DOWN;
-			hero->steps = 8;
-		}
+		hero->dir = DIR_LEFT;
+		hero->state = HERO_STATE_WALK_LEFT;
 	}
-
-	HeroMove();
-
-
-	SpriteDrawHero(hero->x, hero->y, hero->frame);
+	else if (JOY_RIGHT & joy)
+	{
+		hero->dir = DIR_RIGHT;
+		hero->state = HERO_STATE_WALK_RIGHT;
+	}
+	else if (JOY_UP & joy)
+	{
+		hero->dir = DIR_UP;
+		hero->steps = 8;
+		hero->state = HERO_STATE_CLIMB_UP;
+	}
+	else if (JOY_DOWN & joy)
+	{
+		hero->dir = DIR_DOWN;
+		hero->steps = 8;
+		hero->state = HERO_STATE_CLIMB_DOWN;
+	}
 }
 
-void HeroMove(void)
+/*--------------------------------------------------------------------------*/
+
+static void HeroStateWalkRight(UBYTE joy)
 {
-	if (DIR_NONE == hero->dir)
-	{
-		return;
-	}
-
-	if (DIR_LEFT == hero->dir)
-	{
-		hero->x--;
-		hero->frame = HERO_SPR_WALK_LEFT + (3 - ((hero->x >> 1) & 3));
-	}
-	else if (DIR_RIGHT == hero->dir)
-	{
-		hero->x++;
-		hero->frame = HERO_SPR_WALK_RIGHT + ((hero->x >> 1) & 3);
-	}
-
-	if (DIR_UP == hero->dir)
-	{
-		hero->y--;
-		hero->frame = HERO_SPR_LADDER + ((hero->y >> 2) & 1);
-	}
-	else if (DIR_DOWN == hero->dir)
-	{
-		hero->y++;
-		hero->frame = HERO_SPR_LADDER + ((hero->y >> 2) & 1);
-	}
-
-	hero->steps--;
-
 	if (0 == hero->steps)
 	{
-		hero->dir = DIR_NONE;
+		if (0 == (JOY_RIGHT & joy))
+		{
+			hero->state = HERO_STATE_IDLE;
+			hero->dir = DIR_NONE;
+			return;
+		}
+
+		hero->steps = 8;
 	}
+
+	hero->man.frame = HERO_SPR_WALK_RIGHT + ((hero->man.x >> 1) & 3);
+	hero->man.x++;
+	hero->steps--;
+}
+
+/*--------------------------------------------------------------------------*/
+
+static void HeroStateWalkLeft(UBYTE joy)
+{
+	if (0 == hero->steps)
+	{
+		if (0 == (JOY_LEFT & joy))
+		{
+			hero->state = HERO_STATE_IDLE;
+			hero->dir = DIR_NONE;
+			return;
+		}
+
+		hero->steps = 8;
+	}
+
+	hero->man.frame = HERO_SPR_WALK_LEFT + ((hero->man.x >> 1) & 3);
+	hero->man.x--;
+	hero->steps--;
+}
+
+/*--------------------------------------------------------------------------*/
+
+static void HeroStateClimbUp(UBYTE joy)
+{
+	if (0 == hero->steps)
+	{
+		if (0 == (JOY_UP & joy))
+		{
+			hero->state = HERO_STATE_IDLE;
+			hero->dir = DIR_NONE;
+			return;
+		}
+
+		hero->steps = 8;
+	}
+
+
+	hero->man.frame = HERO_SPR_LADDER + ((hero->man.y >> 2) & 1);
+	hero->man.y--;
+	hero->steps--;
+
+}
+
+/*--------------------------------------------------------------------------*/
+
+static void HeroStateClimbDown(UBYTE joy)
+{
+	if (0 == hero->steps)
+	{
+		if (0 == (JOY_DOWN & joy))
+		{
+			hero->state = HERO_STATE_IDLE;
+			hero->dir = DIR_NONE;
+			return;
+		}
+
+		hero->steps = 8;
+	}
+
+
+	hero->man.frame = HERO_SPR_LADDER + ((hero->man.y >> 2) & 1);
+	hero->man.y++;
+	hero->steps--;
+}
+
+/*--------------------------------------------------------------------------*/
+
+void HeroHandleInput(UBYTE joy)
+{
+	UWORD dx;
+	UWORD dy;
+
+	switch (hero->state)
+	{
+		case HERO_STATE_IDLE:
+
+			HeroStateIdle(joy);
+			break;
+
+		case HERO_STATE_WALK_RIGHT:
+
+			HeroStateWalkRight(joy);
+			break;
+
+		case HERO_STATE_WALK_LEFT:
+			HeroStateWalkLeft(joy);
+			break;
+
+		case HERO_STATE_CLIMB_UP:
+
+			HeroStateClimbUp(joy);
+			break;
+		case HERO_STATE_CLIMB_DOWN:
+
+			HeroStateClimbDown(joy);
+			break;
+	}
+
+	SpriteDrawHero(&hero->man);
 }
 
 /*--------------------------------------------------------------------------*/

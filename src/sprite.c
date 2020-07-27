@@ -67,15 +67,12 @@ void SpriteDraw(Sprite* sprite)
 }
 
 /*--------------------------------------------------------------------------*/
-static Sprite spr;
 
-void SpriteDrawHero(UWORD x, UWORD y, UBYTE frame)
+void SpriteDrawHero(Sprite* sprite)
 {
-	spr.x = x;
-	spr.y = y;
-	spr.src = spriteGfxData + frame * 16 * 4;
-	spr.dst = spriteHero;
-	SpriteDraw(&spr);
+	sprite->src = spriteGfxData + sprite->frame * 16 * 4;
+	sprite->dst = spriteHero;
+	SpriteDraw(sprite);
 
 	CopperUpdatSprite(spriteHero, 4);
 }

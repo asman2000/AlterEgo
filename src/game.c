@@ -115,7 +115,7 @@ static void GameLoop(struct State* gameState)
 
 		UBYTE joy = InputJoystickGetState();
 
-		HeroProcess(joy);
+		HeroHandleInput(joy);
 
 		if (InputMouseLeftButton())
 		{
