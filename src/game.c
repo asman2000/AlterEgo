@@ -24,7 +24,7 @@ static ScreenInfo screen;
 static ULONG mapsData;
 static UWORD* palette;
 
-static Lvl* level;
+
 
 void GameNextLevel(struct State* gameState);
 static void GameLoop(struct State* gameState);
@@ -42,9 +42,7 @@ void GameInit(void)
 
 	GfxTileInit();
 
-
-	level = (Lvl*)MemoryAnyGet(LEVEL_SIZE);
-
+	MapInit();
 
 	HeroInit(HERO_ONE);
 
@@ -64,46 +62,15 @@ UBYTE worldColors[] =
 	ASSET_WORLD4_COLORS,
 };
 
-UBYTE worldLevels[] =
-{
-	ASSET_WORLD0_0,
-	ASSET_WORLD0_1,
-	ASSET_WORLD0_2,
-	ASSET_WORLD0_3,
-	ASSET_WORLD0_4,
-
-	ASSET_WORLD1_0,
-	ASSET_WORLD1_1,
-	ASSET_WORLD1_2,
-	ASSET_WORLD1_3,
-	ASSET_WORLD1_4,
-
-	ASSET_WORLD2_0,
-	ASSET_WORLD2_1,
-	ASSET_WORLD2_2,
-	ASSET_WORLD2_3,
-	ASSET_WORLD2_4,
-
-	ASSET_WORLD3_0,
-	ASSET_WORLD3_1,
-	ASSET_WORLD3_2,
-	ASSET_WORLD3_3,
-	ASSET_WORLD3_4,
-
-	ASSET_WORLD4_0,
-	ASSET_WORLD4_1,
-	ASSET_WORLD4_2,
-	ASSET_WORLD4_3,
-	ASSET_WORLD4_4,
-};
 
 static void GameLoop(struct State* gameState)
 {
 	AssetsGet((ULONG)palette, worldColors[worldNumber]);
 	UBYTE number = levelNumber + worldNumber * 5;
-	AssetsGet((ULONG)level, worldLevels[number]);
 
-	MapDraw(level->gfxMap);
+	MapProcess(number);
+
+
 
 	ScreenOn();
 	ScreenFadeIn(palette, 32);

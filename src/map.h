@@ -12,7 +12,8 @@ typedef struct
 	UBYTE colMap[40*32];
 } Lvl;
 
-
+void MapInit(void);
+void MapProcess(UWORD levelNumber);
 void MapDraw(UBYTE* map);
 
 /*--------------------------------------------------------------------------*/

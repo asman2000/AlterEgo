@@ -7,7 +7,7 @@
 
 void GfxTileInit(void);
 
-void GfxTileDrawOne(ULONG screen, UBYTE tileNumber);
+void GfxTileDrawOne(ULONG scrOffset, UBYTE tileNumber);
 
 /*--------------------------------------------------------------------------*/
 
