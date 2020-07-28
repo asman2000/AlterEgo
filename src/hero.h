@@ -20,6 +20,7 @@ struct Hero
 
 
 	UBYTE state;
+	UBYTE idleCounter;
 };
 
 

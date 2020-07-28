@@ -19,6 +19,7 @@
 #define DIR_UP				3
 #define DIR_DOWN			4
 
+#define HERO_IDLE_COUNTER_MAX	50
 
 static struct Hero heroes[2];
 
@@ -65,6 +66,7 @@ void HeroInit(HeroNumber number)
 	hero->steps = 0;
 	hero->man.frame = HERO_SPR_IDLE;
 	hero->state = HERO_STATE_IDLE;
+	hero->idleCounter = 0;
 }
 
 /*--------------------------------------------------------------------------*/
@@ -75,6 +77,12 @@ void HeroDraw(void)
 	//SpriteDrawHero(100,100);
 }
 
+static void HeroSetIdle(void)
+{
+	hero->state = HERO_STATE_IDLE;
+	hero->dir = DIR_NONE;
+	hero->idleCounter = HERO_IDLE_COUNTER_MAX;
+}
 /*--------------------------------------------------------------------------*/
 
 static void HeroStateIdle(UBYTE joy)
@@ -92,15 +100,24 @@ static void HeroStateIdle(UBYTE joy)
 	else if (JOY_UP & joy)
 	{
 		hero->dir = DIR_UP;
-		hero->steps = 8;
 		hero->state = HERO_STATE_CLIMB_UP;
 	}
 	else if (JOY_DOWN & joy)
 	{
 		hero->dir = DIR_DOWN;
-		hero->steps = 8;
 		hero->state = HERO_STATE_CLIMB_DOWN;
 	}
+
+
+	if (0 == hero->idleCounter)
+	{
+		hero->man.frame = HERO_SPR_IDLE;
+	}
+	else
+	{
+		hero->idleCounter--;
+	}
+
 }
 
 /*--------------------------------------------------------------------------*/
@@ -111,10 +128,17 @@ static void HeroStateWalkRight(UBYTE joy)
 	{
 		if (0 == (JOY_RIGHT & joy))
 		{
-			hero->state = HERO_STATE_IDLE;
-			hero->dir = DIR_NONE;
+			HeroSetIdle();
 			return;
 		}
+
+		//FUTURE add possibility to go down or up 
+		// if (JOY_DOWN & joy)
+		// {
+		// 	hero->state = HERO_STATE_CLIMB_DOWN;
+		// 	hero->dir = DIR_DOWN;
+		// 	return;
+		// }
 
 		hero->steps = 8;
 	}
@@ -132,8 +156,7 @@ static void HeroStateWalkLeft(UBYTE joy)
 	{
 		if (0 == (JOY_LEFT & joy))
 		{
-			hero->state = HERO_STATE_IDLE;
-			hero->dir = DIR_NONE;
+			HeroSetIdle();
 			return;
 		}
 
@@ -153,8 +176,7 @@ static void HeroStateClimbUp(UBYTE joy)
 	{
 		if (0 == (JOY_UP & joy))
 		{
-			hero->state = HERO_STATE_IDLE;
-			hero->dir = DIR_NONE;
+			HeroSetIdle();
 			return;
 		}
 
@@ -176,8 +198,7 @@ static void HeroStateClimbDown(UBYTE joy)
 	{
 		if (0 == (JOY_DOWN & joy))
 		{
-			hero->state = HERO_STATE_IDLE;
-			hero->dir = DIR_NONE;
+			HeroSetIdle();
 			return;
 		}
 
