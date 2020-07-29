@@ -2,6 +2,7 @@
 
 #include "assets.h"
 #include "gfxtile.h"
+#include "hero.h"
 #include "memory.h"
 #include "screen.h"
 #include "sizes.h"
@@ -9,7 +10,17 @@
 #define MAP_WIDTH (40)
 #define MAP_HEIGHT (32)
 
+#define TILE_NUM_PLAYER		0x20
+#define TILE_NUM_ENEMY_R	0x21
+#define TILE_NUM_ENEMY_L	0x22
+#define TILE_NUM_ENEMY_U	0x23
+#define TILE_NUM_ENEMY_D	0x24
+#define TILE_NUM_ITEM_1		0x17
+#define TILE_NUM_ITEM_2		0x18
+
 static Lvl* level;
+
+UWORD mapItemsToCollect;
 
 static ScreenInfo screen;
 
@@ -56,12 +67,55 @@ void MapInit(void)
 }
 
 /*--------------------------------------------------------------------------*/
+
 void MapProcess(UWORD levelNumber)
 {
 	AssetsGet((ULONG)level, worldLevels[levelNumber]);
+
+	mapItemsToCollect = 0;
+
+	UBYTE* map = level->colMap;
+
+	for (int y = 0; y < MAP_HEIGHT; ++y)
+	{
+		for (int x = 0; x < MAP_WIDTH; ++x)
+		{
+			UBYTE tile = *map;
+
+			switch (tile)
+			{
+			case TILE_NUM_PLAYER:
+				HeroSetPosition(x * 8, y * 8 - 8);
+				tile = 0;
+				break;
+			case TILE_NUM_ENEMY_R:
+			case TILE_NUM_ENEMY_L:
+			case TILE_NUM_ENEMY_U:
+			case TILE_NUM_ENEMY_D:
+				//EnemyAdd(x * 8, y * 8, tile);
+				tile = 0;
+				break;
+
+			case TILE_ITEM1:
+				//AnimTileAdd(x, y, 0xd0);
+				mapItemsToCollect++;
+				break;
+
+			case TILE_ITEM2:
+				//AnimTileAdd(x, y, 0xd8);
+				mapItemsToCollect++;
+				break;
+			}
+
+			*map = tile;
+			map++;
+		}
+	}
+
 	
 	MapDraw(level->gfxMap);
 }
+
 /*--------------------------------------------------------------------------*/
 
 void MapDraw(UBYTE* map)
@@ -79,6 +133,16 @@ void MapDraw(UBYTE* map)
 		//TODO change it
 		scrOffset += 40*4*8-40;
 	}
+}
+
+/*--------------------------------------------------------------------------*/
+
+UBYTE MapCheck(UWORD x, UWORD y)
+{
+	UWORD posX = x >> 3;
+	UWORD posY = y >> 3;
+
+	return level->colMap[(posY * 40) + posX];
 }
 
 /*--------------------------------------------------------------------------*/

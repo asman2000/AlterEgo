@@ -1,7 +1,9 @@
 #include "hero.h"
 
-#include "sprite.h"
 #include "input.h"
+#include "map.h"
+#include "sprite.h"
+
 
 /*--------------------------------------------------------------------------*/
 
@@ -32,6 +34,7 @@ typedef enum
 	HERO_STATE_CLIMB_DOWN,
 	HERO_STATE_WALK_RIGHT,
 	HERO_STATE_WALK_LEFT,
+	HERO_STATE_FALL
 
 } HeroStates;
 
@@ -47,7 +50,7 @@ typedef enum
 
 /*--------------------------------------------------------------------------*/
 
-void HeroInit(HeroNumber number)
+void HeroSetUp(HeroNumber number)
 {
 	hero = &heroes[0];
 
@@ -55,10 +58,16 @@ void HeroInit(HeroNumber number)
 	{
 		hero = &heroes[1];
 	}
+}
+
+/*--------------------------------------------------------------------------*/
+
+void HeroInit(void)
+{
 
 	hero->dir = DIR_NONE;
-	hero->man.x = 64;
-	hero->man.y = 128;
+	hero->man.x = 0;
+	hero->man.y = 0;
 	//TODO
 	hero->man.src = 0;	// spriteGfxData + 12 * 16 * 4;
 	hero->man.dst = 0;	//spriteHero;
@@ -71,10 +80,10 @@ void HeroInit(HeroNumber number)
 
 /*--------------------------------------------------------------------------*/
 
-void HeroDraw(void)
+void HeroSetPosition(UWORD x, UWORD y)
 {
-	//just for test
-	//SpriteDrawHero(100,100);
+	hero->man.x = x;
+	hero->man.y = y;
 }
 
 static void HeroSetIdle(void)
@@ -83,10 +92,31 @@ static void HeroSetIdle(void)
 	hero->dir = DIR_NONE;
 	hero->idleCounter = HERO_IDLE_COUNTER_MAX;
 }
+
+static UBYTE HeroIsFall(void)
+{
+	UBYTE tile = MapCheck(hero->man.x, hero->man.y + 8);
+	UBYTE bottom = MapCheck(hero->man.x, hero->man.y + 16);
+
+	if (!(bottom & TILE_FLOOR) && !(tile & TILE_LADDER))
+	{
+		hero->dir = DIR_DOWN;
+		hero->state = HERO_STATE_FALL;
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
 /*--------------------------------------------------------------------------*/
 
 static void HeroStateIdle(UBYTE joy)
 {
+	if (TRUE == HeroIsFall())
+	{
+		return;
+	}
+
 	if (JOY_LEFT & joy)
 	{
 		hero->dir = DIR_LEFT;
@@ -126,6 +156,17 @@ static void HeroStateWalkRight(UBYTE joy)
 {
 	if (0 == hero->steps)
 	{
+		if (TRUE == HeroIsFall())
+		{
+			return;
+		}
+
+		if (MapCheck(hero->man.x + 8, hero->man.y + 8) & TILE_WALL)
+		{
+			HeroSetIdle();
+			return;
+		}
+
 		if (0 == (JOY_RIGHT & joy))
 		{
 			HeroSetIdle();
@@ -154,6 +195,17 @@ static void HeroStateWalkLeft(UBYTE joy)
 {
 	if (0 == hero->steps)
 	{
+		if (TRUE == HeroIsFall())
+		{
+			return;
+		}
+
+		if (MapCheck(hero->man.x - 8, hero->man.y + 8) & TILE_WALL)
+		{
+			HeroSetIdle();
+			return;
+		}
+
 		if (0 == (JOY_LEFT & joy))
 		{
 			HeroSetIdle();
@@ -174,6 +226,15 @@ static void HeroStateClimbUp(UBYTE joy)
 {
 	if (0 == hero->steps)
 	{
+		UBYTE ladder = MapCheck(hero->man.x, hero->man.y + 8) & TILE_LADDER;
+		UBYTE above = MapCheck(hero->man.x, hero->man.y) & TILE_LADDER;
+
+		if (!(ladder ) || !(above))
+		{
+			HeroSetIdle();
+			return;
+		}
+
 		if (0 == (JOY_UP & joy))
 		{
 			HeroSetIdle();
@@ -196,6 +257,21 @@ static void HeroStateClimbDown(UBYTE joy)
 {
 	if (0 == hero->steps)
 	{
+		UBYTE ladder = MapCheck(hero->man.x, hero->man.y + 8) & TILE_LADDER;
+		UBYTE above = MapCheck(hero->man.x, hero->man.y + 16);
+
+		if (!(ladder ) && !(above & TILE_LADDER))
+		{
+			HeroSetIdle();
+			return;
+		}
+
+		if (above & (TILE_WALL | TILE_BRIDGE))
+		{
+			HeroSetIdle();
+			return;
+		}
+
 		if (0 == (JOY_DOWN & joy))
 		{
 			HeroSetIdle();
@@ -207,6 +283,28 @@ static void HeroStateClimbDown(UBYTE joy)
 
 
 	hero->man.frame = HERO_SPR_LADDER + ((hero->man.y >> 2) & 1);
+	hero->man.y++;
+	hero->steps--;
+}
+/*--------------------------------------------------------------------------*/
+
+void HeroStateFall(UBYTE joy)
+{
+	if (0 == hero->steps)
+	{
+		UBYTE tile = MapCheck(hero->man.x, hero->man.y + 8);
+		UBYTE bottom = MapCheck(hero->man.x, hero->man.y + 16);
+
+		if ((bottom & TILE_FLOOR) || (tile & TILE_LADDER))
+		{
+			HeroSetIdle();
+			return;
+		}
+
+		hero->steps = 8;
+	}
+
+	hero->man.frame = HERO_SPR_FALL + ((hero->man.y >> 2) & 1);
 	hero->man.y++;
 	hero->steps--;
 }
@@ -241,6 +339,10 @@ void HeroHandleInput(UBYTE joy)
 		case HERO_STATE_CLIMB_DOWN:
 
 			HeroStateClimbDown(joy);
+			break;
+		case HERO_STATE_FALL:
+
+			HeroStateFall(joy);
 			break;
 	}
 

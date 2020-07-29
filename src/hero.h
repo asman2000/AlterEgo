@@ -24,13 +24,12 @@ struct Hero
 };
 
 
-void HeroDraw(void);
-
 void HeroHandleInput(UBYTE joy);
 
-void HeroInit(HeroNumber number);
-// void HeroProcess(UBYTE joy);
-// void HeroMove(void);
+void HeroSetUp(HeroNumber number);
+void HeroInit(void);
+
+void HeroSetPosition(UWORD x, UWORD y);
 
 /*--------------------------------------------------------------------------*/
 #endif /* ALTEREGO_HERO_H */

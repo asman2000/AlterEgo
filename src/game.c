@@ -42,9 +42,9 @@ void GameInit(void)
 
 	GfxTileInit();
 
+	HeroSetUp(HERO_ONE);
 	MapInit();
-
-	HeroInit(HERO_ONE);
+	
 
 	ScreenOff();
 	ScreenClear();
@@ -68,6 +68,7 @@ static void GameLoop(struct State* gameState)
 	AssetsGet((ULONG)palette, worldColors[worldNumber]);
 	UBYTE number = levelNumber + worldNumber * 5;
 
+	HeroInit();
 	MapProcess(number);
 
 
