@@ -11,6 +11,9 @@ typedef struct
 	ULONG src;
 	ULONG dst;
 	UWORD frame;
+
+	UWORD dx;
+	UWORD dy;
 } Sprite;
 
 void SpriteInit(void);

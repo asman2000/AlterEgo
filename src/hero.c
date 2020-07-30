@@ -68,6 +68,9 @@ void HeroInit(void)
 	hero->dir = DIR_NONE;
 	hero->man.x = 0;
 	hero->man.y = 0;
+	hero->man.dx = 0;
+	hero->man.dy = 0;
+	
 	//TODO
 	hero->man.src = 0;	// spriteGfxData + 12 * 16 * 4;
 	hero->man.dst = 0;	//spriteHero;
@@ -120,21 +123,29 @@ static void HeroStateIdle(UBYTE joy)
 	if (JOY_LEFT & joy)
 	{
 		hero->dir = DIR_LEFT;
+		hero->man.dx = 0xffff;
+		hero->man.dy = 0;
 		hero->state = HERO_STATE_WALK_LEFT;
 	}
 	else if (JOY_RIGHT & joy)
 	{
 		hero->dir = DIR_RIGHT;
+		hero->man.dx = 0x0001;
+		hero->man.dy = 0;
 		hero->state = HERO_STATE_WALK_RIGHT;
 	}
 	else if (JOY_UP & joy)
 	{
 		hero->dir = DIR_UP;
+		hero->man.dx = 0;
+		hero->man.dy = 0xffff;
 		hero->state = HERO_STATE_CLIMB_UP;
 	}
 	else if (JOY_DOWN & joy)
 	{
 		hero->dir = DIR_DOWN;
+		hero->man.dx = 0;
+		hero->man.dy = 0x0001;
 		hero->state = HERO_STATE_CLIMB_DOWN;
 	}
 
@@ -185,7 +196,7 @@ static void HeroStateWalkRight(UBYTE joy)
 	}
 
 	hero->man.frame = HERO_SPR_WALK_RIGHT + ((hero->man.x >> 1) & 3);
-	hero->man.x++;
+	hero->man.x += hero->man.dx;
 	hero->steps--;
 }
 
@@ -216,7 +227,7 @@ static void HeroStateWalkLeft(UBYTE joy)
 	}
 
 	hero->man.frame = HERO_SPR_WALK_LEFT + ((hero->man.x >> 1) & 3);
-	hero->man.x--;
+	hero->man.x += hero->man.dx;
 	hero->steps--;
 }
 
@@ -246,7 +257,7 @@ static void HeroStateClimbUp(UBYTE joy)
 
 
 	hero->man.frame = HERO_SPR_LADDER + ((hero->man.y >> 2) & 1);
-	hero->man.y--;
+	hero->man.y += hero->man.dy;
 	hero->steps--;
 
 }
@@ -283,7 +294,7 @@ static void HeroStateClimbDown(UBYTE joy)
 
 
 	hero->man.frame = HERO_SPR_LADDER + ((hero->man.y >> 2) & 1);
-	hero->man.y++;
+	hero->man.y += hero->man.dy;
 	hero->steps--;
 }
 /*--------------------------------------------------------------------------*/
