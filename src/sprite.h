@@ -11,6 +11,7 @@ typedef struct
 	ULONG src;
 	ULONG dst;
 	UWORD frame;
+	UWORD frameOffset;
 
 	UWORD dx;
 	UWORD dy;

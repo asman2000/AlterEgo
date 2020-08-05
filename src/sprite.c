@@ -70,7 +70,8 @@ void SpriteDraw(Sprite* sprite)
 
 void SpriteDrawHero(Sprite* sprite)
 {
-	sprite->src = spriteGfxData + sprite->frame * 16 * 4;
+	UWORD frame = sprite->frame + sprite->frameOffset;
+	sprite->src = spriteGfxData + frame * 16 * 4;
 	sprite->dst = spriteHero;
 	SpriteDraw(sprite);
 

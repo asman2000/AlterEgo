@@ -34,7 +34,8 @@ typedef enum
 	HERO_STATE_CLIMB_DOWN,
 	HERO_STATE_WALK_RIGHT,
 	HERO_STATE_WALK_LEFT,
-	HERO_STATE_FALL
+	HERO_STATE_FALL,
+	HERO_STATE_MOVING
 
 } HeroStates;
 
@@ -89,12 +90,82 @@ void HeroSetPosition(UWORD x, UWORD y)
 	hero->man.y = y;
 }
 
-static void HeroSetIdle(void)
+/*--------------------------------------------------------------------------*/
+
+static void HeroStateSetIdle(void)
 {
 	hero->state = HERO_STATE_IDLE;
 	hero->dir = DIR_NONE;
 	hero->idleCounter = HERO_IDLE_COUNTER_MAX;
+	hero->man.frameOffset = 0;
 }
+
+/*--------------------------------------------------------------------------*/
+
+static void HeroStateSetWalkingLeft(void)
+{
+	hero->dir = DIR_LEFT;
+	hero->man.dx = 0xffff;
+	hero->man.dy = 0;
+	hero->state = HERO_STATE_WALK_LEFT;
+	hero->steps = 8;
+	hero->man.frame = HERO_SPR_WALK_LEFT;
+	hero->man.frameOffset = 0;
+}
+
+/*--------------------------------------------------------------------------*/
+
+static void HeroStateSetWalkingRight(void)
+{
+	hero->dir = DIR_RIGHT;
+	hero->man.dx = 0x0001;
+	hero->man.dy = 0;
+	hero->state = HERO_STATE_WALK_RIGHT;
+	hero->steps = 8;
+	hero->man.frame = HERO_SPR_WALK_RIGHT;
+	hero->man.frameOffset = 0;
+}
+
+/*--------------------------------------------------------------------------*/
+
+static void HeroStateSetClimbUp(void)
+{
+	hero->dir = DIR_UP;
+	hero->man.dx = 0;
+	hero->man.dy = 0xffff;
+	hero->state = HERO_STATE_CLIMB_UP;
+	hero->steps = 8;
+	hero->man.frame = HERO_SPR_LADDER;
+	hero->man.frameOffset = 0;
+}
+
+/*--------------------------------------------------------------------------*/
+
+static void HeroStateSetClimbDown(void)
+{
+	hero->dir = DIR_DOWN;
+	hero->man.dx = 0;
+	hero->man.dy = 0x0001;
+	hero->man.frame = HERO_SPR_LADDER;
+	hero->man.frameOffset = 0;
+	hero->state = HERO_STATE_CLIMB_DOWN;
+	hero->steps = 8;
+}
+
+/*--------------------------------------------------------------------------*/
+
+static void HeroStateSetFall(void)
+{
+	hero->dir = DIR_DOWN;
+	hero->state = HERO_STATE_FALL;
+	hero->steps = 8;
+	hero->man.dx = 0;
+	hero->man.dy = 0x0001;
+	hero->man.frame = HERO_SPR_FALL;
+	hero->man.frameOffset = 0;
+}
+
+/*--------------------------------------------------------------------------*/
 
 static UBYTE HeroIsFall(void)
 {
@@ -103,8 +174,6 @@ static UBYTE HeroIsFall(void)
 
 	if (!(bottom & TILE_FLOOR) && !(tile & TILE_LADDER))
 	{
-		hero->dir = DIR_DOWN;
-		hero->state = HERO_STATE_FALL;
 		return TRUE;
 	}
 
@@ -113,42 +182,103 @@ static UBYTE HeroIsFall(void)
 
 /*--------------------------------------------------------------------------*/
 
+static UBYTE HeroCanLeft(void)
+{
+	if (MapCheck(hero->man.x - 8, hero->man.y + 8) & TILE_WALL)
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/*--------------------------------------------------------------------------*/
+
+static UBYTE HeroCanRight(void)
+{
+	if (MapCheck(hero->man.x + 8, hero->man.y + 8) & TILE_WALL)
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/*--------------------------------------------------------------------------*/
+
+static UBYTE HeroCanUp(void)
+{
+	UBYTE ladder = MapCheck(hero->man.x, hero->man.y + 8);
+	UBYTE above = MapCheck(hero->man.x, hero->man.y);
+
+	if ((ladder & TILE_LADDER) && (above & TILE_LADDER))
+	{
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+static UBYTE HeroCanDown(void)
+{
+	UBYTE ladder = MapCheck(hero->man.x, hero->man.y + 8);
+	UBYTE above = MapCheck(hero->man.x, hero->man.y + 16);
+
+	if ((ladder & TILE_LADDER) || (above & TILE_LADDER))
+	{
+		if (!(above & (TILE_WALL | TILE_BRIDGE)))
+		{
+			return TRUE;
+		}
+	}
+
+
+
+	return FALSE;
+
+}
+/*--------------------------------------------------------------------------*/
+
+static void HeroMoveOneStep(void)
+{
+	hero->man.x += hero->man.dx;
+	hero->man.y += hero->man.dy;
+	hero->steps--;
+}
+
+/*--------------------------------------------------------------------------*/
+
 static void HeroStateIdle(UBYTE joy)
 {
 	if (TRUE == HeroIsFall())
 	{
+		HeroStateSetFall();
 		return;
 	}
 
-	if (JOY_LEFT & joy)
+	if ((JOY_RIGHT & joy) && (TRUE == HeroCanRight()))
 	{
-		hero->dir = DIR_LEFT;
-		hero->man.dx = 0xffff;
-		hero->man.dy = 0;
-		hero->state = HERO_STATE_WALK_LEFT;
-	}
-	else if (JOY_RIGHT & joy)
-	{
-		hero->dir = DIR_RIGHT;
-		hero->man.dx = 0x0001;
-		hero->man.dy = 0;
-		hero->state = HERO_STATE_WALK_RIGHT;
-	}
-	else if (JOY_UP & joy)
-	{
-		hero->dir = DIR_UP;
-		hero->man.dx = 0;
-		hero->man.dy = 0xffff;
-		hero->state = HERO_STATE_CLIMB_UP;
-	}
-	else if (JOY_DOWN & joy)
-	{
-		hero->dir = DIR_DOWN;
-		hero->man.dx = 0;
-		hero->man.dy = 0x0001;
-		hero->state = HERO_STATE_CLIMB_DOWN;
+		HeroStateSetWalkingRight();
+		return;
 	}
 
+	if ((JOY_LEFT & joy) && (TRUE == HeroCanLeft()))
+	{
+		HeroStateSetWalkingLeft();
+		return;
+	}
+
+	if ((JOY_UP & joy) && (TRUE == HeroCanUp()))
+	{
+		HeroStateSetClimbUp();
+		return;
+	}
+
+	if (JOY_DOWN & joy && (TRUE == HeroCanDown()))
+	{
+		HeroStateSetClimbDown();
+		return;
+	}
 
 	if (0 == hero->idleCounter)
 	{
@@ -165,159 +295,123 @@ static void HeroStateIdle(UBYTE joy)
 
 static void HeroStateWalkRight(UBYTE joy)
 {
-	if (0 == hero->steps)
+	hero->man.frameOffset = (hero->man.x >> 1) & 3;
+	HeroMoveOneStep();
+
+	if (0 != hero->steps)
 	{
-		if (TRUE == HeroIsFall())
-		{
-			return;
-		}
-
-		if (MapCheck(hero->man.x + 8, hero->man.y + 8) & TILE_WALL)
-		{
-			HeroSetIdle();
-			return;
-		}
-
-		if (0 == (JOY_RIGHT & joy))
-		{
-			HeroSetIdle();
-			return;
-		}
-
-		//FUTURE add possibility to go down or up 
-		// if (JOY_DOWN & joy)
-		// {
-		// 	hero->state = HERO_STATE_CLIMB_DOWN;
-		// 	hero->dir = DIR_DOWN;
-		// 	return;
-		// }
-
-		hero->steps = 8;
+		return;
 	}
 
-	hero->man.frame = HERO_SPR_WALK_RIGHT + ((hero->man.x >> 1) & 3);
-	hero->man.x += hero->man.dx;
-	hero->steps--;
+	hero->steps = 8;
+
+	if (TRUE == HeroIsFall())
+	{
+		HeroStateSetFall();
+		return;
+	}
+
+	if ((JOY_RIGHT & joy) && (TRUE == HeroCanRight()))
+	{
+		return;
+	}
+
+	HeroStateSetIdle();
 }
 
 /*--------------------------------------------------------------------------*/
 
 static void HeroStateWalkLeft(UBYTE joy)
 {
-	if (0 == hero->steps)
+	hero->man.frameOffset = (hero->man.x >> 1) & 3;
+	HeroMoveOneStep();
+
+	if (0 != hero->steps)
 	{
-		if (TRUE == HeroIsFall())
-		{
-			return;
-		}
-
-		if (MapCheck(hero->man.x - 8, hero->man.y + 8) & TILE_WALL)
-		{
-			HeroSetIdle();
-			return;
-		}
-
-		if (0 == (JOY_LEFT & joy))
-		{
-			HeroSetIdle();
-			return;
-		}
-
-		hero->steps = 8;
+		return;
 	}
 
-	hero->man.frame = HERO_SPR_WALK_LEFT + ((hero->man.x >> 1) & 3);
-	hero->man.x += hero->man.dx;
-	hero->steps--;
+	hero->steps = 8;
+
+	if (TRUE == HeroIsFall())
+	{
+		HeroStateSetFall();
+		return;
+	}
+
+	if (JOY_LEFT & joy)
+	{
+		if (TRUE == HeroCanLeft())
+		{
+			return;
+		}
+	}
+
+	HeroStateSetIdle();
 }
 
 /*--------------------------------------------------------------------------*/
 
 static void HeroStateClimbUp(UBYTE joy)
 {
-	if (0 == hero->steps)
+	hero->man.frameOffset = (hero->man.y >> 2) & 1;
+	HeroMoveOneStep();
+
+	if (0 != hero->steps)
 	{
-		UBYTE ladder = MapCheck(hero->man.x, hero->man.y + 8) & TILE_LADDER;
-		UBYTE above = MapCheck(hero->man.x, hero->man.y) & TILE_LADDER;
-
-		if (!(ladder ) || !(above))
-		{
-			HeroSetIdle();
-			return;
-		}
-
-		if (0 == (JOY_UP & joy))
-		{
-			HeroSetIdle();
-			return;
-		}
-
-		hero->steps = 8;
+		return;
 	}
 
+	hero->steps = 8;
 
-	hero->man.frame = HERO_SPR_LADDER + ((hero->man.y >> 2) & 1);
-	hero->man.y += hero->man.dy;
-	hero->steps--;
+	if ((JOY_UP & joy) && (TRUE == HeroCanUp()))
+	{
+		return;
+	}
 
+	HeroStateSetIdle();
 }
 
 /*--------------------------------------------------------------------------*/
 
 static void HeroStateClimbDown(UBYTE joy)
 {
-	if (0 == hero->steps)
+	hero->man.frameOffset = (hero->man.y >> 2) & 1;
+	HeroMoveOneStep();
+
+	if (0 != hero->steps)
 	{
-		UBYTE ladder = MapCheck(hero->man.x, hero->man.y + 8) & TILE_LADDER;
-		UBYTE above = MapCheck(hero->man.x, hero->man.y + 16);
-
-		if (!(ladder ) && !(above & TILE_LADDER))
-		{
-			HeroSetIdle();
-			return;
-		}
-
-		if (above & (TILE_WALL | TILE_BRIDGE))
-		{
-			HeroSetIdle();
-			return;
-		}
-
-		if (0 == (JOY_DOWN & joy))
-		{
-			HeroSetIdle();
-			return;
-		}
-
-		hero->steps = 8;
+		return;
 	}
 
+	hero->steps = 8;
 
-	hero->man.frame = HERO_SPR_LADDER + ((hero->man.y >> 2) & 1);
-	hero->man.y += hero->man.dy;
-	hero->steps--;
+	if ((JOY_DOWN & joy) && (TRUE == HeroCanDown()))
+	{
+		return;
+	}
+
+	HeroStateSetIdle();
 }
+
 /*--------------------------------------------------------------------------*/
 
 void HeroStateFall(UBYTE joy)
 {
-	if (0 == hero->steps)
+	hero->man.frameOffset = (hero->man.y >> 2) & 1;
+	HeroMoveOneStep();
+
+	if (0 != hero->steps)
 	{
-		UBYTE tile = MapCheck(hero->man.x, hero->man.y + 8);
-		UBYTE bottom = MapCheck(hero->man.x, hero->man.y + 16);
-
-		if ((bottom & TILE_FLOOR) || (tile & TILE_LADDER))
-		{
-			HeroSetIdle();
-			return;
-		}
-
-		hero->steps = 8;
+		return;
 	}
 
-	hero->man.frame = HERO_SPR_FALL + ((hero->man.y >> 2) & 1);
-	hero->man.y++;
-	hero->steps--;
+	hero->steps = 8;
+
+	if (FALSE == HeroIsFall())
+	{
+		HeroStateSetIdle();
+	}
 }
 
 /*--------------------------------------------------------------------------*/
