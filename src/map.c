@@ -3,6 +3,7 @@
 #include "assets.h"
 #include "gfxtile.h"
 #include "hero.h"
+#include "item.h"
 #include "memory.h"
 #include "screen.h"
 #include "sizes.h"
@@ -73,10 +74,13 @@ void MapProcess(UWORD levelNumber)
 	AssetsGet((ULONG)level, worldLevels[levelNumber]);
 
 	mapItemsToCollect = 0;
+	ItemInit();
 	HeroSetSwaps(level->swaps);
 	HeroSetSyncType(level->syncType);
 
 	UBYTE* map = level->colMap;
+
+	const ULONG yOffset = 8 * screen.bpl * screen.brow;
 
 	for (int y = 0; y < MAP_HEIGHT; ++y)
 	{
@@ -99,12 +103,12 @@ void MapProcess(UWORD levelNumber)
 				break;
 
 			case TILE_ITEM1:
-				//AnimTileAdd(x, y, 0xd0);
+				ItemAdd(x + y * yOffset, 0xd0);
 				mapItemsToCollect++;
 				break;
 
 			case TILE_ITEM2:
-				//AnimTileAdd(x, y, 0xd8);
+				ItemAdd(x + y * yOffset, 0xd8);
 				mapItemsToCollect++;
 				break;
 			}
@@ -116,6 +120,7 @@ void MapProcess(UWORD levelNumber)
 
 	
 	MapDraw(level->gfxMap);
+	ItemDraw();
 }
 
 /*--------------------------------------------------------------------------*/

@@ -5,7 +5,7 @@
 BIN = exe/AlterEgo
 
 CC = vc
-CFLAGS =-quiet -c -O3 -sc -c99 -IC:/vbcc/targets/m68k-amigaos/include/ -IC:/vbcc/include_h/
+CFLAGS =-quiet -c -O2 -sc -c99 -IC:/vbcc/targets/m68k-amigaos/include/ -IC:/vbcc/include_h/
 
 AS = vasmm68k_mot.exe
 AFLAGS =-quiet -Fvobj -x -IC:/vbcc/include_i/ 
