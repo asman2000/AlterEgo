@@ -10,6 +10,7 @@ static ULONG spriteGfxData;
 static ULONG spriteFake;
 
 static ULONG spriteHero;
+static ULONG spriteEgo;
 /*--------------------------------------------------------------------------*/
 
 void SpriteInit(void)
@@ -28,6 +29,7 @@ void SpriteInit(void)
 	} while (--i, 0 != i);
 
 	spriteHero = spriteFake + 8;
+	spriteEgo = spriteHero + 18 * 4;
 }
 
 /*--------------------------------------------------------------------------*/
@@ -76,6 +78,18 @@ void SpriteDrawHero(Sprite* sprite)
 	SpriteDraw(sprite);
 
 	CopperUpdatSprite(spriteHero, 4);
+}
+
+/*--------------------------------------------------------------------------*/
+
+void SpriteDrawEgo(Sprite* sprite)
+{
+	UWORD frame = sprite->frame + sprite->frameOffset;
+	sprite->src = spriteGfxData + frame * 16 * 4;
+	sprite->dst = spriteEgo;
+	SpriteDraw(sprite);
+
+	CopperUpdatSprite(spriteEgo, 5);
 }
 
 /*--------------------------------------------------------------------------*/

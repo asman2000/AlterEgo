@@ -14,6 +14,7 @@ typedef enum
 struct Hero
 {
 	Sprite man;
+	Sprite ego;
 
 	UWORD dir;
 	UWORD steps;
@@ -21,6 +22,9 @@ struct Hero
 
 	UBYTE state;
 	UBYTE idleCounter;
+
+	UBYTE swaps;
+	UBYTE syncType;
 };
 
 
@@ -30,6 +34,9 @@ void HeroSetUp(HeroNumber number);
 void HeroInit(void);
 
 void HeroSetPosition(UWORD x, UWORD y);
+void HeroSetSyncType(UBYTE sync);
+void HeroSetSwaps(UBYTE swaps);
+
 
 /*--------------------------------------------------------------------------*/
 #endif /* ALTEREGO_HERO_H */

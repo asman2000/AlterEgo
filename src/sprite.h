@@ -24,6 +24,7 @@ ULONG SpriteGetFalse(void);
 void SpriteDraw(Sprite* sprite);
 
 void SpriteDrawHero(Sprite* sprite);
+void SpriteDrawEgo(Sprite* sprite);
 
 
 

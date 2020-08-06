@@ -73,6 +73,8 @@ void MapProcess(UWORD levelNumber)
 	AssetsGet((ULONG)level, worldLevels[levelNumber]);
 
 	mapItemsToCollect = 0;
+	HeroSetSwaps(level->swaps);
+	HeroSetSyncType(level->syncType);
 
 	UBYTE* map = level->colMap;
 

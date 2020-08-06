@@ -91,11 +91,11 @@ static void GameLoop(struct State* gameState)
 			break;
 		}
 
-		if (InputJoystickRedButton())
-		{
-			gameState->run = GameNextLevel;
-			break;
-		}
+		// if (InputJoystickRedButton())
+		// {
+		// 	gameState->run = GameNextLevel;
+		// 	break;
+		// }
 	}
 
 	ScreenFadeOut(palette, 32);

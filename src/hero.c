@@ -35,7 +35,7 @@ typedef enum
 	HERO_STATE_WALK_RIGHT,
 	HERO_STATE_WALK_LEFT,
 	HERO_STATE_FALL,
-	HERO_STATE_MOVING
+	HERO_STATE_EXCHANGE
 
 } HeroStates;
 
@@ -80,7 +80,31 @@ void HeroInit(void)
 	hero->man.frame = HERO_SPR_IDLE;
 	hero->state = HERO_STATE_IDLE;
 	hero->idleCounter = 0;
+
+
+	hero->ego.x = 8;
+	hero->ego.y = 32;
+	hero->ego.frame = HERO_SPR_ALTER;
+	hero->ego.frameOffset = 0;
 }
+
+/*--------------------------------------------------------------------------*/
+
+static void HeroSyncWithEgo(void)
+{
+	if (!hero->syncType)
+	{
+		hero->ego.x = 312 - hero->man.x;
+		hero->ego.y = hero->man.y;
+	}
+	else
+	{
+		hero->ego.x = hero->man.x;
+		hero->ego.y = 224 - hero->man.y;
+	}
+
+}
+
 
 /*--------------------------------------------------------------------------*/
 
@@ -88,6 +112,22 @@ void HeroSetPosition(UWORD x, UWORD y)
 {
 	hero->man.x = x;
 	hero->man.y = y;
+
+	HeroSyncWithEgo();
+}
+
+/*--------------------------------------------------------------------------*/
+
+void HeroSetSyncType(UBYTE sync)
+{
+	hero->syncType = sync;
+}
+
+/*--------------------------------------------------------------------------*/
+
+void HeroSetSwaps(UBYTE swaps)
+{
+	hero->swaps = swaps;
 }
 
 /*--------------------------------------------------------------------------*/
@@ -167,6 +207,53 @@ static void HeroStateSetFall(void)
 
 /*--------------------------------------------------------------------------*/
 
+static void HeroStateSetExchange(void)
+{
+	hero->state = HERO_STATE_EXCHANGE;
+	hero->man.frame = HERO_SPR_IDLE;
+	hero->man.frameOffset = 0;
+
+	hero->man.dx = 0;
+	hero->man.dy = 0;
+	hero->ego.dx = 0;
+	hero->ego.dy = 0;
+
+	if (!hero->syncType)
+	{
+		UWORD steps = hero->ego.x - hero->man.x;
+		UWORD dx = 4;
+
+		if (hero->man.x > hero->ego.x)
+		{
+			steps = -steps;
+			dx = -dx;
+		}
+		
+		hero->steps = steps >> 2;
+		hero->man.dx = dx;
+		hero->ego.dx = !dx;
+	}
+	else
+	{
+		UWORD steps = hero->ego.y - hero->man.y;
+		UWORD dy = 4;
+
+		if (hero->man.y > hero->ego.y)
+		{
+			steps = -steps;
+			dy = -dy;
+		}
+		
+		hero->steps = steps >> 2;
+		hero->man.dy = dy;
+		hero->ego.dy = !dy;
+
+	}
+
+}
+
+/*--------------------------------------------------------------------------*/
+
 static UBYTE HeroIsFall(void)
 {
 	UBYTE tile = MapCheck(hero->man.x, hero->man.y + 8);
@@ -219,6 +306,8 @@ static UBYTE HeroCanUp(void)
 	return FALSE;
 }
 
+/*--------------------------------------------------------------------------*/
+
 static UBYTE HeroCanDown(void)
 {
 	UBYTE ladder = MapCheck(hero->man.x, hero->man.y + 8);
@@ -232,11 +321,35 @@ static UBYTE HeroCanDown(void)
 		}
 	}
 
-
-
 	return FALSE;
-
 }
+
+/*--------------------------------------------------------------------------*/
+
+static UBYTE HeroTryExchange(void)
+{
+	if (0 == hero->swaps)
+	{
+		//TODO sfx no swaps
+		return FALSE;
+	}
+
+	UBYTE tile = MapCheck(hero->ego.x, hero->ego.y + 8);
+
+	if (tile & TILE_WALL)
+	{
+		//TODO sfx can't exchange
+		return FALSE;
+	}
+
+	//TODO sfx exchane
+	//TODO hud or sprite update
+
+	//hero->swaps--;
+
+	return TRUE;
+}
+
 /*--------------------------------------------------------------------------*/
 
 static void HeroMoveOneStep(void)
@@ -244,6 +357,8 @@ static void HeroMoveOneStep(void)
 	hero->man.x += hero->man.dx;
 	hero->man.y += hero->man.dy;
 	hero->steps--;
+
+	HeroSyncWithEgo();
 }
 
 /*--------------------------------------------------------------------------*/
@@ -277,6 +392,12 @@ static void HeroStateIdle(UBYTE joy)
 	if (JOY_DOWN & joy && (TRUE == HeroCanDown()))
 	{
 		HeroStateSetClimbDown();
+		return;
+	}
+
+	if ((JOY_BUTTON_RED & joy) && (TRUE == HeroTryExchange()))
+	{
+		HeroStateSetExchange();
 		return;
 	}
 
@@ -412,6 +533,31 @@ void HeroStateFall(UBYTE joy)
 	{
 		HeroStateSetIdle();
 	}
+
+	if (JOY_BUTTON_RED & joy)
+	{
+		HeroStateSetExchange();
+	}
+}
+
+/*--------------------------------------------------------------------------*/
+
+static void HeroStateExchange(UBYTE joy)
+{
+	HeroMoveOneStep();
+
+	if (0 != hero->steps)
+	{
+		return;
+	}
+
+	if ((JOY_BUTTON_RED & joy) && (TRUE == HeroTryExchange()))
+	{
+		HeroStateSetExchange();
+		return;
+	}
+
+	HeroStateSetIdle();
 }
 
 /*--------------------------------------------------------------------------*/
@@ -449,9 +595,16 @@ void HeroHandleInput(UBYTE joy)
 
 			HeroStateFall(joy);
 			break;
+		case HERO_STATE_EXCHANGE:
+
+			HeroStateExchange(joy);
+			break;
 	}
 
+	//HeroSyncWithEgo();
+
 	SpriteDrawHero(&hero->man);
+	SpriteDrawEgo(&hero->ego);
 }
 
 /*--------------------------------------------------------------------------*/
