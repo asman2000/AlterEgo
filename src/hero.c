@@ -345,7 +345,7 @@ static UBYTE HeroTryExchange(void)
 	//TODO sfx exchane
 	//TODO hud or sprite update
 
-	//hero->swaps--;
+	hero->swaps--;
 
 	return TRUE;
 }
