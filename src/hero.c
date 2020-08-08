@@ -548,6 +548,7 @@ void HeroStateFall(UBYTE joy)
 	if (FALSE == HeroIsFall())
 	{
 		HeroStateSetIdle();
+		hero->idleCounter = 5;
 	}
 
 	if (JOY_BUTTON_RED & joy)
