@@ -21,6 +21,8 @@ struct Hero
 
 
 	UBYTE state;
+	UBYTE previousState;
+	UBYTE unused;
 	UBYTE idleCounter;
 
 	UBYTE swaps;

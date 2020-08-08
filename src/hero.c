@@ -75,12 +75,14 @@ void HeroInit(void)
 	//TODO
 	hero->man.src = 0;	// spriteGfxData + 12 * 16 * 4;
 	hero->man.dst = 0;	//spriteHero;
+	hero->man.frame = HERO_SPR_IDLE;
+	hero->man.frameOffset = 0;
 
 	hero->steps = 0;
-	hero->man.frame = HERO_SPR_IDLE;
+	
 	hero->state = HERO_STATE_IDLE;
+	hero->previousState = HERO_STATE_IDLE;
 	hero->idleCounter = 0;
-
 
 	hero->ego.x = 8;
 	hero->ego.y = 32;
@@ -134,6 +136,7 @@ void HeroSetSwaps(UBYTE swaps)
 
 static void HeroStateSetIdle(void)
 {
+	hero->previousState = hero->state;
 	hero->state = HERO_STATE_IDLE;
 	hero->dir = DIR_NONE;
 	hero->idleCounter = HERO_IDLE_COUNTER_MAX;
@@ -147,6 +150,7 @@ static void HeroStateSetWalkingLeft(void)
 	hero->dir = DIR_LEFT;
 	hero->man.dx = 0xffff;
 	hero->man.dy = 0;
+	hero->previousState = hero->state;
 	hero->state = HERO_STATE_WALK_LEFT;
 	hero->steps = 8;
 	hero->man.frame = HERO_SPR_WALK_LEFT;
@@ -160,6 +164,7 @@ static void HeroStateSetWalkingRight(void)
 	hero->dir = DIR_RIGHT;
 	hero->man.dx = 0x0001;
 	hero->man.dy = 0;
+	hero->previousState = hero->state;
 	hero->state = HERO_STATE_WALK_RIGHT;
 	hero->steps = 8;
 	hero->man.frame = HERO_SPR_WALK_RIGHT;
@@ -173,6 +178,7 @@ static void HeroStateSetClimbUp(void)
 	hero->dir = DIR_UP;
 	hero->man.dx = 0;
 	hero->man.dy = 0xffff;
+	hero->previousState = hero->state;
 	hero->state = HERO_STATE_CLIMB_UP;
 	hero->steps = 8;
 	hero->man.frame = HERO_SPR_LADDER;
@@ -188,6 +194,7 @@ static void HeroStateSetClimbDown(void)
 	hero->man.dy = 0x0001;
 	hero->man.frame = HERO_SPR_LADDER;
 	hero->man.frameOffset = 0;
+	hero->previousState = hero->state;
 	hero->state = HERO_STATE_CLIMB_DOWN;
 	hero->steps = 8;
 }
@@ -197,6 +204,7 @@ static void HeroStateSetClimbDown(void)
 static void HeroStateSetFall(void)
 {
 	hero->dir = DIR_DOWN;
+	hero->previousState = hero->state;
 	hero->state = HERO_STATE_FALL;
 	hero->steps = 8;
 	hero->man.dx = 0;
@@ -209,6 +217,7 @@ static void HeroStateSetFall(void)
 
 static void HeroStateSetExchange(void)
 {
+	hero->previousState = hero->state;
 	hero->state = HERO_STATE_EXCHANGE;
 	hero->man.frame = HERO_SPR_IDLE;
 	hero->man.frameOffset = 0;
@@ -345,7 +354,7 @@ static UBYTE HeroTryExchange(void)
 	//TODO sfx exchane
 	//TODO hud or sprite update
 
-	hero->swaps--;
+	//hero->swaps--;
 
 	return TRUE;
 }
@@ -401,9 +410,16 @@ static void HeroStateIdle(UBYTE joy)
 		return;
 	}
 
+	
+
 	if (0 == hero->idleCounter)
 	{
-		hero->man.frame = HERO_SPR_IDLE;
+		if (hero->previousState == HERO_STATE_WALK_LEFT ||
+		hero->previousState == HERO_STATE_WALK_RIGHT ||
+		hero->previousState == HERO_STATE_FALL)
+		{
+			hero->man.frame = HERO_SPR_IDLE;
+		}
 	}
 	else
 	{
@@ -558,6 +574,15 @@ static void HeroStateExchange(UBYTE joy)
 	}
 
 	HeroStateSetIdle();
+
+	UBYTE tile = MapCheck(hero->man.x, hero->man.y + 8);
+
+	if (tile & TILE_LADDER)
+	{
+		hero->man.frame = HERO_SPR_LADDER;
+		hero->man.frameOffset = 0;
+	}
+
 }
 
 /*--------------------------------------------------------------------------*/
