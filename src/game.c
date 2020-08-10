@@ -34,7 +34,7 @@ static void GameLoop(struct State* gameState);
 void GameInit(void)
 {
 	worldNumber = 0;
-	levelNumber = 0;
+	levelNumber = 3;
 
 
 	MemoryAnyReset();

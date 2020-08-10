@@ -604,6 +604,14 @@ void HeroHandleInput(UBYTE joy)
 		{
 			ItemTake(hero->man.x / 8, hero->man.y+8);
 		}
+
+		tile = MapCheck(hero->ego.x, hero->ego.y + 8); 
+
+		if (TILE_ITEM2 == tile)
+		{
+			DbgUbyte(0, '0');
+			ItemTake(hero->ego.x / 8, hero->ego.y + 8);
+		}
 	}
 
 
