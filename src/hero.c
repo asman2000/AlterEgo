@@ -609,7 +609,6 @@ void HeroHandleInput(UBYTE joy)
 
 		if (TILE_ITEM2 == tile)
 		{
-			DbgUbyte(0, '0');
 			ItemTake(hero->ego.x / 8, hero->ego.y + 8);
 		}
 	}

@@ -19,13 +19,14 @@ static AnimItem* current;
 
 static ScreenInfo screen;
 
-
+static UBYTE counter;
 /*--------------------------------------------------------------------------*/
 
 void ItemInit(void)
 {
 	current = &items[0];
 	ScreenCopyInformation(&screen);
+	counter = 0;
 }
 
 
@@ -42,6 +43,8 @@ void ItemAdd(ULONG scrOffset, UBYTE tileNumber)
 
 void ItemDraw(void)
 {
+	ItemAnimate();
+
 	AnimItem* item = &items[0];
 
 	while (item != current)
@@ -76,7 +79,21 @@ void ItemTake(UWORD x, UWORD y)
 
 void ItemAnimate(void)
 {
+	UBYTE j = ((counter++ >> 1) & 7);
 
+	AnimItem* item = &items[0];
+
+	while (item != current)
+	{
+		if (TILE_EMPTY != item->tileNumber)
+		{
+			item->tileNumber =(item->tileNumber & ~7) | j;
+		}
+
+		j = (j + 1) & 7;
+
+		item++;
+	}
 }
 
 /*--------------------------------------------------------------------------*/
