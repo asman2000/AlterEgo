@@ -69,3 +69,13 @@ static void SmallFontDrawOne(UBYTE* scr, UBYTE fntNumber)
 }
 
 /*--------------------------------------------------------------------------*/
+
+void SmallFontDrawDigit(ULONG screenOffset, const char digit)
+{
+	UBYTE font = digit - '0' + 28 + 1;
+	UBYTE* scr = (UBYTE*)(screen.address + screenOffset);
+
+	SmallFontDrawOne(scr, font);
+}
+
+/*--------------------------------------------------------------------------*/

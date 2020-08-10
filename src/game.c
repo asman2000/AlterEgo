@@ -4,6 +4,7 @@
 #include "gfxtile.h"
 #include "hero.h"
 #include "input.h"
+#include "item.h"
 #include "map.h"
 #include "memory.h"
 #include "screen.h"
@@ -80,6 +81,8 @@ static void GameLoop(struct State* gameState)
 	while (TRUE)
 	{
 		ScreenWaitForVerticallBlank();
+
+		ItemDraw();
 
 		UBYTE joy = InputJoystickGetState();
 

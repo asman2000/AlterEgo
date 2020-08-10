@@ -2,6 +2,10 @@
 #define ALTEREGO_TYPES_H
 
 /*--------------------------------------------------------------------------*/
+
+#define GAME_DEBUG 1
+
+
 #ifdef _WINDOWS
 #define __reg(string)
 #endif

@@ -7,7 +7,9 @@
 
 void ItemInit(void);
 void ItemAdd(ULONG scrOffset, UBYTE tileNumber);
+void ItemAnimate(void);
 void ItemDraw(void);
+void ItemTake(UWORD x, UWORD y);
 
 /*--------------------------------------------------------------------------*/
 

@@ -1,9 +1,12 @@
 #include "hero.h"
 
 #include "input.h"
+#include "item.h"
 #include "map.h"
 #include "sprite.h"
 
+#include "smallfont.h"
+#include "dbg.h"
 
 /*--------------------------------------------------------------------------*/
 
@@ -59,6 +62,8 @@ void HeroSetUp(HeroNumber number)
 	{
 		hero = &heroes[1];
 	}
+
+	SmallFontInit();
 }
 
 /*--------------------------------------------------------------------------*/
@@ -139,6 +144,7 @@ static void HeroStateSetIdle(void)
 	hero->previousState = hero->state;
 	hero->state = HERO_STATE_IDLE;
 	hero->dir = DIR_NONE;
+	hero->steps = 8;
 	hero->idleCounter = HERO_IDLE_COUNTER_MAX;
 	hero->man.frameOffset = 0;
 }
@@ -351,7 +357,7 @@ static UBYTE HeroTryExchange(void)
 		return FALSE;
 	}
 
-	//TODO sfx exchane
+	//TODO sfx exchange
 	//TODO hud or sprite update
 
 	//hero->swaps--;
@@ -590,8 +596,17 @@ static void HeroStateExchange(UBYTE joy)
 
 void HeroHandleInput(UBYTE joy)
 {
-	UWORD dx;
-	UWORD dy;
+	if (8 == hero->steps)
+	{
+		UBYTE tile = MapCheck(hero->man.x, hero->man.y + 8);
+
+		if (TILE_ITEM1 == tile)
+		{
+			ItemTake(hero->man.x / 8, hero->man.y+8);
+		}
+	}
+
+
 
 	switch (hero->state)
 	{
@@ -626,8 +641,6 @@ void HeroHandleInput(UBYTE joy)
 			HeroStateExchange(joy);
 			break;
 	}
-
-	//HeroSyncWithEgo();
 
 	SpriteDrawHero(&hero->man);
 	SpriteDrawEgo(&hero->ego);
