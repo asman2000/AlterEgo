@@ -4,6 +4,7 @@
 
 #include "types.h"
 #include "sprite.h"
+#include "game.h"
 
 typedef enum 
 {
@@ -30,7 +31,7 @@ struct Hero
 };
 
 
-void HeroHandleInput(UBYTE joy);
+void HeroHandleInput(UBYTE joy, GameInfo* game);
 
 void HeroSetUp(HeroNumber number);
 void HeroInit(void);

@@ -594,7 +594,7 @@ static void HeroStateExchange(UBYTE joy)
 
 /*--------------------------------------------------------------------------*/
 
-void HeroHandleInput(UBYTE joy)
+void HeroHandleInput(UBYTE joy, GameInfo* game)
 {
 	if (8 == hero->steps)
 	{
@@ -603,6 +603,7 @@ void HeroHandleInput(UBYTE joy)
 		if (TILE_ITEM1 == tile)
 		{
 			ItemTake(hero->man.x / 8, hero->man.y+8);
+			game->itemsToCollect--;
 		}
 
 		tile = MapCheck(hero->ego.x, hero->ego.y + 8); 
@@ -610,6 +611,7 @@ void HeroHandleInput(UBYTE joy)
 		if (TILE_ITEM2 == tile)
 		{
 			ItemTake(hero->ego.x / 8, hero->ego.y + 8);
+			game->itemsToCollect--;
 		}
 	}
 

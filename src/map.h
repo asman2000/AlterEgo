@@ -24,7 +24,7 @@ typedef struct
 
 
 void MapInit(void);
-void MapProcess(UWORD levelNumber);
+UWORD MapProcess(UWORD levelNumber);
 void MapDraw(UBYTE* map);
 UBYTE MapCheck(UWORD x, UWORD y);
 /*--------------------------------------------------------------------------*/

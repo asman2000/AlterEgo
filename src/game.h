@@ -3,6 +3,13 @@
 
 #include "types.h"
 
+typedef struct
+{
+	UBYTE worldNumber;
+	UBYTE levelNumber;
+	UWORD itemsToCollect;
+} GameInfo;
+
 /*--------------------------------------------------------------------------*/
 void GameInit(void);
 

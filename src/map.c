@@ -69,7 +69,7 @@ void MapInit(void)
 
 /*--------------------------------------------------------------------------*/
 
-void MapProcess(UWORD levelNumber)
+UWORD MapProcess(UWORD levelNumber)
 {
 	AssetsGet((ULONG)level, worldLevels[levelNumber]);
 
@@ -117,10 +117,10 @@ void MapProcess(UWORD levelNumber)
 			map++;
 		}
 	}
-
 	
 	MapDraw(level->gfxMap);
-	ItemDraw();
+
+	return mapItemsToCollect;
 }
 
 /*--------------------------------------------------------------------------*/

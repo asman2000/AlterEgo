@@ -13,11 +13,9 @@
 #include "sprite.h"
 
 
-static UBYTE worldNumber;
-static UBYTE levelNumber;
+GameInfo currentGame;
 
 static ScreenInfo screen;
-
 
 #define LEVEL_MAX_NUMBER 5
 #define WORLD_MAX_NUMBER 5
@@ -33,8 +31,8 @@ static void GameLoop(struct State* gameState);
 
 void GameInit(void)
 {
-	worldNumber = 0;
-	levelNumber = 3;
+	currentGame.levelNumber = 0;
+	currentGame.worldNumber = 0;
 
 
 	MemoryAnyReset();
@@ -66,11 +64,11 @@ UBYTE worldColors[] =
 
 static void GameLoop(struct State* gameState)
 {
-	AssetsGet((ULONG)palette, worldColors[worldNumber]);
-	UBYTE number = levelNumber + worldNumber * 5;
+	AssetsGet((ULONG)palette, worldColors[currentGame.worldNumber]);
+	UBYTE number = currentGame.levelNumber + currentGame.worldNumber * 5;
 
 	HeroInit();
-	MapProcess(number);
+	currentGame.itemsToCollect = MapProcess(number);
 
 
 
@@ -86,7 +84,7 @@ static void GameLoop(struct State* gameState)
 
 		UBYTE joy = InputJoystickGetState();
 
-		HeroHandleInput(joy);
+		HeroHandleInput(joy, &currentGame);
 
 		if (InputMouseLeftButton())
 		{
@@ -94,11 +92,11 @@ static void GameLoop(struct State* gameState)
 			break;
 		}
 
-		// if (InputJoystickRedButton())
-		// {
-		// 	gameState->run = GameNextLevel;
-		// 	break;
-		// }
+		if (0 == currentGame.itemsToCollect)
+		{
+			gameState->run = GameNextLevel;
+			break;
+		}
 	}
 
 	ScreenFadeOut(palette, 32);
@@ -141,14 +139,14 @@ void GameNextLevel(struct State* gameState)
 {
 	gameState->run = GameLoop;
 
-	levelNumber++;
+	currentGame.levelNumber++;
 
-	if (LEVEL_MAX_NUMBER == levelNumber)
+	if (LEVEL_MAX_NUMBER == currentGame.levelNumber)
 	{
-		levelNumber = 0;
-		worldNumber++;
+		currentGame.levelNumber = 0;
+		currentGame.worldNumber++;
 
-		if (WORLD_MAX_NUMBER == worldNumber)
+		if (WORLD_MAX_NUMBER == currentGame.worldNumber)
 		{
 			//TODO implement GameOutro
 			//gameState->run = GameOutro;
