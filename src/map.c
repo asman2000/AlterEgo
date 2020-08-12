@@ -153,3 +153,13 @@ UBYTE MapCheck(UWORD x, UWORD y)
 }
 
 /*--------------------------------------------------------------------------*/
+
+void MapClearTile(UWORD x, UWORD y)
+{
+	UWORD posX = x >> 3;
+	UWORD posY = y >> 3;
+
+	level->colMap[(posY * 40) + posX] = TILE_EMPTY;
+}
+
+/*--------------------------------------------------------------------------*/

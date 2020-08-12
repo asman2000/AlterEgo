@@ -27,5 +27,7 @@ void MapInit(void);
 UWORD MapProcess(UWORD levelNumber);
 void MapDraw(UBYTE* map);
 UBYTE MapCheck(UWORD x, UWORD y);
+
+void MapClearTile(UWORD x, UWORD y);
 /*--------------------------------------------------------------------------*/
 #endif /* ALTEREGO_MAP_H */

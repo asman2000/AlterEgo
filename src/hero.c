@@ -604,14 +604,16 @@ void HeroHandleInput(UBYTE joy, GameInfo* game)
 		{
 			ItemTake(hero->man.x / 8, hero->man.y+8);
 			game->itemsToCollect--;
+			MapClearTile(hero->man.x, hero->man.y + 8);
 		}
 
-		tile = MapCheck(hero->ego.x, hero->ego.y + 8); 
+		tile = MapCheck(hero->ego.x, hero->ego.y + 8);
 
 		if (TILE_ITEM2 == tile)
 		{
 			ItemTake(hero->ego.x / 8, hero->ego.y + 8);
 			game->itemsToCollect--;
+			MapClearTile(hero->ego.x, hero->ego.y + 8);
 		}
 	}
 
