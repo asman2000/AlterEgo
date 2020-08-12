@@ -75,6 +75,7 @@ UWORD MapProcess(UWORD levelNumber)
 
 	mapItemsToCollect = 0;
 	ItemInit();
+	HeroInit();
 	HeroSetSwaps(level->swaps);
 	HeroSetSyncType(level->syncType);
 

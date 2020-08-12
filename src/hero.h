@@ -35,6 +35,8 @@ void HeroHandleInput(UBYTE joy, GameInfo* game);
 
 void HeroSetUp(HeroNumber number);
 void HeroInit(void);
+void HeroShow(void);
+
 
 void HeroSetPosition(UWORD x, UWORD y);
 void HeroSetSyncType(UBYTE sync);

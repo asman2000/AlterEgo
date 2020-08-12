@@ -653,6 +653,13 @@ void HeroHandleInput(UBYTE joy, GameInfo* game)
 			break;
 	}
 
+	HeroShow();
+}
+
+/*--------------------------------------------------------------------------*/
+
+void HeroShow(void)
+{
 	SpriteDrawHero(&hero->man);
 	SpriteDrawEgo(&hero->ego);
 }

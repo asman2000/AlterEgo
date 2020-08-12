@@ -67,10 +67,10 @@ static void GameLoop(struct State* gameState)
 	AssetsGet((ULONG)palette, worldColors[currentGame.worldNumber]);
 	UBYTE number = currentGame.levelNumber + currentGame.worldNumber * 5;
 
-	HeroInit();
+	
 	currentGame.itemsToCollect = MapProcess(number);
 
-
+	HeroShow();
 
 	ScreenOn();
 	ScreenFadeIn(palette, 32);
