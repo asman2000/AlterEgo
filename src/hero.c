@@ -1,5 +1,6 @@
 #include "hero.h"
 
+#include "game.h"
 #include "input.h"
 #include "item.h"
 #include "map.h"
@@ -42,16 +43,6 @@ typedef enum
 
 } HeroStates;
 
-// struct HeroState;
-// typedef void (*HeroStateFunc)(struct HeroState*);
-
-// struct HeroState
-// {
-// 	HeroStateFunc next;
-
-// 	UBYTE joy;
-// };
-
 /*--------------------------------------------------------------------------*/
 
 void HeroSetUp(HeroNumber number)
@@ -63,6 +54,7 @@ void HeroSetUp(HeroNumber number)
 		hero = &heroes[1];
 	}
 
+	//debug
 	SmallFontInit();
 }
 
@@ -599,6 +591,13 @@ void HeroHandleInput(UBYTE joy, GameInfo* game)
 	if (8 == hero->steps)
 	{
 		UBYTE tile = MapCheck(hero->man.x, hero->man.y + 8);
+
+		DbgUbyte(0, tile);
+
+		if (TILE_WATER == tile)
+		{
+			game->state = GAME_STATE_FAIL;
+		}
 
 		if (TILE_ITEM1 == tile)
 		{

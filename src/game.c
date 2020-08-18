@@ -26,6 +26,7 @@ static UWORD* palette;
 
 
 void GameNextLevel(struct State* gameState);
+void GameLevelFail(struct State* gameState);
 static void GameLoop(struct State* gameState);
 /*--------------------------------------------------------------------------*/
 
@@ -33,6 +34,9 @@ void GameInit(void)
 {
 	currentGame.levelNumber = 0;
 	currentGame.worldNumber = 0;
+	currentGame.itemsToCollect = 0;
+	currentGame.state = GAME_STATE_NOTHING;
+	currentGame.livesNumber = 1;
 
 
 	MemoryAnyReset();
@@ -97,6 +101,12 @@ static void GameLoop(struct State* gameState)
 			gameState->run = GameNextLevel;
 			break;
 		}
+
+		if (GAME_STATE_FAIL == currentGame.state)
+		{
+			gameState->run = GameLevelFail;
+			break;
+		}
 	}
 
 	ScreenFadeOut(palette, 32);
@@ -127,8 +137,13 @@ void GameFailed(struct State* gameState)
 
 void GameLevelFail(struct State* gameState)
 {
-	//TODO
-	//player loose life and restart level
+	currentGame.livesNumber--;
+
+	if (0 == currentGame.livesNumber)
+	{
+		gameState->run = GameFailed;
+		return;
+	}
 
 	gameState->run = GameLoop;
 }
