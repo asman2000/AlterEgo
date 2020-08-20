@@ -63,7 +63,6 @@ static void SmallFontDrawOne(UBYTE* scr, UBYTE fntNumber)
 		scr += screen.brow;
 		*scr = *fonts++;
 		scr += screen.brow * 3;
-
 		
 	} while (--i, 0 != i);
 }

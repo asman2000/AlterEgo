@@ -1,6 +1,7 @@
 #include "game.h"
 
 #include "assets.h"
+#include "gameover.h"
 #include "gfxtile.h"
 #include "hero.h"
 #include "input.h"
@@ -129,8 +130,7 @@ void Game(struct State* gameState)
 
 void GameFailed(struct State* gameState)
 {
-	//TODO add gameover
-	//gameState->run = GameOver;
+	gameState->run = GameOver;
 }
 
 /*--------------------------------------------------------------------------*/

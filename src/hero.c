@@ -592,8 +592,6 @@ void HeroHandleInput(UBYTE joy, GameInfo* game)
 	{
 		UBYTE tile = MapCheck(hero->man.x, hero->man.y + 8);
 
-		DbgUbyte(0, tile);
-
 		if (TILE_WATER == tile)
 		{
 			game->state = GAME_STATE_FAIL;
