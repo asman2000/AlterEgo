@@ -19,12 +19,6 @@
 #define HERO_SPR_ALTER		25
 
 
-#define DIR_NONE			0
-#define DIR_LEFT			1
-#define DIR_RIGHT			2
-#define DIR_UP				3
-#define DIR_DOWN			4
-
 #define HERO_IDLE_COUNTER_MAX	50
 
 static struct Hero heroes[2];
@@ -34,10 +28,8 @@ static struct Hero* hero;
 typedef enum
 {
 	HERO_STATE_IDLE,
-	HERO_STATE_CLIMB_UP,
-	HERO_STATE_CLIMB_DOWN,
-	HERO_STATE_WALK_RIGHT,
-	HERO_STATE_WALK_LEFT,
+	HERO_STATE_WALK,
+	HERO_STATE_LADDER,
 	HERO_STATE_FALL,
 	HERO_STATE_EXCHANGE
 
@@ -62,8 +54,6 @@ void HeroSetUp(HeroNumber number)
 
 void HeroInit(void)
 {
-
-	hero->dir = DIR_NONE;
 	hero->man.x = 0;
 	hero->man.y = 0;
 	hero->man.dx = 0;
@@ -75,16 +65,15 @@ void HeroInit(void)
 	hero->man.frame = HERO_SPR_IDLE;
 	hero->man.frameOffset = 0;
 
-	hero->steps = 0;
-	
-	hero->state = HERO_STATE_IDLE;
-	hero->previousState = HERO_STATE_IDLE;
-	hero->idleCounter = 0;
-
 	hero->ego.x = 8;
 	hero->ego.y = 32;
 	hero->ego.frame = HERO_SPR_ALTER;
 	hero->ego.frameOffset = 0;
+
+	hero->steps = 0;
+	hero->state = HERO_STATE_IDLE;
+	hero->previousState = HERO_STATE_IDLE;
+
 }
 
 /*--------------------------------------------------------------------------*/
@@ -135,9 +124,7 @@ static void HeroStateSetIdle(void)
 {
 	hero->previousState = hero->state;
 	hero->state = HERO_STATE_IDLE;
-	hero->dir = DIR_NONE;
-	hero->steps = 8;
-	hero->idleCounter = HERO_IDLE_COUNTER_MAX;
+	hero->steps = HERO_IDLE_COUNTER_MAX;
 	hero->man.frameOffset = 0;
 }
 
@@ -145,11 +132,10 @@ static void HeroStateSetIdle(void)
 
 static void HeroStateSetWalkingLeft(void)
 {
-	hero->dir = DIR_LEFT;
 	hero->man.dx = 0xffff;
 	hero->man.dy = 0;
 	hero->previousState = hero->state;
-	hero->state = HERO_STATE_WALK_LEFT;
+	hero->state = HERO_STATE_WALK;
 	hero->steps = 8;
 	hero->man.frame = HERO_SPR_WALK_LEFT;
 	hero->man.frameOffset = 0;
@@ -159,11 +145,10 @@ static void HeroStateSetWalkingLeft(void)
 
 static void HeroStateSetWalkingRight(void)
 {
-	hero->dir = DIR_RIGHT;
 	hero->man.dx = 0x0001;
 	hero->man.dy = 0;
 	hero->previousState = hero->state;
-	hero->state = HERO_STATE_WALK_RIGHT;
+	hero->state = HERO_STATE_WALK;
 	hero->steps = 8;
 	hero->man.frame = HERO_SPR_WALK_RIGHT;
 	hero->man.frameOffset = 0;
@@ -173,11 +158,10 @@ static void HeroStateSetWalkingRight(void)
 
 static void HeroStateSetClimbUp(void)
 {
-	hero->dir = DIR_UP;
 	hero->man.dx = 0;
 	hero->man.dy = 0xffff;
 	hero->previousState = hero->state;
-	hero->state = HERO_STATE_CLIMB_UP;
+	hero->state = HERO_STATE_LADDER;
 	hero->steps = 8;
 	hero->man.frame = HERO_SPR_LADDER;
 	hero->man.frameOffset = 0;
@@ -187,13 +171,12 @@ static void HeroStateSetClimbUp(void)
 
 static void HeroStateSetClimbDown(void)
 {
-	hero->dir = DIR_DOWN;
 	hero->man.dx = 0;
 	hero->man.dy = 0x0001;
 	hero->man.frame = HERO_SPR_LADDER;
 	hero->man.frameOffset = 0;
 	hero->previousState = hero->state;
-	hero->state = HERO_STATE_CLIMB_DOWN;
+	hero->state = HERO_STATE_LADDER;
 	hero->steps = 8;
 }
 
@@ -201,7 +184,6 @@ static void HeroStateSetClimbDown(void)
 
 static void HeroStateSetFall(void)
 {
-	hero->dir = DIR_DOWN;
 	hero->previousState = hero->state;
 	hero->state = HERO_STATE_FALL;
 	hero->steps = 8;
@@ -370,6 +352,58 @@ static void HeroMoveOneStep(void)
 
 /*--------------------------------------------------------------------------*/
 
+static UBYTE HeroJoyRight(UBYTE joy)
+{
+	if ((JOY_RIGHT & joy) && (TRUE == HeroCanRight()))
+	{
+		HeroStateSetWalkingRight();
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+/*--------------------------------------------------------------------------*/
+
+static UBYTE HeroJoyLeft(UBYTE joy)
+{
+	if ((JOY_LEFT & joy) && (TRUE == HeroCanLeft()))
+	{
+		HeroStateSetWalkingLeft();
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+/*--------------------------------------------------------------------------*/
+
+static UBYTE HeroJoyUp(UBYTE joy)
+{
+	if ((JOY_UP & joy) && (TRUE == HeroCanUp()))
+	{
+		HeroStateSetClimbUp();
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+/*--------------------------------------------------------------------------*/
+
+static UBYTE HeroJoyDown(UBYTE joy)
+{
+	if (JOY_DOWN & joy && (TRUE == HeroCanDown()))
+	{
+		HeroStateSetClimbDown();
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+/*--------------------------------------------------------------------------*/
+
 static void HeroStateIdle(UBYTE joy)
 {
 	if (TRUE == HeroIsFall())
@@ -378,27 +412,23 @@ static void HeroStateIdle(UBYTE joy)
 		return;
 	}
 
-	if ((JOY_RIGHT & joy) && (TRUE == HeroCanRight()))
+	if (TRUE == HeroJoyRight(joy))
 	{
-		HeroStateSetWalkingRight();
 		return;
 	}
 
-	if ((JOY_LEFT & joy) && (TRUE == HeroCanLeft()))
+	if (TRUE == HeroJoyLeft(joy))
 	{
-		HeroStateSetWalkingLeft();
 		return;
 	}
 
-	if ((JOY_UP & joy) && (TRUE == HeroCanUp()))
+	if (TRUE == HeroJoyUp(joy))
 	{
-		HeroStateSetClimbUp();
 		return;
 	}
 
-	if (JOY_DOWN & joy && (TRUE == HeroCanDown()))
+	if (TRUE == HeroJoyDown(joy))
 	{
-		HeroStateSetClimbDown();
 		return;
 	}
 
@@ -407,28 +437,26 @@ static void HeroStateIdle(UBYTE joy)
 		HeroStateSetExchange();
 		return;
 	}
-
 	
 
-	if (0 == hero->idleCounter)
+	if (0 == hero->steps)
 	{
-		if (hero->previousState == HERO_STATE_WALK_LEFT ||
-		hero->previousState == HERO_STATE_WALK_RIGHT ||
-		hero->previousState == HERO_STATE_FALL)
+		if (hero->previousState == HERO_STATE_WALK ||
+			hero->previousState == HERO_STATE_FALL)
 		{
 			hero->man.frame = HERO_SPR_IDLE;
 		}
 	}
 	else
 	{
-		hero->idleCounter--;
+		hero->steps--;
 	}
 
 }
 
 /*--------------------------------------------------------------------------*/
 
-static void HeroStateWalkRight(UBYTE joy)
+static void HeroStateWalk(UBYTE joy)
 {
 	hero->man.frameOffset = (hero->man.x >> 1) & 3;
 	HeroMoveOneStep();
@@ -438,15 +466,18 @@ static void HeroStateWalkRight(UBYTE joy)
 		return;
 	}
 
-	hero->steps = 8;
-
 	if (TRUE == HeroIsFall())
 	{
 		HeroStateSetFall();
 		return;
 	}
 
-	if ((JOY_RIGHT & joy) && (TRUE == HeroCanRight()))
+	if (TRUE == HeroJoyRight(joy))
+	{
+		return;
+	}
+
+	if (TRUE == HeroJoyLeft(joy))
 	{
 		return;
 	}
@@ -456,38 +487,7 @@ static void HeroStateWalkRight(UBYTE joy)
 
 /*--------------------------------------------------------------------------*/
 
-static void HeroStateWalkLeft(UBYTE joy)
-{
-	hero->man.frameOffset = (hero->man.x >> 1) & 3;
-	HeroMoveOneStep();
-
-	if (0 != hero->steps)
-	{
-		return;
-	}
-
-	hero->steps = 8;
-
-	if (TRUE == HeroIsFall())
-	{
-		HeroStateSetFall();
-		return;
-	}
-
-	if (JOY_LEFT & joy)
-	{
-		if (TRUE == HeroCanLeft())
-		{
-			return;
-		}
-	}
-
-	HeroStateSetIdle();
-}
-
-/*--------------------------------------------------------------------------*/
-
-static void HeroStateClimbUp(UBYTE joy)
+static void HeroStateLadder(UBYTE joy)
 {
 	hero->man.frameOffset = (hero->man.y >> 2) & 1;
 	HeroMoveOneStep();
@@ -497,31 +497,12 @@ static void HeroStateClimbUp(UBYTE joy)
 		return;
 	}
 
-	hero->steps = 8;
-
-	if ((JOY_UP & joy) && (TRUE == HeroCanUp()))
+	if (TRUE == HeroJoyUp(joy))
 	{
 		return;
 	}
 
-	HeroStateSetIdle();
-}
-
-/*--------------------------------------------------------------------------*/
-
-static void HeroStateClimbDown(UBYTE joy)
-{
-	hero->man.frameOffset = (hero->man.y >> 2) & 1;
-	HeroMoveOneStep();
-
-	if (0 != hero->steps)
-	{
-		return;
-	}
-
-	hero->steps = 8;
-
-	if ((JOY_DOWN & joy) && (TRUE == HeroCanDown()))
+	if (TRUE == HeroJoyDown(joy))
 	{
 		return;
 	}
@@ -546,7 +527,7 @@ void HeroStateFall(UBYTE joy)
 	if (FALSE == HeroIsFall())
 	{
 		HeroStateSetIdle();
-		hero->idleCounter = 5;
+		hero->steps = 8;
 	}
 
 	if (JOY_BUTTON_RED & joy)
@@ -588,10 +569,36 @@ static void HeroStateExchange(UBYTE joy)
 
 void HeroHandleInput(UBYTE joy, GameInfo* game)
 {
-	if (8 == hero->steps)
+	switch (hero->state)
+	{
+		case HERO_STATE_IDLE:
+
+			HeroStateIdle(joy);
+			break;
+
+		case HERO_STATE_WALK:
+			HeroStateWalk(joy);
+			break;
+
+		case HERO_STATE_LADDER:
+			HeroStateLadder(joy);
+			break;
+
+		case HERO_STATE_FALL:
+
+			HeroStateFall(joy);
+			break;
+		case HERO_STATE_EXCHANGE:
+
+			HeroStateExchange(joy);
+			break;
+	}
+
+	HeroShow();
+
 	{
 		UBYTE tile = MapCheck(hero->man.x, hero->man.y + 8);
-
+	
 		if (TILE_WATER == tile)
 		{
 			game->state = GAME_STATE_FAIL;
@@ -614,43 +621,6 @@ void HeroHandleInput(UBYTE joy, GameInfo* game)
 		}
 	}
 
-
-
-	switch (hero->state)
-	{
-		case HERO_STATE_IDLE:
-
-			HeroStateIdle(joy);
-			break;
-
-		case HERO_STATE_WALK_RIGHT:
-
-			HeroStateWalkRight(joy);
-			break;
-
-		case HERO_STATE_WALK_LEFT:
-			HeroStateWalkLeft(joy);
-			break;
-
-		case HERO_STATE_CLIMB_UP:
-
-			HeroStateClimbUp(joy);
-			break;
-		case HERO_STATE_CLIMB_DOWN:
-
-			HeroStateClimbDown(joy);
-			break;
-		case HERO_STATE_FALL:
-
-			HeroStateFall(joy);
-			break;
-		case HERO_STATE_EXCHANGE:
-
-			HeroStateExchange(joy);
-			break;
-	}
-
-	HeroShow();
 }
 
 /*--------------------------------------------------------------------------*/

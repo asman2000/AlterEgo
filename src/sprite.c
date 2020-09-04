@@ -1,7 +1,6 @@
 #include "sprite.h"
 
 #include "assets.h"
-#include "hero.h"
 #include "memory.h"
 #include "sizes.h"
 #include "copper.h"

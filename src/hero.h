@@ -17,14 +17,10 @@ struct Hero
 	Sprite man;
 	Sprite ego;
 
-	UWORD dir;
 	UWORD steps;
-
 
 	UBYTE state;
 	UBYTE previousState;
-	UBYTE unused;
-	UBYTE idleCounter;
 
 	UBYTE swaps;
 	UBYTE syncType;

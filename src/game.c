@@ -33,7 +33,7 @@ static void GameLoop(struct State* gameState);
 
 void GameInit(void)
 {
-	currentGame.levelNumber = 0;
+	currentGame.levelNumber = 4;
 	currentGame.worldNumber = 0;
 	currentGame.itemsToCollect = 0;
 	currentGame.state = GAME_STATE_NOTHING;
