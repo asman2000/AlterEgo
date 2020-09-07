@@ -14,7 +14,8 @@ typedef struct
 	UWORD livesNumber;
 
 	UBYTE state;
-} GameInfo;
+	UBYTE unused;
+} Match;
 
 /*--------------------------------------------------------------------------*/
 void GameInit(void);

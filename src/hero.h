@@ -20,14 +20,14 @@ struct Hero
 	UWORD steps;
 
 	UBYTE state;
-	UBYTE previousState;
+	UBYTE input;
 
 	UBYTE swaps;
 	UBYTE syncType;
 };
 
 
-void HeroHandleInput(UBYTE joy, GameInfo* game);
+void HeroHandleInput(Match* game);
 
 void HeroSetUp(HeroNumber number);
 void HeroInit(void);

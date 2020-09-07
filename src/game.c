@@ -14,7 +14,7 @@
 #include "sprite.h"
 
 
-GameInfo currentGame;
+Match currentMatch;
 
 static ScreenInfo screen;
 
@@ -33,11 +33,11 @@ static void GameLoop(struct State* gameState);
 
 void GameInit(void)
 {
-	currentGame.levelNumber = 4;
-	currentGame.worldNumber = 0;
-	currentGame.itemsToCollect = 0;
-	currentGame.state = GAME_STATE_NOTHING;
-	currentGame.livesNumber = 1;
+	currentMatch.levelNumber = 0;
+	currentMatch.worldNumber = 0;
+	currentMatch.itemsToCollect = 0;
+	currentMatch.state = GAME_STATE_NOTHING;
+	currentMatch.livesNumber = 1;
 
 
 	MemoryAnyReset();
@@ -69,11 +69,11 @@ UBYTE worldColors[] =
 
 static void GameLoop(struct State* gameState)
 {
-	AssetsGet((ULONG)palette, worldColors[currentGame.worldNumber]);
-	UBYTE number = currentGame.levelNumber + currentGame.worldNumber * 5;
+	AssetsGet((ULONG)palette, worldColors[currentMatch.worldNumber]);
+	UBYTE number = currentMatch.levelNumber + currentMatch.worldNumber * 5;
 
 	
-	currentGame.itemsToCollect = MapProcess(number);
+	currentMatch.itemsToCollect = MapProcess(number);
 
 	HeroShow();
 
@@ -87,9 +87,8 @@ static void GameLoop(struct State* gameState)
 
 		ItemDraw();
 
-		UBYTE joy = InputJoystickGetState();
 
-		HeroHandleInput(joy, &currentGame);
+		HeroHandleInput(&currentMatch);
 
 		if (InputMouseLeftButton())
 		{
@@ -97,13 +96,13 @@ static void GameLoop(struct State* gameState)
 			break;
 		}
 
-		if (0 == currentGame.itemsToCollect)
+		if (0 == currentMatch.itemsToCollect)
 		{
 			gameState->run = GameNextLevel;
 			break;
 		}
 
-		if (GAME_STATE_FAIL == currentGame.state)
+		if (GAME_STATE_FAIL == currentMatch.state)
 		{
 			gameState->run = GameLevelFail;
 			break;
@@ -137,9 +136,9 @@ void GameFailed(struct State* gameState)
 
 void GameLevelFail(struct State* gameState)
 {
-	currentGame.livesNumber--;
+	currentMatch.livesNumber--;
 
-	if (0 == currentGame.livesNumber)
+	if (0 == currentMatch.livesNumber)
 	{
 		gameState->run = GameFailed;
 		return;
@@ -154,14 +153,14 @@ void GameNextLevel(struct State* gameState)
 {
 	gameState->run = GameLoop;
 
-	currentGame.levelNumber++;
+	currentMatch.levelNumber++;
 
-	if (LEVEL_MAX_NUMBER == currentGame.levelNumber)
+	if (LEVEL_MAX_NUMBER == currentMatch.levelNumber)
 	{
-		currentGame.levelNumber = 0;
-		currentGame.worldNumber++;
+		currentMatch.levelNumber = 0;
+		currentMatch.worldNumber++;
 
-		if (WORLD_MAX_NUMBER == currentGame.worldNumber)
+		if (WORLD_MAX_NUMBER == currentMatch.worldNumber)
 		{
 			//TODO implement GameOutro
 			//gameState->run = GameOutro;
