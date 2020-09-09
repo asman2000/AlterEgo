@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include "print.h"
 
 extern int testsRun;
 extern int testsFailed;
@@ -8,7 +8,7 @@ extern int testsFailed;
 	{\
 		if (!(test))\
 		{\
-			printf("%s %s\n", __func__, msg);\
+			printFnc(__func__, msg);\
 			testsFailed++;\
 		}\
 	} while (0)
@@ -23,6 +23,6 @@ extern int testsFailed;
 #define muFail(msg) \
 	do\
 	{\
-		printf("%s %s\n", __func__, msg);\
+		printFnc(__func__, msg);\
 		testsFailed++;\
 	} while (0)

@@ -3,6 +3,8 @@
 #include <proto/exec.h>
 #include "microunit.h"
 
+#include "../src/libs.h"
+
 #include "decompressTest.h"
 #include "assetsTest.h"
 
@@ -10,12 +12,12 @@
 int testsRun = 0;
 int testsFailed = 0;
 
-struct GfxBase* GfxBase;
-static const char* gfxName = "graphics.library";
+char* ulongToDec(ULONG n);
 
 int main(void)
 {
-	GfxBase = (struct GfxBase*)OldOpenLibrary(gfxName);
+	LibsOpen();
+
 	//assets tests
 	muRun(testAssets);
 	muRun(testAssetFonts8);
@@ -25,9 +27,58 @@ int main(void)
 	// decompress tests
 	muRun(testDecompress);
 
-	printf("total: %d, ", testsRun);
-	printf("passed: %d, ", testsRun-testsFailed);
-	printf("failed: %d\n", testsFailed);
+	printFnc("total:", ulongToDec(testsRun));
+	printFnc("passed:", ulongToDec(testsRun-testsFailed));
+	printFnc("failed:", ulongToDec(testsFailed));
+
+	LibsClose();
 
 	return 0;
+}
+
+static char msgDec[11];
+
+char* ulongToDec(ULONG n)
+{
+	ULONG tab[] = {
+		1000000000,
+		100000000,
+		10000000,
+		1000000,
+		100000,
+		10000,
+		1000,
+		100,
+		10,
+	};
+
+	int index = 0;
+
+	for (int i = 0; i < 9; ++i)
+	{
+		msgDec[index] = '0';
+
+		while (n >= tab[i])
+		{
+			n -= tab[i];
+			msgDec[index]++;
+		}
+
+		index++;
+	}
+
+	msgDec[index++] = '0' + n;
+	msgDec[index] = 0;
+
+	char* result = msgDec;
+
+	for (int i = 0; i < 9; ++i)
+	{
+		if (*result == '0')
+		{
+			result++;
+		}
+	}
+
+	return result;
 }

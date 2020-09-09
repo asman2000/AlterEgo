@@ -17,7 +17,8 @@ OBJECTS = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(wildcard $(SRCDIR)/*.c)) \
 	$(OBJDIR)/shrinkler.o
 HEADERS = $(wildcard $(SRCDIR)/*.h)
 
-LIBS = -LC:/VBCC/targets/m68k-amigaos/lib -lvc -lamiga
+#LIBS = -LC:/VBCC/targets/m68k-amigaos/lib -lvc -lamiga
+LIBS =
 LINK = vlink -nostdlib -bamigahunk -Bstatic -Cvbcc -s -x C:/vbcc/targets/m68k-amigaos/lib/minstart.o
 
 RM = rm
@@ -50,7 +51,7 @@ OBJ-OUT = obj/main.o
 TEST-MAIN-OBJ = $(filter-out $(OBJ-OUT), $(OBJECTS))
 
 
-TESTLINK = vlink -nostdlib -bamigahunk -Bstatic -Cvbcc C:/vbcc/targets/m68k-amigaos/lib/startup.o
+TESTLINK = vlink -nostdlib -bamigahunk -Bstatic -Cvbcc C:/vbcc/targets/m68k-amigaos/lib/minstart.o
 
 
 $(TESTOBJDIR)/%.o: test/%.c
