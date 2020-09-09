@@ -1,5 +1,8 @@
 #include "memory.h"
 
+#include "memorychip.h"
+#include "memoryany.h"
+
 #include <proto/exec.h>
 
 #include "sizes.h"
@@ -18,22 +21,22 @@ static ULONG memoryChipOrigin;
 
 ULONG MemoryAllocateAll(void)
 {
-	memoryChip = (ULONG)AllocMem(MEMORY_CHIP_SIZE, MEMF_CHIP);
+	memoryChip = MemoryChipAllocate(MEMORY_CHIP_SIZE);
 
 	if (0 == memoryChip)
 	{
 		return RT_NOT_ENOUGH_CHIP_MEM;
 	}
 
-	memoryAny = (ULONG)AllocMem(MEMORY_OTHER_SIZE, MEMF_ANY);
+	memoryAny = MemoryAnyAllocate(MEMORY_OTHER_SIZE);
 
 	if (0 == memoryAny)
 	{
 		return RT_NOT_ENOUGH_ANY_MEM;
 	}
 
-	MemoryChipSetTo(memoryChip);
-	MemoryAnySetTo(memoryAny);
+	//MemoryChipSetTo(memoryChip);
+	//MemoryAnySetTo(memoryAny);
 
 	return RT_OK;
 }
@@ -42,15 +45,8 @@ ULONG MemoryAllocateAll(void)
 
 void MemoryReleaseAll(void)
 {
-	if (0 != memoryAny)
-	{
-		FreeMem((APTR)memoryAny, MEMORY_OTHER_SIZE);
-	}
-
-	if (0 != memoryChip)
-	{
-		FreeMem((APTR)memoryChip, MEMORY_CHIP_SIZE);
-	}
+	MemoryAnyFree(memoryAny, MEMORY_OTHER_SIZE);
+	MemoryChipFree(memoryChip, MEMORY_CHIP_SIZE);
 }
 
 /*--------------------------------------------------------------------------*/

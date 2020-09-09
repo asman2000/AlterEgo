@@ -198,8 +198,6 @@ void ScreenSetUp(void)
 	const UWORD modulo = (screen.bpl - 1) * screen.brow;
 	custom->bpl1mod = modulo;
 	custom->bpl2mod = modulo;
-
-	
 }
 
 /*--------------------------------------------------------------------------*/
