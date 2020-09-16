@@ -25,57 +25,58 @@ enum Returns
 	RT_FAILED_LOAD_DATA,
 };
 
-struct CopperDetails
+typedef struct _CopperDetails
 {
 	ULONG address;
-};
+} CopperDetails;
 
-struct ScreenDetails
+typedef struct _ScreenDetails
 {
 	UWORD bpl;
 	UWORD brow;
 	UWORD height;
 	ULONG address;
-};
+} ScreenDetails;
 
-struct SpritesDetails
+typedef struct _SpritesDetails
 {
 	ULONG fake;
 	ULONG hero;
 	ULONG ego;
-};
+} SpritesDetails;
 
-struct AssetsDetails
+typedef struct _AssetsDetails
 {
 	ULONG packed;
 	ULONG decrunchStack;
-};
+} AssetsDetails;
 
 
-struct MemoryDetails
+typedef struct _MemoryDetails
 {
-	struct CopperDetails copper;
-	struct ScreenDetails screen;
-	struct SpritesDetails sprites;
+	CopperDetails copper;
+	ScreenDetails screen;
+	SpritesDetails sprites;
 
-	struct AssetsDetails assets;
-};
+	ULONG palette;
+	ULONG creditsText;
+	ULONG smallFont;
+
+	AssetsDetails assets;
+} MemoryDetails;
 
 
-struct State;
-typedef void (*StateFunction)(struct State*);
+struct MainState;
+typedef void (*StateFunction)(struct MainState*);
 
-struct State
+struct MainState
 {
 	StateFunction run;
 
-	struct MemoryDetails* memory;
+	MemoryDetails* memory;
 
 	UBYTE exitToOs;
-
-
 };
-
 
 /*--------------------------------------------------------------------------*/
 

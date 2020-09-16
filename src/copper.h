@@ -3,16 +3,13 @@
 
 #include "types.h"
 
-#include "screen.h"
 /*--------------------------------------------------------------------------*/
 
-void CopperInit(void);
-void CopperStart();
 
-void CopperSetScreen(ScreenInfo* screen);
-void CopperSetFalseSprites(const ULONG falseSprite);
-void CopperUpdateSprite(ULONG sprite, int n);
+void CopperStart(ULONG copperAddress);
 
+//void CopperUpdateScreen(ULONG copperAddress, ULONG screenAddress, UWORD bpl, UWORD brow);
+void CopperUpdateAddress(ULONG copperAddress, ULONG address);
 /*--------------------------------------------------------------------------*/
 
 #endif /* ALTEREGO_COPPER_H */

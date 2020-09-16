@@ -5,11 +5,11 @@
 
 /*--------------------------------------------------------------------------*/
 
-void SmallFontInit(void);
 
-void SmallFontDrawString(ULONG screenOffset, const char* str, UBYTE amount);
 
-void SmallFontDrawDigit(ULONG screenOffset, const char digit);
+void SmallFontDrawString(const MemoryDetails* m, ULONG screenOffset, const char* str, UBYTE amount);
+
+void SmallFontDrawDigit(const MemoryDetails* m, ULONG screenOffset, const char digit);
 
 
 /*--------------------------------------------------------------------------*/

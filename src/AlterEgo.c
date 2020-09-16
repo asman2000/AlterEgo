@@ -1,83 +1,46 @@
 #include "alterego.h"
 
 #include "assets.h"
-#include "error.h"
-#include "hero.h"
-#include "input.h"
+#include "credits.h"
 #include "memory.h"
 #include "os.h"
-#include "screen.h"
-#include "credits.h"
-#include "game.h"
 
 
-static struct State state;
-
-/*--------------------------------------------------------------------------*/
-
-static ULONG AlterEgoInit(void)
-{
-	ULONG result = MemoryAllocateAll();
-
-	if (RT_OK == result)
-	{
-		state.memory =  MemoryDetailsInit();
-		state.exitToOs = FALSE;
-		state.run = Credits;
-
-		result = AssetsLoad("data.bin");
-
-		if (RT_OK == result)
-		{
-			OsStore();
-		}
-	}
-
-	return result;
-}
-
-/*--------------------------------------------------------------------------*/
-
-static void AlterEgoKill(void)
-{
-	MemoryReleaseAll();
-}
-
-/*--------------------------------------------------------------------------*/
-
-static void AlterEgoLoop(void)
-{
-	struct State* gameState = &state;
-
-	while (TRUE)
-	{
-		gameState->run(gameState);
-
-		if (TRUE == gameState->exitToOs)
-		{
-			break;
-		}
-	}
-}
-
+struct MainState state;
 /*--------------------------------------------------------------------------*/
 
 void AlterEgo(void)
 {
-	ULONG result = AlterEgoInit();
+
+	ULONG result = MemoryAllocateAll();
 
 	if (RT_OK == result)
 	{
-		AlterEgoLoop();
+		state.exitToOs = FALSE;
+		state.memory = MemoryGetDetails();
+		state.run = Credits;
 
-		OsRestore();
+		result = AssetsLoad(state.memory, "data.bin");
+
+		if (RT_OK == result)
+		{
+			OsStore();
+
+			while (TRUE)
+			{
+				state.run(&state);
+
+				if (TRUE == state.exitToOs)
+				{
+					break;
+				}
+			}
+
+			OsRestore();
+		}
 	}
-	else
-	{
-		ErrorShow(result);
-	}
-	
-	AlterEgoKill();
+
+	MemoryReleaseAll();
 }
 
 /*--------------------------------------------------------------------------*/

@@ -3,12 +3,10 @@
 
 #include "types.h"
 
-#define DECOMPRESS_STACK_SIZE (1024*5)
 /*--------------------------------------------------------------------------*/
 
-void Decompress(ULONG src, ULONG dst);
+void Decompress(ULONG src, ULONG dst, ULONG stack);
 
-void DecompressSetStack(ULONG adr);
 /*--------------------------------------------------------------------------*/
 
 #endif /* ALTEREGO_DECOMPRESS_H */

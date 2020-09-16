@@ -1,15 +1,12 @@
-#ifndef ALTEREGO_MEMORYANY_H
-#define ALTEREGO_MEMORYANY_H
+#ifndef ALTEREGO_TITLE_H
+#define ALTEREGO_TITLE_H
 
 #include "types.h"
 
 /*--------------------------------------------------------------------------*/
 
-ULONG MemoryAnyAllocate(ULONG size);
-
-void MemoryAnyFree(ULONG memory, ULONG size);
-
+void Title(struct MainState* state);
 
 /*--------------------------------------------------------------------------*/
 
-#endif /* ALTEREGO_MEMORYANY_H */
+#endif /* ALTEREGO_TITLE_H */

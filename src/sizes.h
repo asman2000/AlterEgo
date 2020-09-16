@@ -42,6 +42,8 @@
 
 // ASSETS
 
+#define DECOMPRESS_STACK_SIZE (1024*5)
+
 #define ASSETS_SIZE 36740
 
 

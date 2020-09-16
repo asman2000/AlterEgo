@@ -5,25 +5,18 @@
 
 #include "types.h"
 
-typedef struct
-{
-	UWORD bpl;
-	UWORD brow;
-	UWORD height;
-	ULONG address;
 
-} ScreenInfo;
+void ScreenSetUp(ScreenDetails* screen);
 
+// void ScreenInit(void);
 
-void ScreenClear();
+void ScreenClear(ScreenDetails* screen);
 void ScreenOff(void);
 void ScreenOn(void);
-void ScreenStart(void);
-void ScreenSetUp(void);
+// void ScreenStart(void);
+
 
 void ScreenWaitForVerticallBlank(void);
-
-void ScreenCopyInformation(ScreenInfo* screen);
 
 /*--------------------------------------------------------------------------*/
 #endif /* ALTEREGO_SCREEN_H */

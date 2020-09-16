@@ -2,51 +2,36 @@
 
 #include "decompress.h"
 #include "io.h"
-#include "memory.h"
-
 #include "sizes.h"
 
-
-static ULONG assetsAddress;
-static ULONG* offsets;
-
 /*--------------------------------------------------------------------------*/
 
-ULONG AssetsLoad(const char* name)
+ULONG AssetsLoad(const MemoryDetails* memory, const char* name)
 {
-	MemoryAnyReset();
-	assetsAddress = MemoryAnyGet(ASSETS_SIZE);
-	DecompressSetStack(MemoryAnyGet(DECOMPRESS_STACK_SIZE));
-
-	MemoryAnySetTo(assetsAddress + ASSETS_SIZE + DECOMPRESS_STACK_SIZE);
-
-	ULONG result = IoFileLoad(name, assetsAddress, ASSETS_SIZE);
+	ULONG result = IoFileLoad(name, memory->assets.packed, ASSETS_SIZE);
 	IoFlush();
 
-	if (result != RT_OK)
-	{
-		return result;
-	}
-
-	offsets = (ULONG*)assetsAddress;
-
-	return RT_OK;
+	return result;
 }
 
 /*--------------------------------------------------------------------------*/
 
-void AssetsGet(ULONG address, AssetsOffset number)
+void AssetsGet(const MemoryDetails* memory, ULONG address, AssetsOffset number)
 {
-	ULONG src = assetsAddress + offsets[number];
+	const ULONG* offsets = (const ULONG*)memory->assets.packed;
+	ULONG src = memory->assets.packed + offsets[number];
 
-	Decompress(src, address);
+	Decompress(src, address, memory->assets.decrunchStack);
 }
 
 /*--------------------------------------------------------------------------*/
 
-ULONG AssetsPackedGet(AssetsOffset number)
+void AssetsCredits(const MemoryDetails* m)
 {
-	return assetsAddress + offsets[number];
+	AssetsGet(m, m->copper.address, ASSET_COPPER);
+	AssetsGet(m, m->palette, ASSET_CREDITS_COLORS);
+	AssetsGet(m, m->creditsText, ASSET_CREDITS_TXT);
+	AssetsGet(m, m->smallFont, ASSET_FONTS8);
 }
 
 /*--------------------------------------------------------------------------*/

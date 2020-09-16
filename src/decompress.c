@@ -1,5 +1,7 @@
 #include "decompress.h"
 
+#include "sizes.h"
+
 static ULONG stack;
 
 extern void ShrinklerDecompress(
@@ -8,24 +10,10 @@ extern void ShrinklerDecompress(
 
 /*--------------------------------------------------------------------------*/
 
-void Decompress(ULONG src, ULONG dst)
+void Decompress(ULONG src, ULONG dst, ULONG stack)
 {
 	ShrinklerDecompress(src, dst, stack);
 }
 
 /*--------------------------------------------------------------------------*/
 
-void DecompressSetStack(ULONG adr)
-{
-	stack = adr + DECOMPRESS_STACK_SIZE;
-
-	ULONG i = DECOMPRESS_STACK_SIZE / 4;
-	ULONG* src = (ULONG*)adr;
-	do
-	{
-		*src++ = 0;
-
-	} while (--i, 0 != i);
-}
-
-/*--------------------------------------------------------------------------*/

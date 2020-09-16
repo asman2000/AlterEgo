@@ -1,31 +1,20 @@
 #include "smallfont.h"
 
 #include "assets.h"
-#include "memory.h"
 #include "screen.h"
-#include "sizes.h"
 
 
-static ULONG fontsData;
-static ScreenInfo screen;
 
-static void SmallFontDrawOne(UBYTE* screen, UBYTE fnt);
+static void SmallFontDrawOne(const MemoryDetails* m, UBYTE* scr, UBYTE fntNumber);
 
 /*--------------------------------------------------------------------------*/
 
-void SmallFontInit(void)
-{
-	fontsData = MemoryAnyGet(FONTS8_SIZE);
-	AssetsGet(fontsData, ASSET_FONTS8);
-
-	ScreenCopyInformation(&screen);
-}
 
 /*--------------------------------------------------------------------------*/
 
-void SmallFontDrawString(ULONG screenOffset, const char* str, UBYTE amount)
+void SmallFontDrawString(const MemoryDetails* m, ULONG screenOffset, const char* str, UBYTE amount)
 {
-	UBYTE* scr = (UBYTE*)(screen.address + screenOffset);
+	UBYTE* scr = (UBYTE*)(m->screen.address + screenOffset);
 
 	do
 	{
@@ -44,37 +33,37 @@ void SmallFontDrawString(ULONG screenOffset, const char* str, UBYTE amount)
 			fnt = fnt - 'A' + 1;
 		}
 
-		SmallFontDrawOne(scr++, fnt);
+		SmallFontDrawOne(m, scr++, fnt);
 
 	} while (--amount, 0 != amount);
 }
 
 /*--------------------------------------------------------------------------*/
 
-static void SmallFontDrawOne(UBYTE* scr, UBYTE fntNumber)
+static void SmallFontDrawOne(const MemoryDetails* m, UBYTE* scr, UBYTE fntNumber)
 {
 	ULONG i = 8;
-	UBYTE* fonts = (UBYTE*)fontsData;
+	UBYTE* fonts = (UBYTE*)m->smallFont;
 	fonts += fntNumber * 16;
 
 	do
 	{
 		*scr = *fonts++;
-		scr += screen.brow;
+		scr += m->screen.brow;
 		*scr = *fonts++;
-		scr += screen.brow * 3;
+		scr += m->screen.brow * 3;
 		
 	} while (--i, 0 != i);
 }
 
 /*--------------------------------------------------------------------------*/
 
-void SmallFontDrawDigit(ULONG screenOffset, const char digit)
+void SmallFontDrawDigit(const MemoryDetails* m, ULONG screenOffset, const char digit)
 {
 	UBYTE font = digit - '0' + 28 + 1;
-	UBYTE* scr = (UBYTE*)(screen.address + screenOffset);
+	UBYTE* scr = (UBYTE*)(m->screen.address + screenOffset);
 
-	SmallFontDrawOne(scr, font);
+	SmallFontDrawOne(m, scr, font);
 }
 
 /*--------------------------------------------------------------------------*/

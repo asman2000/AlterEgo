@@ -3,59 +3,24 @@
 #include "assets.h"
 #include "colors.h"
 #include "input.h"
-#include "memory.h"
 #include "screen.h"
-#include "sizes.h"
+#include "copper.h"
 #include "smallfont.h"
+#include "title.h"
 
 
+#include <hardware/custom.h>
+#include <hardware/dmabits.h>
 
-static UWORD* palette;
 
-static ULONG texts;
-
-static void CreditsDrawTexts(void);
-
-/*--------------------------------------------------------------------------*/
-
-void CreditsMemoryInit(void)
-{
-	// screen
-	// copper
-	// sprites (at least fake one)
-
-	// palette
-	// texts
-	// small fonts
-}
-
+extern struct Custom* custom;
 
 /*--------------------------------------------------------------------------*/
-static void CreditsInit(void)
-{
-	MemoryAnyReset();
 
-	palette = (UWORD*) MemoryAnyGet(CREDITS_COLORS_SIZE);
-	AssetsGet((ULONG)palette, ASSET_CREDITS_COLORS);
-	
-	texts = MemoryAnyGet(CREDITS_TEXTS_SIZE);
-	AssetsGet(texts, ASSET_CREDITS_TXT);
-
-	SmallFontInit();
-
-	
-	ColorsSetAllToBlack();
-	ScreenClear();
-
-	CreditsDrawTexts();
-	ScreenOn();
-}
-
-/*--------------------------------------------------------------------------*/
-static void CreditsDrawTexts(void)
+static void CreditsDrawTexts(const MemoryDetails* m)
 {
 	ULONG scr = 0;
-	UBYTE* txt = (UBYTE*)texts;
+	UBYTE* txt = (UBYTE*)m->creditsText;
 
 	while (TRUE)
 	{
@@ -70,18 +35,20 @@ static void CreditsDrawTexts(void)
 		txt +=2;
 		size = *txt++;
 
-		SmallFontDrawString(scr + offset, txt, size);
+		SmallFontDrawString(m, scr + offset, txt, size);
 		txt += size;
 	}
 }
 
-/*--------------------------------------------------------------------------*/
+// /*--------------------------------------------------------------------------*/
 
-static void CreditsMain(struct State* gameState)
+void CreditsMain(struct MainState* state)
 {
+
+
 	UWORD wait = 300;
 
-	ColorsFadeIn(palette, 16);
+	ColorsFadeIn((const UWORD*)state->memory->palette, 16);
 
 	do
 	{
@@ -92,29 +59,55 @@ static void CreditsMain(struct State* gameState)
 			break;
 		}
 
-		
-
 		if (InputMouseLeftButton())
 		{
-			gameState->exitToOs = TRUE;
+			state->exitToOs = TRUE;
 			break;
 		}
 
 
 	} while (--wait, 0 != wait);
 
-	ColorsFadeOut(palette, 16);
+	ColorsFadeOut((const UWORD*)state->memory->palette, 16);
 	ScreenOff();
 
-	//gameState->run = Title;
+	state->run = Title;
 }
 
 /*--------------------------------------------------------------------------*/
 
-void Credits(struct State* gameState)
+void Credits(struct MainState* state)
 {
-	CreditsInit();
-	CreditsMain(gameState);
+	AssetsCredits(state->memory);
+
+	//set up credits screen
+
+	UWORD* copper = (UWORD*)state->memory->copper.address + 1;
+	ULONG screen = state->memory->screen.address;
+	UWORD bpl = state->memory->screen.bpl;
+	UWORD brow = state->memory->screen.brow;
+
+	do
+	{
+		CopperUpdateAddress((ULONG)copper, screen);
+		copper += 4;
+		screen += brow;
+
+	} while (--bpl, 0 != bpl);
+
+
+	ScreenSetUp(&state->memory->screen);
+	ColorsSetAllToBlack();
+
+	ScreenClear(&state->memory->screen);
+
+	CreditsDrawTexts(state->memory);
+
+	ScreenWaitForVerticallBlank();
+	CopperStart(state->memory->copper.address);
+	custom->dmacon = DMAF_SETCLR|DMAF_MASTER|DMAF_RASTER|DMAF_COPPER|DMAF_SPRITE;
+
+	state->run = CreditsMain;
 }
 
 /*--------------------------------------------------------------------------*/

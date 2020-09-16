@@ -1,11 +1,11 @@
 #include "screen.h"
 
-#include "colors.h"
-#include "copper.h"
-#include "memory.h"
-#include "sprite.h"
+//#include "colors.h"
+//#include "copper.h"
+//#include "memory.h"
+//#include "sprite.h"
 
-#include "sizes.h"
+//#include "sizes.h"
 
 #include <hardware/custom.h>
 #include <hardware/dmabits.h>
@@ -14,36 +14,32 @@
 
 extern struct Custom* custom;
 
-static ScreenInfo screen =
+
+// /*--------------------------------------------------------------------------*/
+
+// void ScreenInit(void)
+// {
+// 	screen.address = MemoryChipGet(SCREEN_SIZE);
+// 	ScreenClear();
+// 	ScreenStart();
+// }
+
+// /*--------------------------------------------------------------------------*/
+
+// void ScreenCopyInformation(ScreenInfo* scr)
+// {
+// 	scr->address = screen.address;
+// 	scr->bpl = screen.bpl;
+// 	scr->brow = screen.brow;
+// 	scr->height = screen.height;
+// }
+
+// /*--------------------------------------------------------------------------*/
+
+void ScreenClear(ScreenDetails* screen)
 {
-	4,40,256,0
-};
-
-/*--------------------------------------------------------------------------*/
-
-void ScreenInit(void)
-{
-	screen.address = MemoryChipGet(SCREEN_SIZE);
-	ScreenClear();
-	ScreenStart();
-}
-
-/*--------------------------------------------------------------------------*/
-
-void ScreenCopyInformation(ScreenInfo* scr)
-{
-	scr->address = screen.address;
-	scr->bpl = screen.bpl;
-	scr->brow = screen.brow;
-	scr->height = screen.height;
-}
-
-/*--------------------------------------------------------------------------*/
-
-void ScreenClear()
-{
-	ULONG* scr = (ULONG*)screen.address;
-	ULONG i = (screen.height * screen.bpl * screen.brow) / 4;
+	ULONG* scr = (ULONG*)screen->address;
+	ULONG i = (screen->height * screen->bpl * screen->brow) / 4;
 
 	do
 	{
@@ -69,21 +65,21 @@ void ScreenOn(void)
 
 /*--------------------------------------------------------------------------*/
 
-void ScreenStart()
-{
-	CopperInit();
-	SpriteInit();
-	CopperSetScreen(&screen);
-	CopperSetFalseSprites(SpriteGetFalse());
+// void ScreenStart()
+// {
+// 	CopperInit();
+// 	SpriteInit();
+// 	CopperSetScreen(&screen);
+// 	CopperSetFalseSprites(SpriteGetFalse());
 
-	ColorsSetAllToBlack();
-	ScreenSetUp();
+// 	ColorsSetAllToBlack();
+// 	ScreenSetUp();
 
-	ScreenWaitForVerticallBlank();
-	CopperStart();
+// 	ScreenWaitForVerticallBlank();
+// 	CopperStart();
 
-	custom->dmacon = DMAF_SETCLR|DMAF_MASTER|DMAF_RASTER|DMAF_COPPER|DMAF_SPRITE;
-}
+// 	custom->dmacon = DMAF_SETCLR|DMAF_MASTER|DMAF_RASTER|DMAF_COPPER|DMAF_SPRITE;
+// }
 
 /*--------------------------------------------------------------------------*/
 
@@ -97,7 +93,7 @@ void ScreenWaitForVerticallBlank(void)
 
 /*--------------------------------------------------------------------------*/
 
-void ScreenSetUp(void)
+void ScreenSetUp(ScreenDetails* screen)
 {
 	//TODO add AGA check
 	custom->fmode = 0;
@@ -108,11 +104,11 @@ void ScreenSetUp(void)
 	custom->ddfstrt = 0x0038;
 	custom->ddfstop = 0x00d0;
 
-	custom->bplcon0 = screen.bpl * 0x1000 + 0x200;
+	custom->bplcon0 = screen->bpl * 0x1000 + 0x200;
 	custom->bplcon1 = 0;
 	custom->bplcon2 = 0x24;
 	
-	const UWORD modulo = (screen.bpl - 1) * screen.brow;
+	const UWORD modulo = (screen->bpl - 1) * screen->brow;
 	custom->bpl1mod = modulo;
 	custom->bpl2mod = modulo;
 }

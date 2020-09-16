@@ -1,9 +1,7 @@
 #include "memory.h"
 
-#include "memorychip.h"
-#include "memoryany.h"
-
 #include <proto/exec.h>
+
 
 #include "sizes.h"
 
@@ -11,32 +9,35 @@ static ULONG memoryChip;
 static ULONG memoryAny;
 
 
-static ULONG memoryAnyCurrent;
-static ULONG memoryAnyOrigin;
+static ULONG chipCurrent;
+static ULONG anyCurrent;
 
-static ULONG memoryChipCurrent;
-static ULONG memoryChipOrigin;
+static void MemoryRelease(ULONG memory, ULONG size);
+
+ULONG MemoryGetChip(ULONG size);
+ULONG MemoryGetAny(ULONG size);
 
 /*--------------------------------------------------------------------------*/
 
 ULONG MemoryAllocateAll(void)
 {
-	memoryChip = MemoryChipAllocate(MEMORY_CHIP_SIZE);
+	memoryChip = (ULONG)AllocMem(MEMORY_CHIP_SIZE, MEMF_CHIP);
 
 	if (0 == memoryChip)
 	{
 		return RT_NOT_ENOUGH_CHIP_MEM;
 	}
 
-	memoryAny = MemoryAnyAllocate(MEMORY_OTHER_SIZE);
+	memoryAny = (ULONG)AllocMem(MEMORY_OTHER_SIZE, MEMF_ANY);
 
 	if (0 == memoryAny)
 	{
 		return RT_NOT_ENOUGH_ANY_MEM;
 	}
 
-	MemoryChipSetTo(memoryChip);
-	MemoryAnySetTo(memoryAny);
+	chipCurrent = memoryChip;
+	anyCurrent = memoryAny;
+
 
 	return RT_OK;
 }
@@ -45,102 +46,68 @@ ULONG MemoryAllocateAll(void)
 
 void MemoryReleaseAll(void)
 {
-	MemoryAnyFree(memoryAny, MEMORY_OTHER_SIZE);
-	MemoryChipFree(memoryChip, MEMORY_CHIP_SIZE);
+	MemoryRelease(memoryAny, MEMORY_OTHER_SIZE);
+	MemoryRelease(memoryChip, MEMORY_CHIP_SIZE);
 }
 
 /*--------------------------------------------------------------------------*/
 
-ULONG MemoryAnyGet(ULONG size)
+static void MemoryRelease(ULONG memory, ULONG size)
 {
-	ULONG result = memoryAnyCurrent;
-	memoryAnyCurrent += size;
+	if (0 != memory)
+	{
+		FreeMem((APTR)memory, size);
+	}
+}
+
+/*--------------------------------------------------------------------------*/
+
+MemoryDetails m;
+
+MemoryDetails* MemoryGetDetails(void)
+{
+	m.screen.address = MemoryGetChip(SCREEN_SIZE);
+	m.screen.bpl = 4;
+	m.screen.brow = 40;
+	m.screen.height = 256;
+
+	m.copper.address = MemoryGetChip(COPPER_SIZE);
+
+	m.sprites.fake =  MemoryGetChip(SPRITES_SIZE);
+	m.sprites.hero = m.sprites.fake + 8;
+	m.sprites.ego = m.sprites.hero + 18 * 4;
+
+
+	m.assets.packed = MemoryGetAny(ASSETS_SIZE);
+	ULONG stack = MemoryGetAny(DECOMPRESS_STACK_SIZE);
+	m.assets.decrunchStack = stack + DECOMPRESS_STACK_SIZE;
+
+	// credits
+	m.palette = MemoryGetAny(PALETTE_SIZE);
+	m.creditsText = MemoryGetAny(CREDITS_TEXTS_SIZE);
+	m.smallFont = MemoryGetAny(FONTS8_SIZE);
+
+	return &m;
+}
+
+/*--------------------------------------------------------------------------*/
+
+ULONG MemoryGetChip(ULONG size)
+{
+	ULONG result = chipCurrent;
+	chipCurrent += size;
 
 	return result;
 }
 
 /*--------------------------------------------------------------------------*/
 
-void MemoryAnyReset(void)
+ULONG MemoryGetAny(ULONG size)
 {
-	memoryAnyCurrent = memoryAnyOrigin;
-}
-
-/*--------------------------------------------------------------------------*/
-
-void MemoryAnySetToCurrent(void)
-{
-	MemoryAnySetTo(memoryAnyCurrent);
-}
-
-/*--------------------------------------------------------------------------*/
-
-void MemoryAnySetTo(ULONG origin)
-{
-	memoryAnyOrigin = origin;
-	MemoryAnyReset();
-}
-
-/*--------------------------------------------------------------------------*/
-
-ULONG MemoryChipGet(ULONG size)
-{
-	ULONG result = memoryChipCurrent;
-	memoryChipCurrent += size;
+	ULONG result = anyCurrent;
+	anyCurrent += size;
 
 	return result;
-}
-
-/*--------------------------------------------------------------------------*/
-
-void MemoryChipReset(void)
-{
-	memoryChipCurrent = memoryChipOrigin;
-}
-
-/*--------------------------------------------------------------------------*/
-
-void MemoryChipSetToCurrent(void)
-{
-	MemoryChipSetTo(memoryChipCurrent);
-}
-
-/*--------------------------------------------------------------------------*/
-void MemoryChipSetTo(ULONG origin)
-{
-	memoryChipOrigin = origin;
-	MemoryChipReset();
-}
-
-/*--------------------------------------------------------------------------*/
-
-#define DECOMPRESS_STACK_SIZE (1024*5)
-
-struct MemoryDetails memDetails;
-
-struct MemoryDetails* MemoryDetailsInit(void)
-{
-	//--- C H I P ---
-
-	memDetails.screen.address = MemoryChipGet(SCREEN_SIZE);
-	memDetails.screen.bpl = 4;
-	memDetails.screen.brow = 40;
-	memDetails.screen.height = 256;
-
-	memDetails.copper.address = MemoryChipGet(COPPER_SIZE);
-
-	memDetails.sprites.fake =  MemoryChipGet(SPRITES_SIZE);
-	memDetails.sprites.hero = memDetails.sprites.fake + 8;
-	memDetails.sprites.ego = memDetails.sprites.hero + 18 * 4;
-
-
-	//--- A N Y ---
-
-	memDetails.assets.packed = MemoryAnyGet(ASSETS_SIZE);
-	memDetails.assets.decrunchStack = MemoryAnyGet(DECOMPRESS_STACK_SIZE);
-
-
-	return &memDetails;
 }
 
 /*--------------------------------------------------------------------------*/
