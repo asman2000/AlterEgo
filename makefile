@@ -20,8 +20,10 @@ OBJDIR = obj
 
 OBJECTS = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(wildcard $(SRCDIR)/*.c)) \
 	$(OBJDIR)/shrinkler.o
+
 HEADERS = $(wildcard $(SRCDIR)/*.h)
 
+#LIBS = -LC:/VBCC/targets/m68k-amigaos/lib -lvc -lamiga
 LIBS =
 LINK = vlink -nostdlib -bamigahunk -Bstatic -Cvbcc -s -x $(MINSTART)
 
@@ -38,16 +40,6 @@ $(OBJDIR)/shrinkler.o: $(SRCDIR)/asm/shrinkler.s
 
 
 
-
-.PHONY: cls aec tests
-
-aec:	$(BIN)
-cls:
-	$(RM) $(OBJECTS) $(TESTOBJECTS) $(BIN) $(TESTBIN)
-
-tests:	$(TESTBIN)
-
-#tests
 TESTBIN = exe/tests
 
 TESTOBJDIR = obj
@@ -57,8 +49,6 @@ OBJ-OUT = obj/main.o
 TEST-MAIN-OBJ = $(filter-out $(OBJ-OUT), $(OBJECTS))
 
 
-
-
 TESTLINK = vlink -nostdlib -bamigahunk -Bstatic -Cvbcc $(MINSTART)
 
 $(TESTOBJDIR)/%.o: test/%.c
@@ -66,3 +56,19 @@ $(TESTOBJDIR)/%.o: test/%.c
 
 $(TESTBIN): $(TESTOBJECTS) $(TEST-MAIN-OBJ)
 	$(TESTLINK) $(TESTOBJECTS) $(TEST-MAIN-OBJ) -o $@ $(LIBS)
+
+
+
+
+
+.PHONY: cls ae tests
+
+
+ae:	$(BIN)
+
+cls:
+	$(RM) $(OBJECTS) $(TESTOBJECTS) $(BIN) $(TESTBIN)
+
+tests:	$(TESTBIN)
+
+
