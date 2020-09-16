@@ -8,8 +8,8 @@
 void ColorsSetAllToBlack(void);
 void ColorsSetPalette(const UWORD* palette, ULONG size);
 
-void ColorsFadeIn(const UWORD* palette, UWORD size);
-void ColorsFadeOut(const UWORD* palette, UWORD size);
+void ColorsFadeIn(ULONG palette, UWORD size);
+void ColorsFadeOut(ULONG palette, UWORD size);
 
 /*--------------------------------------------------------------------------*/
 

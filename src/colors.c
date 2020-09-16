@@ -38,14 +38,14 @@ void ColorsSetPalette(const UWORD* palette, ULONG size)
 
 /*--------------------------------------------------------------------------*/
 
-void ColorsFadeIn(const UWORD* palette, UWORD size)
+void ColorsFadeIn(ULONG palette, UWORD size)
 {
 	ULONG i = 0;
 
 	while (i < 17)
 	{
 		UWORD k = size;
-		const UWORD* plt = palette;
+		const UWORD* plt = (const UWORD*)palette;
 		UWORD* col = custom->color;
 		ScreenWaitForVerticallBlank();
 
@@ -61,14 +61,14 @@ void ColorsFadeIn(const UWORD* palette, UWORD size)
 
 /*--------------------------------------------------------------------------*/
 
-void ColorsFadeOut(const UWORD* palette, UWORD size)
+void ColorsFadeOut(ULONG palette, UWORD size)
 {
 	ULONG i = 16;
 
 	while (i > 0)
 	{
 		ULONG k = size;
-		const UWORD* plt = palette;
+		const UWORD* plt = (const UWORD*)palette;
 		UWORD* col = custom->color;
 		ScreenWaitForVerticallBlank();
 		do

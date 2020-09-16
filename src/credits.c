@@ -40,15 +40,13 @@ static void CreditsDrawTexts(const MemoryDetails* m)
 	}
 }
 
-// /*--------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------*/
 
 void CreditsMain(struct MainState* state)
 {
-
-
 	UWORD wait = 300;
 
-	ColorsFadeIn((const UWORD*)state->memory->palette, 16);
+	ColorsFadeIn(state->memory->palette, 16);
 
 	do
 	{
@@ -68,7 +66,7 @@ void CreditsMain(struct MainState* state)
 
 	} while (--wait, 0 != wait);
 
-	ColorsFadeOut((const UWORD*)state->memory->palette, 16);
+	ColorsFadeOut(state->memory->palette, 16);
 	ScreenOff();
 
 	state->run = Title;

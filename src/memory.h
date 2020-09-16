@@ -9,6 +9,7 @@ ULONG MemoryAllocateAll(void);
 void MemoryReleaseAll(void);
 
 MemoryDetails* MemoryGetDetails(void);
+
 /*--------------------------------------------------------------------------*/
 
 #endif /* ALTEREGO_MEMORY_H */
