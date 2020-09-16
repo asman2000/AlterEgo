@@ -1,6 +1,7 @@
 #include "credits.h"
 
 #include "assets.h"
+#include "colors.h"
 #include "input.h"
 #include "memory.h"
 #include "screen.h"
@@ -14,8 +15,22 @@ static UWORD* palette;
 static ULONG texts;
 
 static void CreditsDrawTexts(void);
+
 /*--------------------------------------------------------------------------*/
 
+void CreditsMemoryInit(void)
+{
+	// screen
+	// copper
+	// sprites (at least fake one)
+
+	// palette
+	// texts
+	// small fonts
+}
+
+
+/*--------------------------------------------------------------------------*/
 static void CreditsInit(void)
 {
 	MemoryAnyReset();
@@ -29,7 +44,7 @@ static void CreditsInit(void)
 	SmallFontInit();
 
 	
-	ScreenBlackColors();
+	ColorsSetAllToBlack();
 	ScreenClear();
 
 	CreditsDrawTexts();
@@ -66,7 +81,7 @@ static void CreditsMain(struct State* gameState)
 {
 	UWORD wait = 300;
 
-	ScreenFadeIn(palette, 16);
+	ColorsFadeIn(palette, 16);
 
 	do
 	{
@@ -77,7 +92,7 @@ static void CreditsMain(struct State* gameState)
 			break;
 		}
 
-		--wait;
+		
 
 		if (InputMouseLeftButton())
 		{
@@ -86,9 +101,9 @@ static void CreditsMain(struct State* gameState)
 		}
 
 
-	} while (wait != 0);
+	} while (--wait, 0 != wait);
 
-	ScreenFadeOut(palette, 16);
+	ColorsFadeOut(palette, 16);
 	ScreenOff();
 
 	//gameState->run = Title;

@@ -35,8 +35,8 @@ ULONG MemoryAllocateAll(void)
 		return RT_NOT_ENOUGH_ANY_MEM;
 	}
 
-	//MemoryChipSetTo(memoryChip);
-	//MemoryAnySetTo(memoryAny);
+	MemoryChipSetTo(memoryChip);
+	MemoryAnySetTo(memoryAny);
 
 	return RT_OK;
 }
@@ -110,6 +110,37 @@ void MemoryChipSetTo(ULONG origin)
 {
 	memoryChipOrigin = origin;
 	MemoryChipReset();
+}
+
+/*--------------------------------------------------------------------------*/
+
+#define DECOMPRESS_STACK_SIZE (1024*5)
+
+struct MemoryDetails memDetails;
+
+struct MemoryDetails* MemoryDetailsInit(void)
+{
+	//--- C H I P ---
+
+	memDetails.screen.address = MemoryChipGet(SCREEN_SIZE);
+	memDetails.screen.bpl = 4;
+	memDetails.screen.brow = 40;
+	memDetails.screen.height = 256;
+
+	memDetails.copper.address = MemoryChipGet(COPPER_SIZE);
+
+	memDetails.sprites.fake =  MemoryChipGet(SPRITES_SIZE);
+	memDetails.sprites.hero = memDetails.sprites.fake + 8;
+	memDetails.sprites.ego = memDetails.sprites.hero + 18 * 4;
+
+
+	//--- A N Y ---
+
+	memDetails.assets.packed = MemoryAnyGet(ASSETS_SIZE);
+	memDetails.assets.decrunchStack = MemoryAnyGet(DECOMPRESS_STACK_SIZE);
+
+
+	return &memDetails;
 }
 
 /*--------------------------------------------------------------------------*/

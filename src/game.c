@@ -1,6 +1,7 @@
 #include "game.h"
 
 #include "assets.h"
+#include "colors.h"
 #include "gameover.h"
 #include "gfxtile.h"
 #include "hero.h"
@@ -52,7 +53,7 @@ void GameInit(void)
 
 	ScreenOff();
 	ScreenClear();
-	ScreenBlackColors();
+	ColorsSetAllToBlack();
 }
 
 /*--------------------------------------------------------------------------*/
@@ -78,7 +79,7 @@ static void GameLoop(struct State* gameState)
 	HeroShow();
 
 	ScreenOn();
-	ScreenFadeIn(palette, 32);
+	ColorsFadeIn(palette, 32);
 
 	//game logic
 	while (TRUE)
@@ -109,11 +110,10 @@ static void GameLoop(struct State* gameState)
 		}
 	}
 
-	ScreenFadeOut(palette, 32);
+	ColorsFadeOut(palette, 32);
 	ScreenOff();
 	ScreenClear();
-	ScreenBlackColors();
-
+	ColorsSetAllToBlack();
 }
 
 /*--------------------------------------------------------------------------*/

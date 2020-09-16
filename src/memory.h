@@ -8,6 +8,10 @@
 ULONG MemoryAllocateAll(void);
 void MemoryReleaseAll(void);
 
+
+struct MemoryDetails* MemoryDetailsInit(void);
+
+
 ULONG MemoryAnyGet(ULONG size);
 void MemoryAnyReset(void);
 void MemoryAnySetTo(ULONG origin);

@@ -13,7 +13,6 @@
 extern struct Custom* custom;
 
 
-
 ULONG copper;
 
 /*--------------------------------------------------------------------------*/
@@ -51,8 +50,7 @@ void CopperSetScreen(ScreenInfo* screen)
 
 		scr += screen->brow;
 
-		--i;
-	} while (0 != i);
+	} while (--i, 0 != i);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -69,14 +67,12 @@ void CopperSetFalseSprites(const ULONG falseSprite)
 		*cp = falseSprite & 0xffff;
 		cp += 2;
 
-		amount--;
-
-	} while (amount > 0);
+	} while (amount--, amount > 0);
 }
 
 /*--------------------------------------------------------------------------*/
 
-void CopperUpdatSprite(ULONG sprite, int n)
+void CopperUpdateSprite(ULONG sprite, int n)
 {
 	UWORD* cp = (UWORD*)copper + 19;
 	cp += n * 4;

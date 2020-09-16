@@ -11,6 +11,8 @@
 #include "game.h"
 
 
+static struct State state;
+
 /*--------------------------------------------------------------------------*/
 
 static ULONG AlterEgoInit(void)
@@ -19,14 +21,15 @@ static ULONG AlterEgoInit(void)
 
 	if (RT_OK == result)
 	{
+		state.memory =  MemoryDetailsInit();
+		state.exitToOs = FALSE;
+		state.run = Credits;
+
 		result = AssetsLoad("data.bin");
 
 		if (RT_OK == result)
 		{
 			OsStore();
-			ScreenInit();
-			MemoryAnySetToCurrent();
-			MemoryChipSetToCurrent();
 		}
 	}
 
@@ -42,29 +45,15 @@ static void AlterEgoKill(void)
 
 /*--------------------------------------------------------------------------*/
 
-static struct State state;
-
-
 static void AlterEgoLoop(void)
 {
 	struct State* gameState = &state;
-	//gameState->run = Credits;
-	gameState->run = Game;
-	gameState->exitToOs = FALSE;
-
-	//HeroDraw();
 
 	while (TRUE)
 	{
 		gameState->run(gameState);
 
 		if (TRUE == gameState->exitToOs)
-		{
-			break;
-		}
-
-		//temprorary
-		if (InputMouseLeftButton())
 		{
 			break;
 		}

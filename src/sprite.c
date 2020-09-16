@@ -76,7 +76,7 @@ void SpriteDrawHero(Sprite* sprite)
 	sprite->dst = spriteHero;
 	SpriteDraw(sprite);
 
-	CopperUpdatSprite(spriteHero, 4);
+	CopperUpdateSprite(spriteHero, 4);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -88,7 +88,7 @@ void SpriteDrawEgo(Sprite* sprite)
 	sprite->dst = spriteEgo;
 	SpriteDraw(sprite);
 
-	CopperUpdatSprite(spriteEgo, 5);
+	CopperUpdateSprite(spriteEgo, 5);
 }
 
 /*--------------------------------------------------------------------------*/

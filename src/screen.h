@@ -14,7 +14,6 @@ typedef struct
 
 } ScreenInfo;
 
-void ScreenInit(void);
 
 void ScreenClear();
 void ScreenOff(void);
@@ -25,12 +24,6 @@ void ScreenSetUp(void);
 void ScreenWaitForVerticallBlank(void);
 
 void ScreenCopyInformation(ScreenInfo* screen);
-
-void ScreenBlackColors(void);
-void ScreenSetPalette(const UWORD* palette, ULONG size);
-void ScreenFadeIn(const UWORD* palette, UWORD size);
-void ScreenFadeOut(const UWORD* palette, UWORD size);
-
 
 /*--------------------------------------------------------------------------*/
 #endif /* ALTEREGO_SCREEN_H */
