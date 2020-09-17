@@ -71,7 +71,6 @@ void Credits(struct MainState* state)
 {
 	AssetsCredits(state->memory);
 
-	ScreenInit(state->memory);
 	ScreenClear(&state->memory->screen);
 	CreditsDrawTexts(state->memory);
 
