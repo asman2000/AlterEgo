@@ -2,6 +2,7 @@
 
 #include "assets.h"
 #include "credits.h"
+#include "error.h"
 #include "memory.h"
 #include "os.h"
 #include "screen.h"
@@ -42,6 +43,8 @@ void AlterEgo(void)
 			OsRestore();
 		}
 	}
+
+	ErrorShow(result);
 
 	MemoryReleaseAll();
 }

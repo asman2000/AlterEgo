@@ -33,7 +33,6 @@ void AssetsScreen(const MemoryDetails* m)
 	AssetsGet(m, m->copper.address, ASSET_COPPER);
 }
 
-
 /*--------------------------------------------------------------------------*/
 void AssetsCredits(const MemoryDetails* m)
 {
