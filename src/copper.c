@@ -12,20 +12,8 @@ void CopperStart(ULONG copperAddress)
 {
 	custom->cop1lc = copperAddress;
 	custom->copjmp1 = 1;
+	custom->dmacon = DMAF_SETCLR|DMAF_MASTER|DMAF_COPPER;
 }
-
-/*--------------------------------------------------------------------------*/
-
-// void CopperUpdateScreen(ULONG copperAddress, ULONG screenAddress, UWORD bpl, UWORD brow)
-// {
-// 	do
-// 	{
-// 		CopperUpdateAddress(copperAddress, screenAddress);
-// 		copperAddress += 2;
-// 		screenAddress += brow;
-
-// 	} while (--bpl, 0 != bpl);
-// }
 
 /*--------------------------------------------------------------------------*/
 

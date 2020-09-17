@@ -56,9 +56,10 @@ typedef enum
 
 ULONG AssetsLoad(const MemoryDetails* memory, const char* name);
 
-void AssetsGet(const MemoryDetails* memory, ULONG address, AssetsOffset number);
+void AssetsScreen(const MemoryDetails* m);
 
 void AssetsCredits(const MemoryDetails* m);
+
 /*--------------------------------------------------------------------------*/
 
 #endif /* ALTEREGO_ASSETS_H */

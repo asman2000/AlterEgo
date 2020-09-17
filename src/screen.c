@@ -1,40 +1,41 @@
 #include "screen.h"
 
-//#include "colors.h"
-//#include "copper.h"
-//#include "memory.h"
-//#include "sprite.h"
-
-//#include "sizes.h"
+#include "assets.h"
+#include "colors.h"
+#include "copper.h"
 
 #include <hardware/custom.h>
 #include <hardware/dmabits.h>
 
-
-
 extern struct Custom* custom;
 
+/*--------------------------------------------------------------------------*/
 
-// /*--------------------------------------------------------------------------*/
+void ScreenInit(MemoryDetails* memory)
+{
+	AssetsScreen(memory);
 
-// void ScreenInit(void)
-// {
-// 	screen.address = MemoryChipGet(SCREEN_SIZE);
-// 	ScreenClear();
-// 	ScreenStart();
-// }
+	UWORD* copper = (UWORD*)memory->copper.address + 1;
+	ULONG screen = memory->screen.address;
+	UWORD bpl = memory->screen.bpl;
+	UWORD brow = memory->screen.brow;
 
-// /*--------------------------------------------------------------------------*/
+	do
+	{
+		CopperUpdateAddress((ULONG)copper, screen);
+		copper += 4;
+		screen += brow;
 
-// void ScreenCopyInformation(ScreenInfo* scr)
-// {
-// 	scr->address = screen.address;
-// 	scr->bpl = screen.bpl;
-// 	scr->brow = screen.brow;
-// 	scr->height = screen.height;
-// }
+	} while (--bpl, 0 != bpl);
 
-// /*--------------------------------------------------------------------------*/
+
+	ScreenSetUp(&memory->screen);
+	ColorsSetAllToBlack();
+	ScreenWaitForVerticallBlank();
+	CopperStart(memory->copper.address);
+}
+
+/*--------------------------------------------------------------------------*/
 
 void ScreenClear(ScreenDetails* screen)
 {
@@ -62,24 +63,6 @@ void ScreenOn(void)
 	ScreenWaitForVerticallBlank();
 	custom->dmacon = DMAF_SETCLR | DMAF_RASTER;
 }
-
-/*--------------------------------------------------------------------------*/
-
-// void ScreenStart()
-// {
-// 	CopperInit();
-// 	SpriteInit();
-// 	CopperSetScreen(&screen);
-// 	CopperSetFalseSprites(SpriteGetFalse());
-
-// 	ColorsSetAllToBlack();
-// 	ScreenSetUp();
-
-// 	ScreenWaitForVerticallBlank();
-// 	CopperStart();
-
-// 	custom->dmacon = DMAF_SETCLR|DMAF_MASTER|DMAF_RASTER|DMAF_COPPER|DMAF_SPRITE;
-// }
 
 /*--------------------------------------------------------------------------*/
 

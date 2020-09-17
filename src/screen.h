@@ -8,7 +8,7 @@
 
 void ScreenSetUp(ScreenDetails* screen);
 
-// void ScreenInit(void);
+void ScreenInit(MemoryDetails* memory);
 
 void ScreenClear(ScreenDetails* screen);
 void ScreenOff(void);

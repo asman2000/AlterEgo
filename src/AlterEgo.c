@@ -4,6 +4,7 @@
 #include "credits.h"
 #include "memory.h"
 #include "os.h"
+#include "screen.h"
 
 
 struct MainState state;
@@ -25,6 +26,8 @@ void AlterEgo(void)
 		if (RT_OK == result)
 		{
 			OsStore();
+			ScreenInit(state.memory);
+
 
 			while (TRUE)
 			{
