@@ -30,6 +30,7 @@ void TitleLoop(struct MainState* state)
 
 		if (TRUE == InputJoystickRedButton())
 		{
+			InputJoystickReleaseRedButton();
 			state->run = Game;
 			break;
 		}

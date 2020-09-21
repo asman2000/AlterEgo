@@ -1,10 +1,10 @@
 #include "gameover.h"
 
 #include "assets.h"
-#include "game.h"
 #include "input.h"
 #include "screen.h"
 #include "smallfont.h"
+#include "title.h"
 
 #include <hardware/custom.h>
 
@@ -25,7 +25,8 @@ static void GameOverLoop(struct MainState* state)
 	{
 		if (TRUE == InputJoystickRedButton())
 		{
-			state->run = Game;
+			InputJoystickReleaseRedButton();
+			state->run = Title;
 			break;
 		}
 	}

@@ -47,6 +47,7 @@ void CreditsMain(struct MainState* state)
 
 		if (InputJoystickRedButton())
 		{
+			InputJoystickReleaseRedButton();
 			break;
 		}
 

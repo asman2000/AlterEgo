@@ -22,6 +22,16 @@ UBYTE InputJoystickRedButton(void)
 
 /*--------------------------------------------------------------------------*/
 
+void InputJoystickReleaseRedButton(void)
+{
+	while (InputJoystickRedButton())
+	{
+		;
+	}
+}
+
+/*--------------------------------------------------------------------------*/
+
 UBYTE InputJoystickGetState(void)
 {
 	UWORD joy = custom->joy1dat;

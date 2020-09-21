@@ -12,6 +12,7 @@
 
 UBYTE InputMouseLeftButton(void);
 UBYTE InputJoystickRedButton(void);
+void InputJoystickReleaseRedButton(void);
 
 UBYTE InputJoystickGetState(void);
 /*--------------------------------------------------------------------------*/
