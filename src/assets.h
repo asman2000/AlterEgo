@@ -67,6 +67,7 @@ void AssetsGameWorldPalette(const MemoryDetails* m, UBYTE worldNumber);
 void AssetsGameTiles(const MemoryDetails* m);
 void AssetsGameSprites(const MemoryDetails* m);
 
+void AssetsTitle(const MemoryDetails* m);
 
 void AssetsGameOver(const MemoryDetails* m);
 /*--------------------------------------------------------------------------*/

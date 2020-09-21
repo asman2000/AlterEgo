@@ -21,7 +21,7 @@ void AlterEgo(void)
 	{
 		state.exitToOs = FALSE;
 		state.memory = MemoryGetDetails();
-		state.run = Game;
+		state.run = Credits;
 
 		result = AssetsLoad(state.memory, "data.bin");
 

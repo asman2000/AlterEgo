@@ -120,3 +120,10 @@ void AssetsGameOver(const MemoryDetails* m)
 }
 
 /*--------------------------------------------------------------------------*/
+
+void AssetsTitle(const MemoryDetails* m)
+{
+	AssetsGet(m, m->smallFont, ASSET_FONTS8);
+}
+
+/*--------------------------------------------------------------------------*/
