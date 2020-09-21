@@ -2,6 +2,7 @@
 
 #include "assets.h"
 #include "credits.h"
+#include "game.h"
 #include "error.h"
 #include "memory.h"
 #include "os.h"
@@ -20,7 +21,7 @@ void AlterEgo(void)
 	{
 		state.exitToOs = FALSE;
 		state.memory = MemoryGetDetails();
-		state.run = Credits;
+		state.run = Game;
 
 		result = AssetsLoad(state.memory, "data.bin");
 

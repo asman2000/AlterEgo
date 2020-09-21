@@ -9,9 +9,6 @@ static void SmallFontDrawOne(const MemoryDetails* m, UBYTE* scr, UBYTE fntNumber
 
 /*--------------------------------------------------------------------------*/
 
-
-/*--------------------------------------------------------------------------*/
-
 void SmallFontDrawString(const MemoryDetails* m, ULONG screenOffset, const char* str, UBYTE amount)
 {
 	UBYTE* scr = (UBYTE*)(m->screen.address + screenOffset);

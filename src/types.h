@@ -43,6 +43,7 @@ typedef struct _SpritesDetails
 	ULONG fake;
 	ULONG hero;
 	ULONG ego;
+	ULONG data;
 } SpritesDetails;
 
 typedef struct _AssetsDetails
@@ -51,6 +52,12 @@ typedef struct _AssetsDetails
 	ULONG decrunchStack;
 } AssetsDetails;
 
+typedef struct _GameDetails
+{
+	ULONG level;
+	ULONG tiles;
+
+} GameDetails;
 
 typedef struct _MemoryDetails
 {
@@ -63,6 +70,9 @@ typedef struct _MemoryDetails
 	ULONG smallFont;
 
 	AssetsDetails assets;
+
+	GameDetails game;
+
 } MemoryDetails;
 
 

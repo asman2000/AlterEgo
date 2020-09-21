@@ -77,6 +77,8 @@ MemoryDetails* MemoryGetDetails(void)
 	m.sprites.hero = m.sprites.fake + 8;
 	m.sprites.ego = m.sprites.hero + 18 * 4;
 
+	m.sprites.data = MemoryGetAny(GFX_SPRITES_SIZE);
+
 
 	m.assets.packed = MemoryGetAny(ASSETS_SIZE);
 	ULONG stack = MemoryGetAny(DECOMPRESS_STACK_SIZE);
@@ -86,6 +88,10 @@ MemoryDetails* MemoryGetDetails(void)
 	m.palette = MemoryGetAny(PALETTE_SIZE);
 	m.creditsText = MemoryGetAny(CREDITS_TEXTS_SIZE);
 	m.smallFont = MemoryGetAny(FONTS8_SIZE);
+
+	//game
+	m.game.level = MemoryGetAny(LEVEL_SIZE);
+	m.game.tiles = MemoryGetAny(TILES_SIZE);
 
 	return &m;
 }

@@ -60,6 +60,15 @@ void AssetsScreen(const MemoryDetails* m);
 
 void AssetsCredits(const MemoryDetails* m);
 
+void AssetsMap(const MemoryDetails* m, UWORD levelNumber);
+
+void AssetsGameWorldPalette(const MemoryDetails* m, UBYTE worldNumber);
+
+void AssetsGameTiles(const MemoryDetails* m);
+void AssetsGameSprites(const MemoryDetails* m);
+
+
+void AssetsGameOver(const MemoryDetails* m);
 /*--------------------------------------------------------------------------*/
 
 #endif /* ALTEREGO_ASSETS_H */
