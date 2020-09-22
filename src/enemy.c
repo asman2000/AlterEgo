@@ -45,7 +45,7 @@ UBYTE enemy_cnt;
 UBYTE enemy_move_cnt;
 
 
-void SpritesMultiplexed(void);
+void SpritesMultiplexed(const MemoryDetails* m);
 void SpritesDrawEnemies(const MemoryDetails* m);
 void EnemySkullAnimation(UBYTE frameCounter);
 void EnemyCheckBlockCollision(const MemoryDetails* m);
@@ -142,6 +142,7 @@ void EnemyAnimation(EnemySprite* enemy, UWORD frame_cnt, const MemoryDetails* m)
 	}
 }
 /*--------------------------------------------------------------------------*/
+
 UBYTE EnemyProcess(struct Hero* player, UBYTE frame_cnt, const MemoryDetails* m)
 {
 	if ( !(frame_cnt & 1) || player->state == HERO_STATE_EXCHANGE)
@@ -298,16 +299,9 @@ void EnemyInitCnt(void)
 
 void EnemyDraw(const MemoryDetails* m)
 {
-	SpritesMultiplexed();
+	SpritesMultiplexed(m);
 	SpritesDrawEnemies(m);
 }
-
-/*---------------------------------------------------------------------------*/
-
-// void SpritesSetUp(void)
-// {
-// 	enemySpritesMemory = (ULONG*)MemoryGetSpriteEnemy();
-// }
 
 /*---------------------------------------------------------------------------*/
 
@@ -358,7 +352,7 @@ void SortInsertion(void)
 	}
 }
 
-void SpritesMultiplexed(void)
+void SpritesMultiplexed(const MemoryDetails* m)
 {
 	//0. copy y position with index
 	SortCopyPositionWithIndex();
@@ -367,8 +361,7 @@ void SpritesMultiplexed(void)
 	SortInsertion();
 
 
-	ULONG* spriteData = enemySpritesMemory;
-
+	ULONG* spriteData = (ULONG*)m->sprites.enemies;
 
 	//for (int i = 0; i < 4; ++i)
 	
@@ -415,12 +408,15 @@ void SpritesDrawEnemies(const MemoryDetails* m)
 		UWORD y = Enemies[i].PosY - 8;
 		UBYTE charNr = Enemies[i].Frame;
 
-		//ULONG gfxSprites = MemoryGetSpritesData() + charNr * 16 * 4;
 		ULONG gfxSprites = m->sprites.data + charNr * 16 * 4;
 
-		//PrintSprite(sprite, x, y, gfxSprites);
-		
-		//TODO SpriteDraw()
+		Sprite spr;
+		spr.x = x;
+		spr.y = y;
+		spr.src = gfxSprites;
+		spr.dst = sprite;
+
+		SpriteDraw(&spr);
 	}
 
 	for (int i = 0; i < 4; ++i)

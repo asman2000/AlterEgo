@@ -76,6 +76,7 @@ MemoryDetails* MemoryGetDetails(void)
 	m.sprites.fake =  MemoryGetChip(SPRITES_SIZE);
 	m.sprites.hero = m.sprites.fake + 8;
 	m.sprites.ego = m.sprites.hero + 18 * 4;
+	m.sprites.enemies = m.sprites.ego + 18 * 4;
 
 	m.sprites.data = MemoryGetAny(GFX_SPRITES_SIZE);
 

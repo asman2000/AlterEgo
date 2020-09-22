@@ -1,6 +1,7 @@
 #include "map.h"
 
 #include "assets.h"
+#include "enemy.h"
 #include "gfxtile.h"
 #include "hero.h"
 #include "item.h"
@@ -21,6 +22,7 @@ UWORD MapProcess(UWORD levelNumber, const MemoryDetails* m)
 	AssetsMap(m, levelNumber);
 
 	mapItemsToCollect = 0;
+	EnemyInitCnt();
 	ItemInit();
 	HeroInit();
 	HeroSetSwaps(level->swaps);
@@ -46,7 +48,7 @@ UWORD MapProcess(UWORD levelNumber, const MemoryDetails* m)
 			case TILE_NUM_ENEMY_L:
 			case TILE_NUM_ENEMY_U:
 			case TILE_NUM_ENEMY_D:
-				//EnemyAdd(x * 8, y * 8, tile);
+				EnemyAdd(x * 8, y * 8, tile);
 				tile = 0;
 				break;
 

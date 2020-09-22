@@ -2,6 +2,7 @@
 
 #include "assets.h"
 #include "colors.h"
+#include "enemy.h"
 #include "gameover.h"
 #include "gfxtile.h"
 #include "hero.h"
@@ -56,8 +57,9 @@ static void GameLoop(struct MainState* state)
 	AssetsGameWorldPalette(state->memory, currentMatch.worldNumber);
 	
 	UBYTE number = currentMatch.levelNumber + currentMatch.worldNumber * 5;
-	
+
 	currentMatch.itemsToCollect = MapProcess(number, state->memory);
+	EnemyInit();
 
 	HeroShow(state->memory);
 
@@ -71,6 +73,7 @@ static void GameLoop(struct MainState* state)
 
 		ItemDraw(state->memory);
 
+		EnemyDraw(state->memory);
 
 		HeroHandleInput(&currentMatch, state->memory);
 

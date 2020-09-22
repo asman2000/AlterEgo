@@ -43,6 +43,7 @@ typedef struct _SpritesDetails
 	ULONG fake;
 	ULONG hero;
 	ULONG ego;
+	ULONG enemies;
 	ULONG data;
 } SpritesDetails;
 
