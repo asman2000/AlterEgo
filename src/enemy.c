@@ -143,35 +143,33 @@ void EnemyAnimation(EnemySprite* enemy, UWORD frame_cnt, const MemoryDetails* m)
 }
 /*--------------------------------------------------------------------------*/
 
-UBYTE EnemyProcess(struct Hero* player, UBYTE frame_cnt, const MemoryDetails* m)
+UBYTE EnemyProcess(struct Hero* hero, UBYTE frame_cnt, struct MainState* state)
 {
-	if ( !(frame_cnt & 1) || player->state == HERO_STATE_EXCHANGE)
+	if ( !(frame_cnt & 1) || hero->state == HERO_STATE_EXCHANGE)
 	{
-		return 0;
+		return GAME_STATE_NOTHING;
 	}
 
-	UWORD player_x1e = player->man.x + 8;
-	UWORD player_y1e = player->man.y + 8;
+	UWORD x = hero->man.x + 8;
+	UWORD y = hero->man.y + 16;
 	EnemySprite* enemy = Enemies;
 
 	for (UBYTE i = 0; i < enemy_cnt; i++)
 	{
-		
 		UWORD py = enemy->PosY;
 
 		//check collision with hero 
-		if (py >= player->man.y && py < player_y1e)
+		if (py >= (hero->man.y + 8) && py < y)
 		{
 			UWORD px = enemy->PosX;
-			if (px >= player->man.x && px < player_x1e)
+			if (px >= hero->man.x && px < x)
 			{
-				//DONE_NOLUCK
-				return 1;
+				return GAME_STATE_FAIL;
 			}
 		}
 
 		//do animation of enemy (movement too)
-		EnemyAnimation(enemy, frame_cnt, m);
+		EnemyAnimation(enemy, frame_cnt, state->memory);
 
 		enemy++;
 	}
@@ -183,71 +181,14 @@ UBYTE EnemyProcess(struct Hero* player, UBYTE frame_cnt, const MemoryDetails* m)
 
 	enemy_move_cnt--;
 
-	//EnemyCheckBlockCollision();
-
 	EnemySkullAnimation(frame_cnt);
 
-	return 0;
+	return GAME_STATE_NOTHING;
 }
 
 /*--------------------------------------------------------------------------*/
 
-void EnemyCheckBlockCollision(const MemoryDetails* m)
-{
-	enemy_move_cnt--;
-
-	//wait for synchronization
-	if (!enemy_move_cnt)
-	{
-		return;
-	}
-
-	//check enemy collision with level blocks
-	for (UBYTE i = 0; i < enemy_cnt; i++)
-	{
-		UWORD px = Enemies[i].PosX;
-		UWORD py = Enemies[i].PosY;
-
-		switch(Enemies[i].Direction)
-		{
-		case TILE_NUM_ENEMY_L:
-			if (!(MapCheck(px, py + 8, m) & TILE_FLOOR) ||
-				(MapCheck(px - 8, py, m) & TILE_WALL))
-			{
-				Enemies[i].Direction = TILE_NUM_ENEMY_R;
-			}
-			break;
-
-		case TILE_NUM_ENEMY_R:
-			if (!(MapCheck(px + 8, py + 8, m)&TILE_FLOOR) ||
-				(MapCheck(px + 8, py, m)  &TILE_WALL))
-			{
-				Enemies[i].Direction = TILE_NUM_ENEMY_L;
-			}
-			break;
-
-		case TILE_NUM_ENEMY_U:
-			if (MapCheck(px, py - 8, m)&(TILE_WALL | TILE_BRIDGE | TILE_WATER))
-			{
-				Enemies[i].Direction = TILE_NUM_ENEMY_D;
-			}
-			break;
-
-		case TILE_NUM_ENEMY_D:
-			if (MapCheck(px, py + 8, m)&(TILE_WALL | TILE_BRIDGE | TILE_WATER))
-			{
-				Enemies[i].Direction = TILE_NUM_ENEMY_U;
-			}
-			break;
-		}
-	}
-
-	enemy_move_cnt = 8;
-
-}
-/*--------------------------------------------------------------------------*/
 UWORD AnimColors[] = { 0x0A20, 0x0E00, 0x0E80 ,0x0E00 };
-
 
 void EnemySkullAnimation(UBYTE frameCounter)
 {

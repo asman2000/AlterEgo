@@ -80,6 +80,12 @@ static void GameLoop(struct MainState* state)
 
 		HeroHandleInput(&currentMatch, state->memory);
 
+		if (GAME_STATE_NOTHING == currentMatch.state)
+		{
+			struct Hero* hero = HeroGet();
+			currentMatch.state = EnemyProcess(hero, frame_cnt, state);
+		}
+
 		if (InputMouseLeftButton())
 		{
 			state->exitToOs = TRUE;
@@ -97,9 +103,6 @@ static void GameLoop(struct MainState* state)
 			state->run = GameLevelFail;
 			break;
 		}
-
-		struct Hero* hero = HeroGet();
-		EnemyProcess(hero, frame_cnt, state->memory);
 	}
 
 	ColorsFadeOut(state->memory->palette, 32);

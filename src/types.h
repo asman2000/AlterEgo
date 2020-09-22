@@ -89,6 +89,9 @@ struct MainState
 	UBYTE exitToOs;
 };
 
+#define GAME_STATE_FAIL 1
+#define GAME_STATE_NOTHING 0
+
 /*--------------------------------------------------------------------------*/
 
 #endif /* ALTEREGO_TYPES_H */
