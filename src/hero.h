@@ -49,6 +49,7 @@ void HeroSetPosition(UWORD x, UWORD y);
 void HeroSetSyncType(UBYTE sync);
 void HeroSetSwaps(UBYTE swaps);
 
+struct Hero* HeroGet(void);
 
 /*--------------------------------------------------------------------------*/
 #endif /* ALTEREGO_HERO_H */

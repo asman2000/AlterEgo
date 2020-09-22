@@ -66,10 +66,13 @@ static void GameLoop(struct MainState* state)
 	ScreenOn();
 	ColorsFadeIn(state->memory->palette, 32);
 
+	UBYTE frame_cnt = 0;
+
 	//game logic
 	while (TRUE)
 	{
 		ScreenWaitForVerticallBlank();
+		frame_cnt++;
 
 		ItemDraw(state->memory);
 
@@ -94,6 +97,9 @@ static void GameLoop(struct MainState* state)
 			state->run = GameLevelFail;
 			break;
 		}
+
+		struct Hero* hero = HeroGet();
+		EnemyProcess(hero, frame_cnt, state->memory);
 	}
 
 	ColorsFadeOut(state->memory->palette, 32);
