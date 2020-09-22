@@ -7,7 +7,6 @@
 #include "sprite.h"
 
 #include "smallfont.h"
-//#include "dbg.h"
 
 /*--------------------------------------------------------------------------*/
 
@@ -25,16 +24,6 @@ static struct Hero heroes[2];
 
 static struct Hero* hero;
 
-typedef enum
-{
-	HERO_STATE_IDLE,
-	HERO_STATE_WALK,
-	HERO_STATE_LADDER,
-	HERO_STATE_LADDER_IDLE,
-	HERO_STATE_FALL,
-	HERO_STATE_EXCHANGE
-
-} HeroStates;
 
 void HeroStateSetLadderIdle(void);
 void HeroCollectItems(Match* game, const MemoryDetails* m);

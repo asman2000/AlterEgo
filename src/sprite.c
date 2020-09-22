@@ -4,7 +4,7 @@
 
 #include "copper.h"
 
-void SpriteDraw(Sprite* sprite);
+
 /*--------------------------------------------------------------------------*/
 
 void SpriteDraw(Sprite* sprite)

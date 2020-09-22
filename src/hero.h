@@ -26,6 +26,17 @@ struct Hero
 	UBYTE syncType;
 };
 
+typedef enum
+{
+	HERO_STATE_IDLE,
+	HERO_STATE_WALK,
+	HERO_STATE_LADDER,
+	HERO_STATE_LADDER_IDLE,
+	HERO_STATE_FALL,
+	HERO_STATE_EXCHANGE
+
+} HeroStates;
+
 
 void HeroHandleInput(Match* game, const MemoryDetails* m);
 

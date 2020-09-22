@@ -17,6 +17,7 @@ typedef struct
 	UWORD dy;
 } Sprite;
 
+void SpriteDraw(Sprite* sprite);
 void SpriteDrawHero(Sprite* sprite, const MemoryDetails* memory);
 void SpriteDrawEgo(Sprite* sprite, const MemoryDetails* memory);
 
