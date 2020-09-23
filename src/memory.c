@@ -78,6 +78,8 @@ MemoryDetails* MemoryGetDetails(void)
 	m.sprites.ego = m.sprites.hero + 18 * 4;
 	m.sprites.enemies = m.sprites.ego + 18 * 4;
 
+	m.music = MemoryGetChip(MUSIC_SIZE);
+
 	m.sprites.data = MemoryGetAny(GFX_SPRITES_SIZE);
 
 

@@ -12,7 +12,7 @@ void CopperStart(ULONG copperAddress)
 {
 	custom->cop1lc = copperAddress;
 	custom->copjmp1 = 1;
-	custom->dmacon = DMAF_SETCLR|DMAF_MASTER|DMAF_COPPER;
+	custom->dmacon = DMAF_SETCLR|DMAF_MASTER|DMAF_COPPER|DMAF_SPRITE|DMAF_AUDIO;
 }
 
 /*--------------------------------------------------------------------------*/

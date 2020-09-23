@@ -3,6 +3,7 @@
 #include "assets.h"
 #include "input.h"
 #include "game.h"
+#include "music.h"
 #include "screen.h"
 #include "smallfont.h"
 
@@ -20,8 +21,12 @@ void TitleLoop(struct MainState* state)
 	custom->color[2] = 0x888;
 	custom->color[3] = 0xaaa;
 
+	MusicStart(state->memory);
+
 	while (TRUE)
 	{
+		ScreenWaitForVerticallBlank();
+
 		if (TRUE == InputMouseLeftButton())
 		{
 			state->exitToOs = TRUE;
@@ -37,6 +42,8 @@ void TitleLoop(struct MainState* state)
 	}
 
 	ScreenOff();
+
+	MusicStop();
 }
 
 /*--------------------------------------------------------------------------*/

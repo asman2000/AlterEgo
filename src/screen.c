@@ -61,7 +61,7 @@ void ScreenOff(void)
 void ScreenOn(void)
 {
 	ScreenWaitForVerticallBlank();
-	custom->dmacon = DMAF_SETCLR | DMAF_RASTER | DMAF_SPRITE;
+	custom->dmacon = DMAF_SETCLR | DMAF_RASTER;
 }
 
 /*--------------------------------------------------------------------------*/

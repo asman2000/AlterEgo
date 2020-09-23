@@ -124,6 +124,7 @@ void AssetsGameOver(const MemoryDetails* m)
 void AssetsTitle(const MemoryDetails* m)
 {
 	AssetsGet(m, m->smallFont, ASSET_FONTS8);
+	AssetsGet(m, m->music, ASSET_MOD_MENU);
 }
 
 /*--------------------------------------------------------------------------*/

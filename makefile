@@ -19,7 +19,7 @@ SRCDIR = src
 OBJDIR = obj
 
 OBJECTS = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(wildcard $(SRCDIR)/*.c)) \
-	$(OBJDIR)/shrinkler.o
+	$(OBJDIR)/shrinkler.o $(OBJDIR)/ptplayer.o
 
 HEADERS = $(wildcard $(SRCDIR)/*.h)
 
@@ -37,6 +37,9 @@ $(BIN): $(OBJECTS)
 
 $(OBJDIR)/shrinkler.o: $(SRCDIR)/asm/shrinkler.s
 	$(AS) $(AFLAGS) $(SRCDIR)/asm/shrinkler.s -o $(OBJDIR)/shrinkler.o
+$(OBJDIR)/ptplayer.o: $(SRCDIR)/asm/ptplayer.asm
+	$(AS) $(AFLAGS) $(SRCDIR)/asm/ptplayer.asm -o $(OBJDIR)/ptplayer.o
+
 
 
 

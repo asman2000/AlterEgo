@@ -5,6 +5,7 @@
 #include "game.h"
 #include "error.h"
 #include "memory.h"
+#include "music.h"
 #include "os.h"
 #include "screen.h"
 
@@ -29,6 +30,7 @@ void AlterEgo(void)
 		{
 			OsStore();
 			ScreenInit(state.memory);
+			MusicSetUp();
 
 
 			while (TRUE)
@@ -41,6 +43,7 @@ void AlterEgo(void)
 				}
 			}
 
+			MusicDestroy();
 			OsRestore();
 		}
 	}

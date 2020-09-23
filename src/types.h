@@ -70,6 +70,8 @@ typedef struct _MemoryDetails
 	ULONG creditsText;
 	ULONG smallFont;
 
+	ULONG music;
+
 	AssetsDetails assets;
 
 	GameDetails game;
