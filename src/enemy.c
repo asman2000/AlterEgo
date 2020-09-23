@@ -262,7 +262,6 @@ SortEntry sortY[ENEMY_MAX_AMOUNT];
 
 void SortCopyPositionWithIndex(void)
 {
-	//for (int i = 0; i < enemy_cnt; ++i)
 	int k = enemy_cnt;
 	int i = 0;
 
@@ -301,12 +300,8 @@ void SpritesMultiplexed(const MemoryDetails* m)
 	//1. sorting (insertion sort)
 	SortInsertion();
 
-
 	ULONG* spriteData = (ULONG*)m->sprites.enemies;
 
-	//for (int i = 0; i < 4; ++i)
-	
-	//for (int i = 3; i >= 0; --i)
 	int i = 3;
 	do
 	{
