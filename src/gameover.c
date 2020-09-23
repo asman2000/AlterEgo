@@ -2,6 +2,7 @@
 
 #include "assets.h"
 #include "input.h"
+#include "music.h"
 #include "screen.h"
 #include "smallfont.h"
 #include "title.h"
@@ -20,9 +21,18 @@ static void GameOverLoop(struct MainState* state)
 	custom->color[3] = 0xaaa;
 
 	SmallFontDrawString(state->memory, 0, "GAME OVER", 9);
+	MusicStart(state->memory);
 
 	while (TRUE)
 	{
+		ScreenWaitForVerticallBlank();
+
+		if (TRUE == InputMouseLeftButton())
+		{
+			state->exitToOs = TRUE;
+			break;
+		}
+
 		if (TRUE == InputJoystickRedButton())
 		{
 			InputJoystickReleaseRedButton();
@@ -32,6 +42,7 @@ static void GameOverLoop(struct MainState* state)
 	}
 
 	ScreenOff();
+	MusicStop();
 }
 
 /*--------------------------------------------------------------------------*/

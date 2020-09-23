@@ -117,6 +117,7 @@ void AssetsGameSprites(const MemoryDetails* m)
 void AssetsGameOver(const MemoryDetails* m)
 {
 	AssetsGet(m, m->smallFont, ASSET_FONTS8);
+	AssetsGet(m, m->music, ASSET_MOD_GAMEOVER);
 }
 
 /*--------------------------------------------------------------------------*/
