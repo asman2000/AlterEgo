@@ -33,8 +33,8 @@ static void GameLoop(struct MainState* state);
 
 void GameInit(const MemoryDetails* m)
 {
-	currentMatch.levelNumber = 0;
-	currentMatch.worldNumber = 0;
+	currentMatch.levelNumber = 4;
+	currentMatch.worldNumber = 4;
 	currentMatch.itemsToCollect = 0;
 	currentMatch.state = GAME_STATE_NOTHING;
 	currentMatch.livesNumber = 1;

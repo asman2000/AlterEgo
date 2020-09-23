@@ -49,6 +49,16 @@ assetsBeg:
 	dc.l	world43-assetsBeg
 	dc.l	world44-assetsBeg
 
+	dc.l	modClear-assetsBeg
+	dc.l	modCongrats-assetsBeg
+	dc.l	modGameOver-assetsBeg
+	dc.l	modMenu-assetsBeg
+	dc.l	modWorld1-assetsBeg
+	dc.l	modWorld2-assetsBeg
+	dc.l	modWorld3-assetsBeg
+	dc.l	modWorld4-assetsBeg
+	dc.l	modWorld5-assetsBeg
+
 	; dc.l	sfx00-assetsBeg
 	; dc.l	sfx01-assetsBeg
 	; dc.l	sfx02-assetsBeg
@@ -109,6 +119,16 @@ world41:	incbin	'world4-1.shr'
 world42:	incbin	'world4-2.shr'
 world43:	incbin	'world4-3.shr'
 world44:	incbin	'world4-4.shr'
+
+modClear:	incbin	'mod.Clear.shr'
+modCongrats:	incbin	'mod.Congrats.shr'
+modGameOver:	incbin	'mod.GameOver.shr'
+modMenu:	incbin	'mod.Menu.shr'
+modWorld1:	incbin	'mod.World1.shr'
+modWorld2:	incbin	'mod.World2.shr'
+modWorld3:	incbin	'mod.World3.shr'
+modWorld4:	incbin	'mod.World4.shr'
+modWorld5:	incbin	'mod.World5.shr'
 
 ; sfx00:		incbin	'raw-packed/sfx-00.shr'
 ; sfx01:		incbin	'raw-packed/sfx-01.shr'
