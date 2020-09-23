@@ -334,11 +334,6 @@ void SpritesMultiplexed(const MemoryDetails* m)
 
 /*---------------------------------------------------------------------------*/
 
-// extern void PrintSprite(__reg("a0") ULONG sprite,
-// 	__reg("d0") UWORD x,
-// 	__reg("d1") UWORD y,
-// 	__reg("a1") ULONG gfx);
-
 void SpritesDrawEnemies(const MemoryDetails* m)
 {
 	for (int i = 0; i < enemy_cnt; ++i)
