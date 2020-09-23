@@ -73,6 +73,7 @@ void AssetsCredits(const MemoryDetails* m);
 void AssetsMap(const MemoryDetails* m, UWORD levelNumber);
 
 void AssetsGameWorldPalette(const MemoryDetails* m, UBYTE worldNumber);
+void AssetsGameWorldMusic(const MemoryDetails* m, UBYTE worldNumber);
 
 void AssetsGameTiles(const MemoryDetails* m);
 void AssetsGameSprites(const MemoryDetails* m);

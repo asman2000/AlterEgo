@@ -10,6 +10,7 @@
 #include "item.h"
 #include "map.h"
 #include "memory.h"
+#include "music.h"
 #include "screen.h"
 #include "sizes.h"
 #include "smallfont.h"
@@ -33,8 +34,8 @@ static void GameLoop(struct MainState* state);
 
 void GameInit(const MemoryDetails* m)
 {
-	currentMatch.levelNumber = 4;
-	currentMatch.worldNumber = 4;
+	currentMatch.levelNumber = 0;
+	currentMatch.worldNumber = 0;
 	currentMatch.itemsToCollect = 0;
 	currentMatch.state = GAME_STATE_NOTHING;
 	currentMatch.livesNumber = 1;
@@ -55,6 +56,7 @@ void GameInit(const MemoryDetails* m)
 static void GameLoop(struct MainState* state)
 {
 	AssetsGameWorldPalette(state->memory, currentMatch.worldNumber);
+	AssetsGameWorldMusic(state->memory, currentMatch.worldNumber);
 	
 	UBYTE number = currentMatch.levelNumber + currentMatch.worldNumber * 5;
 
@@ -67,6 +69,8 @@ static void GameLoop(struct MainState* state)
 	ColorsFadeIn(state->memory->palette, 32);
 
 	UBYTE frame_cnt = 0;
+
+	MusicStart(state->memory);
 
 	//game logic
 	while (TRUE)
@@ -104,6 +108,8 @@ static void GameLoop(struct MainState* state)
 			break;
 		}
 	}
+
+	MusicStop();
 
 	ColorsFadeOut(state->memory->palette, 32);
 	ScreenOff();

@@ -98,6 +98,20 @@ void AssetsGameWorldPalette(const MemoryDetails* m, UBYTE worldNumber)
 	AssetsGet(m, m->palette, worldColors[worldNumber]);
 }
 
+UBYTE worldMusic[] = 
+{ 
+	ASSET_MOD_WORLD0,
+	ASSET_MOD_WORLD1,
+	ASSET_MOD_WORLD2,
+	ASSET_MOD_WORLD3,
+	ASSET_MOD_WORLD4
+};
+
+void AssetsGameWorldMusic(const MemoryDetails* m, UBYTE worldNumber)
+{
+	AssetsGet(m, m->music, worldMusic[worldNumber]);
+}
+
 /*--------------------------------------------------------------------------*/
 
 void AssetsGameTiles(const MemoryDetails* m)
