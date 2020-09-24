@@ -77,6 +77,7 @@ void AssetsGameWorldMusic(const MemoryDetails* m, UBYTE worldNumber);
 
 void AssetsGameTiles(const MemoryDetails* m);
 void AssetsGameSprites(const MemoryDetails* m);
+void AssetsGameLevelClear(const MemoryDetails* m);
 
 void AssetsTitle(const MemoryDetails* m);
 

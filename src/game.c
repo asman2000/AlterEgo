@@ -99,7 +99,7 @@ static void GameLoop(struct MainState* state)
 		if (0 == currentMatch.itemsToCollect)
 		{
 			state->run = GameNextLevel;
-			break;
+			return;
 		}
 
 		if (GAME_STATE_FAIL == currentMatch.state)
@@ -152,6 +152,22 @@ void GameLevelFail(struct MainState* state)
 void GameNextLevel(struct MainState* state)
 {
 	state->run = GameLoop;
+	
+	MusicStop();
+
+	AssetsGameLevelClear(state->memory);
+
+	MusicStart(state->memory);
+
+	UWORD counter = 200;
+
+	do
+	{
+		ScreenWaitForVerticallBlank();
+
+	}
+	while (--counter, 0 != counter);
+
 
 	currentMatch.levelNumber++;
 

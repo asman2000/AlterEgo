@@ -112,6 +112,11 @@ void AssetsGameWorldMusic(const MemoryDetails* m, UBYTE worldNumber)
 	AssetsGet(m, m->music, worldMusic[worldNumber]);
 }
 
+void AssetsGameLevelClear(const MemoryDetails* m)
+{
+	AssetsGet(m, m->music, ASSET_MOD_CLEAR);
+}
+
 /*--------------------------------------------------------------------------*/
 
 void AssetsGameTiles(const MemoryDetails* m)
