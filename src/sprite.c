@@ -4,6 +4,10 @@
 
 #include "copper.h"
 
+#include <hardware/custom.h>
+#include <hardware/dmabits.h>
+
+extern struct Custom* custom;
 
 /*--------------------------------------------------------------------------*/
 
@@ -63,6 +67,21 @@ void SpriteDrawEgo(Sprite* sprite, const MemoryDetails* memory)
 
 	ULONG copperSprite = memory->copper.address + 9 * 4 + 2 + 4 * 8;
 	CopperUpdateAddress(copperSprite, memory->sprites.ego);
+}
+
+/*--------------------------------------------------------------------------*/
+
+void SpritesOn(void)
+{
+	custom->dmacon = DMAF_SETCLR | DMAF_SPRITE;
+
+}
+
+/*--------------------------------------------------------------------------*/
+
+void SpritesOff(void)
+{
+	custom->dmacon = DMAF_SPRITE;
 }
 
 /*--------------------------------------------------------------------------*/

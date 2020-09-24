@@ -21,5 +21,8 @@ void SpriteDraw(Sprite* sprite);
 void SpriteDrawHero(Sprite* sprite, const MemoryDetails* memory);
 void SpriteDrawEgo(Sprite* sprite, const MemoryDetails* memory);
 
+void SpritesOn(void);
+void SpritesOff(void);
+
 /*--------------------------------------------------------------------------*/
 #endif /* ALTEREGO_SPRITE_H */
