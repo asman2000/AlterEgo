@@ -1,11 +1,11 @@
-#include "title.h"
+#include "welldone.h"
 
 #include "assets.h"
-#include "game.h"
 #include "input.h"
 #include "music.h"
 #include "screen.h"
 #include "smallfont.h"
+#include "title.h"
 
 #include <hardware/custom.h>
 
@@ -13,7 +13,7 @@ extern struct Custom* custom;
 
 /*--------------------------------------------------------------------------*/
 
-void TitleLoop(struct MainState* state)
+void WellDoneLoop(struct MainState* state)
 {
 	ScreenWaitForVerticallBlank();
 
@@ -36,7 +36,7 @@ void TitleLoop(struct MainState* state)
 		if (TRUE == InputJoystickRedButton())
 		{
 			InputJoystickReleaseRedButton();
-			state->run = Game;
+			state->run = Title;
 			break;
 		}
 	}
@@ -44,19 +44,22 @@ void TitleLoop(struct MainState* state)
 	ScreenOff();
 
 	MusicStop();
+
 }
 
 /*--------------------------------------------------------------------------*/
 
-void Title(struct MainState* state)
+void Welldone(struct MainState* state)
 {
 	AssetsTitle(state->memory);
 	ScreenClear(&state->memory->screen);
-	SmallFontDrawString(state->memory, 0, "TITLE", 5);
+	SmallFontDrawString(state->memory, 0, "WELL DONE",  9);
 
 	ScreenOn();
 
-	state->run = TitleLoop;
+	state->run = WellDoneLoop;
+
 }
+
 
 /*--------------------------------------------------------------------------*/

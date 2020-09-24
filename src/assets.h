@@ -82,6 +82,8 @@ void AssetsGameLevelClear(const MemoryDetails* m);
 void AssetsTitle(const MemoryDetails* m);
 
 void AssetsGameOver(const MemoryDetails* m);
+
+void AssetsWellDone(const MemoryDetails* m);
 /*--------------------------------------------------------------------------*/
 
 #endif /* ALTEREGO_ASSETS_H */

@@ -15,6 +15,7 @@
 #include "sizes.h"
 #include "smallfont.h"
 #include "sprite.h"
+#include "welldone.h"
 
 
 Match currentMatch;
@@ -34,8 +35,8 @@ static void GameLoop(struct MainState* state);
 
 void GameInit(const MemoryDetails* m)
 {
-	currentMatch.levelNumber = 0;
-	currentMatch.worldNumber = 0;
+	currentMatch.levelNumber = 4;
+	currentMatch.worldNumber = 4;
 	currentMatch.itemsToCollect = 0;
 	currentMatch.state = GAME_STATE_NOTHING;
 	currentMatch.livesNumber = 1;
@@ -178,8 +179,7 @@ void GameNextLevel(struct MainState* state)
 
 		if (WORLD_MAX_NUMBER == currentMatch.worldNumber)
 		{
-			//TODO implement GameOutro
-			//gameState->run = GameOutro;
+			state->run = Welldone;
 		}
 	}
 }
