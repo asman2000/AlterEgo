@@ -6,6 +6,7 @@
 #include "music.h"
 #include "screen.h"
 #include "smallfont.h"
+#include "sprite.h"
 
 #include <hardware/custom.h>
 
@@ -16,6 +17,7 @@ extern struct Custom* custom;
 void TitleLoop(struct MainState* state)
 {
 	ScreenWaitForVerticallBlank();
+	SpritesOff();
 
 	custom->color[1] = 0x555;
 	custom->color[2] = 0x888;
@@ -42,6 +44,7 @@ void TitleLoop(struct MainState* state)
 	}
 
 	ScreenOff();
+	SpritesOn();
 
 	MusicStop();
 }
