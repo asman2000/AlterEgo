@@ -38,7 +38,7 @@
 #define PACKED_SFX (28624)
 #define PACKED_LVL (20480)
 
-
+#define SFX_AMOUNT 14
 
 // ASSETS
 

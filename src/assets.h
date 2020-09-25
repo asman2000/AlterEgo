@@ -79,6 +79,8 @@ void AssetsGameTiles(const MemoryDetails* m);
 void AssetsGameSprites(const MemoryDetails* m);
 void AssetsGameLevelClear(const MemoryDetails* m);
 
+void AssetsSfx(const MemoryDetails* m);
+
 void AssetsTitle(const MemoryDetails* m);
 
 void AssetsGameOver(const MemoryDetails* m);

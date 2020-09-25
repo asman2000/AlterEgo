@@ -80,6 +80,8 @@ MemoryDetails* MemoryGetDetails(void)
 
 	m.music = MemoryGetChip(MUSIC_SIZE);
 
+	m.sfx[0] = MemoryGetChip(SFX_SIZE);
+
 	m.sprites.data = MemoryGetAny(GFX_SPRITES_SIZE);
 
 
