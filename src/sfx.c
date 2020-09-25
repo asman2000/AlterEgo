@@ -69,7 +69,7 @@ void SfxInit(const MemoryDetails* m)
 		adr += size;
 
 		Samples[i].length = size / 2;
-		Samples[i].period = 160;
+		Samples[i].period = 324;
 		Samples[i].volume = 64;
 		Samples[i].channel = -1;
 		Samples[i].priority = 1;

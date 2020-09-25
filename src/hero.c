@@ -5,8 +5,7 @@
 #include "item.h"
 #include "map.h"
 #include "sprite.h"
-
-#include "smallfont.h"
+#include "sfx.h"
 
 /*--------------------------------------------------------------------------*/
 
@@ -176,6 +175,8 @@ static void HeroStateSetFall(void)
 
 static void HeroStateSetExchange(void)
 {
+	SfxPlay(SFX_EXCHANGE);
+
 	hero->state = HERO_STATE_EXCHANGE;
 	hero->man.frame = HERO_SPR_IDLE;
 	hero->man.frameOffset = 0;

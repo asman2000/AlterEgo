@@ -34,7 +34,7 @@ void MusicStart(const MemoryDetails* m)
 {
 	mt_init(0xdff000, m->music, 0, 0);
 	mt_Enable = 1;
-	mt_mastervol(64);
+	mt_mastervol(4);
 }
 
 /*----------------------------------------------------------------------------*/
