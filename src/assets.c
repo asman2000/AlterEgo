@@ -159,7 +159,7 @@ void AssetsWellDone(const MemoryDetails* m)
 
 void AssetsSfx(const MemoryDetails* m)
 {
-	AssetsGet(m, m->sfx[0], ASSET_SFX);
+	AssetsGet(m, m->sfx, ASSET_SFX);
 }
 
 /*--------------------------------------------------------------------------*/

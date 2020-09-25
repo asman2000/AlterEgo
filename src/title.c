@@ -7,6 +7,7 @@
 #include "screen.h"
 #include "smallfont.h"
 #include "sprite.h"
+#include "sfx.h"
 
 #include <hardware/custom.h>
 
@@ -37,16 +38,29 @@ void TitleLoop(struct MainState* state)
 
 		if (TRUE == InputJoystickRedButton())
 		{
+			MusicStop();
 			InputJoystickReleaseRedButton();
 			state->run = Game;
 			break;
 		}
 	}
 
+	SfxPlay(SFX_START);
+	UWORD wait = 150;
+
+	do
+	{
+		ScreenWaitForVerticallBlank();
+
+
+	} while (--wait != 0xffff);
+
+
+
 	ScreenOff();
 	SpritesOn();
 
-	MusicStop();
+	
 }
 
 /*--------------------------------------------------------------------------*/

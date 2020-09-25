@@ -8,6 +8,7 @@
 #include "music.h"
 #include "os.h"
 #include "screen.h"
+#include "sfx.h"
 
 
 struct MainState state;
@@ -31,7 +32,8 @@ void AlterEgo(void)
 			OsStore();
 			ScreenInit(state.memory);
 			MusicSetUp();
-
+			SfxInit(state.memory);
+			AssetsSfx(state.memory);
 
 			while (TRUE)
 			{

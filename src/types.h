@@ -71,7 +71,7 @@ typedef struct _MemoryDetails
 	ULONG smallFont;
 
 	ULONG music;
-	ULONG sfx[14];
+	ULONG sfx;
 
 	AssetsDetails assets;
 
