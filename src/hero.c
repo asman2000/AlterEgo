@@ -299,7 +299,7 @@ static UBYTE HeroTryExchange(const MemoryDetails* m)
 {
 	if (0 == hero->swaps)
 	{
-		//TODO sfx no swaps
+		SfxPlay(SFX_OUT_OF_EXCHANGES);
 		return FALSE;
 	}
 
@@ -307,14 +307,13 @@ static UBYTE HeroTryExchange(const MemoryDetails* m)
 
 	if (tile & TILE_WALL)
 	{
-		//TODO sfx can't exchange
+		SfxPlay(SFX_NO_EXCHANGE);
 		return FALSE;
 	}
 
-	//TODO sfx exchange
 	//TODO hud or sprite update
 
-	//hero->swaps--;
+	hero->swaps--;
 
 	return TRUE;
 }
