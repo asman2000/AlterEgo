@@ -163,6 +163,7 @@ static void HeroStateSetClimbDown(void)
 
 static void HeroStateSetFall(void)
 {
+	SfxPlay(SFX_FALLING);
 	hero->state = HERO_STATE_FALL;
 	hero->steps = 8;
 	hero->man.dx = 0;
@@ -643,6 +644,7 @@ void HeroCollectItems(Match* game, const MemoryDetails* m)
 
 	if (TILE_ITEM1 == tile)
 	{
+		SfxPlay(SFX_ITEM1);
 		ItemTake(hero->man.x / 8, hero->man.y + 8, m);
 		game->itemsToCollect--;
 		MapClearTile(hero->man.x, hero->man.y + 8, m);
@@ -652,6 +654,7 @@ void HeroCollectItems(Match* game, const MemoryDetails* m)
 
 	if (TILE_ITEM2 == tile)
 	{
+		SfxPlay(SFX_ITEM2);
 		ItemTake(hero->ego.x / 8, hero->ego.y + 8, m);
 		game->itemsToCollect--;
 		MapClearTile(hero->ego.x, hero->ego.y + 8, m);

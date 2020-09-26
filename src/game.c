@@ -15,6 +15,7 @@
 #include "sizes.h"
 #include "smallfont.h"
 #include "sprite.h"
+#include "sfx.h"
 #include "welldone.h"
 
 
@@ -105,6 +106,7 @@ static void GameLoop(struct MainState* state)
 
 		if (GAME_STATE_FAIL == currentMatch.state)
 		{
+			SfxPlay(SFX_HIT);
 			state->run = GameLevelFail;
 			break;
 		}
