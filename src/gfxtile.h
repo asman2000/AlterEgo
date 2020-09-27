@@ -13,8 +13,6 @@
 
 /*--------------------------------------------------------------------------*/
 
-void GfxTileInit(void);
-
 void GfxTileDrawOne(ULONG scrOffset, UBYTE tileNumber, const MemoryDetails* m);
 
 /*--------------------------------------------------------------------------*/

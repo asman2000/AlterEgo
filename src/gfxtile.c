@@ -1,16 +1,5 @@
 #include "gfxtile.h"
 
-#include "assets.h"
-
-
-/*--------------------------------------------------------------------------*/
-
-void GfxTileInit(void)
-{
-
-	//AssetsGet(tilesData, ASSET_TILES);
-}
-
 /*--------------------------------------------------------------------------*/
 
 void GfxTileDrawOne(ULONG scrOffset, UBYTE tileNumber, const MemoryDetails* m)
