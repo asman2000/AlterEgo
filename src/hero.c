@@ -47,9 +47,6 @@ void HeroInit(void)
 	hero->man.dx = 0;
 	hero->man.dy = 0;
 	
-	//TODO
-	hero->man.src = 0;	//spriteGfxData + 12 * 16 * 4;
-	hero->man.dst = 0;	//spriteHero;
 	hero->man.frame = HERO_SPR_IDLE;
 	hero->man.frameOffset = 0;
 
