@@ -97,4 +97,32 @@ struct MainState
 
 /*--------------------------------------------------------------------------*/
 
+typedef struct _Memories
+{
+	//any
+	ULONG spritesData;
+	ULONG assetsPackedData;
+	ULONG assetsDecrunchStack;
+	ULONG palette;
+	ULONG creditsText;
+	ULONG smallFont;
+	ULONG gameLevel;
+	ULONG gameTiles;
+
+	// chip
+	ULONG screenAddress;
+	ULONG copperAddress;
+	ULONG spriteFakeAddress;
+	ULONG spriteHeroAddress;
+	ULONG spriteEgoAddress;
+	ULONG spriteEnemyAddress;
+	ULONG musicAddress;
+	ULONG sfxAddress;
+
+	UWORD screenBpl;
+	UWORD screenBrow;
+	UWORD screenHeight;
+} Memories;
+/*--------------------------------------------------------------------------*/
+
 #endif /* ALTEREGO_TYPES_H */
