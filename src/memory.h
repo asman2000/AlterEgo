@@ -8,7 +8,7 @@
 ULONG MemoryAllocateAll(void);
 void MemoryReleaseAll(void);
 
-MemoryDetails* MemoryGetDetails(void);
+void MemoryInitialize(void);
 
 /*--------------------------------------------------------------------------*/
 

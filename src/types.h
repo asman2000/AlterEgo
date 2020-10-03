@@ -119,10 +119,15 @@ typedef struct _Memories
 	ULONG musicAddress;
 	ULONG sfxAddress;
 
+	//variables
 	UWORD screenBpl;
 	UWORD screenBrow;
 	UWORD screenHeight;
+
+	struct MainState mainState;
 } Memories;
+
+extern Memories* mem;
 /*--------------------------------------------------------------------------*/
 
 #endif /* ALTEREGO_TYPES_H */

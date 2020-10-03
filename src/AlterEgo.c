@@ -11,7 +11,7 @@
 #include "sfx.h"
 
 
-struct MainState state;
+//struct MainState state;
 /*--------------------------------------------------------------------------*/
 
 void AlterEgo(void)
@@ -21,31 +21,36 @@ void AlterEgo(void)
 
 	if (RT_OK == result)
 	{
-		state.exitToOs = FALSE;
-		state.memory = MemoryGetDetails();
-		state.run = Credits;
+		MemoryInitialize();
 
-		result = AssetsLoad(state.memory, "data.bin");
+		mem->mainState.exitToOs = FALSE;
+		mem->mainState.run = Credits;
+
+		//state.exitToOs = FALSE;
+		//state.memory = MemoryGetDetails();
+		//state.run = Credits;
+
+		//result = AssetsLoad(state.memory, "data.bin");
 
 		if (RT_OK == result)
 		{
 			OsStore();
-			ScreenInit(state.memory);
-			MusicSetUp();
-			SfxInit(state.memory);
-			AssetsSfx(state.memory);
+			// ScreenInit(state.memory);
+			// MusicSetUp();
+			// SfxInit(state.memory);
+			// AssetsSfx(state.memory);
 
 			while (TRUE)
 			{
-				state.run(&state);
+				mem->mainState.run(&mem->mainState);
 
-				if (TRUE == state.exitToOs)
+				if (TRUE == mem->mainState.exitToOs)
 				{
 					break;
 				}
 			}
 
-			MusicDestroy();
+			//MusicDestroy();
 			OsRestore();
 		}
 	}

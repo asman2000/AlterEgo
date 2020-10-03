@@ -61,53 +61,12 @@ static void MemoryRelease(ULONG memory, ULONG size)
 
 /*--------------------------------------------------------------------------*/
 
-MemoryDetails* m;
-
-MemoryDetails* MemoryGetDetails(void)
-{
-	m = (MemoryDetails*)MemoryGetAny(sizeof(MemoryDetails));
-
-	m->screen.address = MemoryGetChip(SCREEN_SIZE);
-	m->screen.bpl = 4;
-	m->screen.brow = 40;
-	m->screen.height = 256;
-
-	m->copper.address = MemoryGetChip(COPPER_SIZE);
-
-	m->sprites.fake =  MemoryGetChip(SPRITES_SIZE);
-	m->sprites.hero = m->sprites.fake + 8;
-	m->sprites.ego = m->sprites.hero + 18 * 4;
-	m->sprites.enemies = m->sprites.ego + 18 * 4;
-
-	m->music = MemoryGetChip(MUSIC_SIZE);
-
-	m->sfx = MemoryGetChip(SFX_SIZE);
-
-	m->sprites.data = MemoryGetAny(GFX_SPRITES_SIZE);
-
-
-	m->assets.packed = MemoryGetAny(ASSETS_SIZE);
-	ULONG stack = MemoryGetAny(DECOMPRESS_STACK_SIZE);
-	m->assets.decrunchStack = stack + DECOMPRESS_STACK_SIZE;
-
-	// credits
-	m->palette = MemoryGetAny(PALETTE_SIZE);
-	m->creditsText = MemoryGetAny(CREDITS_TEXTS_SIZE);
-	m->smallFont = MemoryGetAny(FONTS8_SIZE);
-
-	//game
-	m->game.level = MemoryGetAny(LEVEL_SIZE);
-	m->game.tiles = MemoryGetAny(TILES_SIZE);
-
-	return m;
-}
-
-/*--------------------------------------------------------------------------*/
+Memories* mem;
 
 void MemoryInitialize(void)
 {
 	ULONG any = memoryAny;
-	Memories* mem = (Memories*)memoryAny;
+	mem = (Memories*)memoryAny;
 	any += sizeof(Memories);
 
 
@@ -165,26 +124,6 @@ void MemoryInitialize(void)
 	mem->screenBpl = 4;
 	mem->screenBrow = 40;
 	mem->screenHeight = 256;
-}
-
-/*--------------------------------------------------------------------------*/
-
-ULONG MemoryGetChip(ULONG size)
-{
-	ULONG result = chipCurrent;
-	chipCurrent += size;
-
-	return result;
-}
-
-/*--------------------------------------------------------------------------*/
-
-ULONG MemoryGetAny(ULONG size)
-{
-	ULONG result = anyCurrent;
-	anyCurrent += size;
-
-	return result;
 }
 
 /*--------------------------------------------------------------------------*/
