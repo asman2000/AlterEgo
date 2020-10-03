@@ -8,14 +8,7 @@
 static ULONG memoryChip;
 static ULONG memoryAny;
 
-
-static ULONG chipCurrent;
-static ULONG anyCurrent;
-
 static void MemoryRelease(ULONG memory, ULONG size);
-
-ULONG MemoryGetChip(ULONG size);
-ULONG MemoryGetAny(ULONG size);
 
 /*--------------------------------------------------------------------------*/
 
@@ -34,9 +27,6 @@ ULONG MemoryAllocateAll(void)
 	{
 		return RT_NOT_ENOUGH_ANY_MEM;
 	}
-
-	chipCurrent = memoryChip;
-	anyCurrent = memoryAny;
 
 	return RT_OK;
 }
