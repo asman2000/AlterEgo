@@ -64,28 +64,28 @@ typedef enum
 
 /*--------------------------------------------------------------------------*/
 
-ULONG AssetsLoad(const MemoryDetails* memory, const char* name);
+ULONG AssetsLoad(const char* name);
 
-void AssetsScreen(const MemoryDetails* m);
+void AssetsScreen(void);
 
-void AssetsCredits(const MemoryDetails* m);
+void AssetsCredits(void);
 
-void AssetsMap(const MemoryDetails* m, UWORD levelNumber);
+void AssetsMap(UWORD levelNumber);
 
-void AssetsGameWorldPalette(const MemoryDetails* m, UBYTE worldNumber);
-void AssetsGameWorldMusic(const MemoryDetails* m, UBYTE worldNumber);
+void AssetsGameWorldPalette(UBYTE worldNumber);
+void AssetsGameWorldMusic(UBYTE worldNumber);
 
-void AssetsGameTiles(const MemoryDetails* m);
-void AssetsGameSprites(const MemoryDetails* m);
-void AssetsGameLevelClear(const MemoryDetails* m);
+void AssetsGameTiles(void);
+void AssetsGameSprites(void);
+void AssetsGameLevelClear(void);
 
-void AssetsSfx(const MemoryDetails* m);
+void AssetsSfx(void);
 
-void AssetsTitle(const MemoryDetails* m);
+void AssetsTitle(void);
 
-void AssetsGameOver(const MemoryDetails* m);
+void AssetsGameOver(void);
 
-void AssetsWellDone(const MemoryDetails* m);
+void AssetsWellDone(void);
 /*--------------------------------------------------------------------------*/
 
 #endif /* ALTEREGO_ASSETS_H */

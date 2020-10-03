@@ -4,13 +4,13 @@
 #include "io.h"
 #include "sizes.h"
 
-void AssetsGet(const MemoryDetails* m, ULONG address, AssetsOffset number);
+void AssetsGet(ULONG address, AssetsOffset number);
 
 /*--------------------------------------------------------------------------*/
 
-ULONG AssetsLoad(const MemoryDetails* memory, const char* name)
+ULONG AssetsLoad(const char* name)
 {
-	ULONG result = IoFileLoad(name, memory->assets.packed, ASSETS_SIZE);
+	ULONG result = IoFileLoad(name, mem->assetsPackedData, ASSETS_SIZE);
 	IoFlush();
 
 	return result;
@@ -18,28 +18,28 @@ ULONG AssetsLoad(const MemoryDetails* memory, const char* name)
 
 /*--------------------------------------------------------------------------*/
 
-void AssetsGet(const MemoryDetails* m, ULONG address, AssetsOffset number)
+void AssetsGet(ULONG address, AssetsOffset number)
 {
-	const ULONG* offsets = (const ULONG*)m->assets.packed;
-	ULONG src = m->assets.packed + offsets[number];
+	const ULONG* offsets = (const ULONG*)mem->assetsPackedData;
+	ULONG src = mem->assetsPackedData + offsets[number];
 
-	Decompress(src, address, m->assets.decrunchStack);
+	Decompress(src, address, mem->assetsDecrunchStack);
 }
 
 /*--------------------------------------------------------------------------*/
 
-void AssetsScreen(const MemoryDetails* m)
+void AssetsScreen(void)
 {
-	AssetsGet(m, m->copper.address, ASSET_COPPER);
+	AssetsGet(mem->copperAddress, ASSET_COPPER);
 }
 
 /*--------------------------------------------------------------------------*/
 
-void AssetsCredits(const MemoryDetails* m)
+void AssetsCredits(void)
 {
-	AssetsGet(m, m->palette, ASSET_CREDITS_COLORS);
-	AssetsGet(m, m->creditsText, ASSET_CREDITS_TXT);
-	AssetsGet(m, m->smallFont, ASSET_FONTS8);
+	AssetsGet(mem->palette, ASSET_CREDITS_COLORS);
+	AssetsGet(mem->creditsText, ASSET_CREDITS_TXT);
+	AssetsGet(mem->smallFont, ASSET_FONTS8);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -76,9 +76,9 @@ UWORD worldLevels[] =
 	ASSET_WORLD4_4,
 };
 
-void AssetsMap(const MemoryDetails* m, UWORD levelNumber)
+void AssetsMap(UWORD levelNumber)
 {
-	AssetsGet(m, m->game.level, worldLevels[levelNumber]);	
+	AssetsGet(mem->gameLevel, worldLevels[levelNumber]);	
 }
 
 /*--------------------------------------------------------------------------*/
@@ -93,9 +93,9 @@ UBYTE worldColors[] =
 };
 
 
-void AssetsGameWorldPalette(const MemoryDetails* m, UBYTE worldNumber)
+void AssetsGameWorldPalette(UBYTE worldNumber)
 {
-	AssetsGet(m, m->palette, worldColors[worldNumber]);
+	AssetsGet(mem->palette, worldColors[worldNumber]);
 }
 
 UBYTE worldMusic[] = 
@@ -107,59 +107,59 @@ UBYTE worldMusic[] =
 	ASSET_MOD_WORLD4
 };
 
-void AssetsGameWorldMusic(const MemoryDetails* m, UBYTE worldNumber)
+void AssetsGameWorldMusic(UBYTE worldNumber)
 {
-	AssetsGet(m, m->music, worldMusic[worldNumber]);
+	AssetsGet(mem->musicAddress, worldMusic[worldNumber]);
 }
 
-void AssetsGameLevelClear(const MemoryDetails* m)
+void AssetsGameLevelClear(void)
 {
-	AssetsGet(m, m->music, ASSET_MOD_CLEAR);
-}
-
-/*--------------------------------------------------------------------------*/
-
-void AssetsGameTiles(const MemoryDetails* m)
-{
-	AssetsGet(m, m->game.tiles, ASSET_TILES);
+	AssetsGet(mem->musicAddress, ASSET_MOD_CLEAR);
 }
 
 /*--------------------------------------------------------------------------*/
 
-void AssetsGameSprites(const MemoryDetails* m)
+void AssetsGameTiles(void)
 {
-	AssetsGet(m, m->sprites.data, ASSET_SPRITES);
+	AssetsGet(mem->gameTiles, ASSET_TILES);
 }
 
 /*--------------------------------------------------------------------------*/
 
-void AssetsGameOver(const MemoryDetails* m)
+void AssetsGameSprites(void)
 {
-	AssetsGet(m, m->smallFont, ASSET_FONTS8);
-	AssetsGet(m, m->music, ASSET_MOD_GAMEOVER);
+	AssetsGet(mem->spritesData, ASSET_SPRITES);
 }
 
 /*--------------------------------------------------------------------------*/
 
-void AssetsTitle(const MemoryDetails* m)
+void AssetsGameOver(void)
 {
-	AssetsGet(m, m->smallFont, ASSET_FONTS8);
-	AssetsGet(m, m->music, ASSET_MOD_MENU);
+	AssetsGet(mem->smallFont, ASSET_FONTS8);
+	AssetsGet(mem->musicAddress, ASSET_MOD_GAMEOVER);
 }
 
 /*--------------------------------------------------------------------------*/
 
-void AssetsWellDone(const MemoryDetails* m)
+void AssetsTitle(void)
 {
-	AssetsGet(m, m->smallFont, ASSET_FONTS8);
-	AssetsGet(m, m->music, ASSET_MOD_CONGRATS);
+	AssetsGet(mem->smallFont, ASSET_FONTS8);
+	AssetsGet(mem->musicAddress, ASSET_MOD_MENU);
 }
 
 /*--------------------------------------------------------------------------*/
 
-void AssetsSfx(const MemoryDetails* m)
+void AssetsWellDone(void)
 {
-	AssetsGet(m, m->sfx, ASSET_SFX);
+	AssetsGet(mem->smallFont, ASSET_FONTS8);
+	AssetsGet(mem->musicAddress, ASSET_MOD_CONGRATS);
+}
+
+/*--------------------------------------------------------------------------*/
+
+void AssetsSfx(void)
+{
+	AssetsGet(mem->sfxAddress, ASSET_SFX);
 }
 
 /*--------------------------------------------------------------------------*/

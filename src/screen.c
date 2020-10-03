@@ -11,7 +11,7 @@ extern struct Custom* custom;
 
 /*--------------------------------------------------------------------------*/
 
-void ScreenInit(MemoryDetails* memory)
+void ScreenInit(void)
 {
 	AssetsScreen(memory);
 

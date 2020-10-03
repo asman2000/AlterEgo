@@ -34,7 +34,7 @@ void AlterEgo(void)
 		mem->mainState.exitToOs = FALSE;
 		mem->mainState.run = AETest;
 
-		//result = AssetsLoad(state.memory, "data.bin");
+		result = AssetsLoad("data.bin");
 
 		if (RT_OK == result)
 		{
