@@ -4,7 +4,7 @@
 
 #include "types.h"
 
-void SfxInit(const MemoryDetails* m);
+void SfxInit(void);
 void SfxPlay(UWORD number);
 
 enum SfxNames

@@ -57,9 +57,9 @@ extern void mt_playfx(__reg("a6") ULONG custom, __reg("a0") ULONG Sfx);
 
 /*---------------------------------------------------------------------------*/
 
-void SfxInit(const MemoryDetails* m)
+void SfxInit(void)
 {
-	ULONG adr = m->sfx;
+	ULONG adr = mem->sfxAddress;
 
 	for (int i = 0; i < 15; ++i)
 	{

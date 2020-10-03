@@ -39,9 +39,9 @@ void AlterEgo(void)
 		if (RT_OK == result)
 		{
 			OsStore();
-			// ScreenInit(state.memory);
-			// MusicSetUp();
-			// SfxInit(state.memory);
+			ScreenInit();
+			MusicSetUp();
+			SfxInit();
 			// AssetsSfx(state.memory);
 
 			while (TRUE)
@@ -54,7 +54,7 @@ void AlterEgo(void)
 				}
 			}
 
-			//MusicDestroy();
+			MusicDestroy();
 			OsRestore();
 		}
 	}
