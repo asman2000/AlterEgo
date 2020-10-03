@@ -92,6 +92,16 @@ struct MainState
 	UBYTE exitToOs;
 };
 
+
+struct GlobalMainState;
+typedef void (*Fnc)(void);
+
+struct GlobalMainState
+{
+	Fnc run;
+	UBYTE exitToOs;
+};
+
 #define GAME_STATE_FAIL 1
 #define GAME_STATE_NOTHING 0
 
@@ -124,7 +134,7 @@ typedef struct _Memories
 	UWORD screenBrow;
 	UWORD screenHeight;
 
-	struct MainState mainState;
+	struct GlobalMainState mainState;
 } Memories;
 
 extern Memories* mem;

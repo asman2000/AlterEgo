@@ -10,9 +10,17 @@
 #include "screen.h"
 #include "sfx.h"
 
+#include "input.h"
 
-//struct MainState state;
 /*--------------------------------------------------------------------------*/
+
+void AETest(void)
+{
+	if (InputMouseLeftButton())
+	{
+		mem->mainState.exitToOs = TRUE;
+	}
+}
 
 void AlterEgo(void)
 {
@@ -24,11 +32,7 @@ void AlterEgo(void)
 		MemoryInitialize();
 
 		mem->mainState.exitToOs = FALSE;
-		mem->mainState.run = Credits;
-
-		//state.exitToOs = FALSE;
-		//state.memory = MemoryGetDetails();
-		//state.run = Credits;
+		mem->mainState.run = AETest;
 
 		//result = AssetsLoad(state.memory, "data.bin");
 
@@ -42,7 +46,7 @@ void AlterEgo(void)
 
 			while (TRUE)
 			{
-				mem->mainState.run(&mem->mainState);
+				mem->mainState.run();
 
 				if (TRUE == mem->mainState.exitToOs)
 				{
