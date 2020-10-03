@@ -5,12 +5,9 @@
 
 #include "types.h"
 
-
-void ScreenSetUp(ScreenDetails* screen);
-
 void ScreenInit(void);
 
-void ScreenClear(ScreenDetails* screen);
+void ScreenClear(void);
 void ScreenOff(void);
 void ScreenOn(void);
 // void ScreenStart(void);

@@ -9,16 +9,17 @@
 
 extern struct Custom* custom;
 
+void ScreenSetUp();
 /*--------------------------------------------------------------------------*/
 
 void ScreenInit(void)
 {
-	AssetsScreen(memory);
+	AssetsScreen();
 
-	UWORD* copper = (UWORD*)memory->copper.address + 1;
-	ULONG screen = memory->screen.address;
-	UWORD bpl = memory->screen.bpl;
-	UWORD brow = memory->screen.brow;
+	UWORD* copper = (UWORD*)mem->copperAddress + 1;
+	ULONG screen = mem->screenAddress;
+	UWORD bpl = mem->screenBpl;
+	UWORD brow = mem->screenBrow;
 
 	do
 	{
@@ -29,18 +30,18 @@ void ScreenInit(void)
 	} while (--bpl, 0 != bpl);
 
 
-	ScreenSetUp(&memory->screen);
+	ScreenSetUp();
 	ColorsSetAllToBlack();
 	ScreenWaitForVerticallBlank();
-	CopperStart(memory->copper.address);
+	CopperStart();
 }
 
 /*--------------------------------------------------------------------------*/
 
-void ScreenClear(ScreenDetails* screen)
+void ScreenClear(void)
 {
-	ULONG* scr = (ULONG*)screen->address;
-	ULONG i = (screen->height * screen->bpl * screen->brow) / 4;
+	ULONG* scr = (ULONG*)mem->screenAddress;
+	ULONG i = (mem->screenHeight * mem->screenBpl * mem->screenBrow) / 4;
 
 	do
 	{
@@ -76,7 +77,7 @@ void ScreenWaitForVerticallBlank(void)
 
 /*--------------------------------------------------------------------------*/
 
-void ScreenSetUp(ScreenDetails* screen)
+void ScreenSetUp()
 {
 	//TODO add AGA check
 	custom->fmode = 0;
@@ -87,11 +88,11 @@ void ScreenSetUp(ScreenDetails* screen)
 	custom->ddfstrt = 0x0038;
 	custom->ddfstop = 0x00d0;
 
-	custom->bplcon0 = screen->bpl * 0x1000 + 0x200;
+	custom->bplcon0 = mem->screenBpl * 0x1000 + 0x200;
 	custom->bplcon1 = 0;
 	custom->bplcon2 = 0x24;
 	
-	const UWORD modulo = (screen->bpl - 1) * screen->brow;
+	const UWORD modulo = (mem->screenBpl - 1) * mem->screenBrow;
 	custom->bpl1mod = modulo;
 	custom->bpl2mod = modulo;
 }

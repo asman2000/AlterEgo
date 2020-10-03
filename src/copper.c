@@ -8,9 +8,9 @@ extern struct Custom* custom;
 
 /*--------------------------------------------------------------------------*/
 
-void CopperStart(ULONG copperAddress)
+void CopperStart()
 {
-	custom->cop1lc = copperAddress;
+	custom->cop1lc = mem->copperAddress;
 	custom->copjmp1 = 1;
 	custom->dmacon = DMAF_SETCLR|DMAF_MASTER|DMAF_COPPER|DMAF_SPRITE|DMAF_AUDIO;
 }
