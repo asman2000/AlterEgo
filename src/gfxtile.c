@@ -2,26 +2,27 @@
 
 /*--------------------------------------------------------------------------*/
 
-void GfxTileDrawOne(ULONG scrOffset, UBYTE tileNumber, const MemoryDetails* m)
+void GfxTileDrawOne(ULONG scrOffset, UBYTE tileNumber)
 {
-	UBYTE* scr = (UBYTE*)(m->screen.address + scrOffset);
-	UBYTE* tiles = (UBYTE*)m->game.tiles + tileNumber * 32;
+	UBYTE* scr = (UBYTE*)(mem->screenAddress + scrOffset);
+	UBYTE* tiles = (UBYTE*)mem->gameTiles + tileNumber * 32;
 
 	ULONG i = 8;
 
 	do
 	{
 		*scr = *tiles++;
-		scr += m->screen.brow;
+		scr += mem->screenBrow;
 
 		*scr = *tiles++;
-		scr += m->screen.brow;
+		scr += mem->screenBrow;
 
 		*scr = *tiles++;
-		scr += m->screen.brow;
+		scr += mem->screenBrow;
 
 		*scr = *tiles++;
-		scr += m->screen.brow;
+		scr += mem->screenBrow;
+
 	} while (--i, 0 != i);
 }
 
