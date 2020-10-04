@@ -8,8 +8,7 @@
 
 
 void SmallFontDrawString(ULONG screenOffset, const char* str, UBYTE amount);
-
-void SmallFontDrawDigit(const MemoryDetails* m, ULONG screenOffset, const char digit);
+void SmallFontDrawDigit(ULONG screenOffset, const char digit);
 
 
 /*--------------------------------------------------------------------------*/

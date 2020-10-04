@@ -5,13 +5,13 @@
 
 
 
-static void SmallFontDrawOne(const MemoryDetails* m, UBYTE* scr, UBYTE fntNumber);
+static void SmallFontDrawOne(UBYTE* scr, UBYTE fntNumber);
 
 /*--------------------------------------------------------------------------*/
 
-void SmallFontDrawString(const MemoryDetails* m, ULONG screenOffset, const char* str, UBYTE amount)
+void SmallFontDrawString(ULONG screenOffset, const char* str, UBYTE amount)
 {
-	UBYTE* scr = (UBYTE*)(m->screen.address + screenOffset);
+	UBYTE* scr = (UBYTE*)(mem->screenAddress + screenOffset);
 
 	do
 	{
@@ -30,37 +30,37 @@ void SmallFontDrawString(const MemoryDetails* m, ULONG screenOffset, const char*
 			fnt = fnt - 'A' + 1;
 		}
 
-		SmallFontDrawOne(m, scr++, fnt);
+		SmallFontDrawOne(scr++, fnt);
 
 	} while (--amount, 0 != amount);
 }
 
 /*--------------------------------------------------------------------------*/
 
-static void SmallFontDrawOne(const MemoryDetails* m, UBYTE* scr, UBYTE fntNumber)
+static void SmallFontDrawOne(UBYTE* scr, UBYTE fntNumber)
 {
 	ULONG i = 8;
-	UBYTE* fonts = (UBYTE*)m->smallFont;
+	UBYTE* fonts = (UBYTE*)mem->smallFont;
 	fonts += fntNumber * 16;
 
 	do
 	{
 		*scr = *fonts++;
-		scr += m->screen.brow;
+		scr += mem->screenBrow;
 		*scr = *fonts++;
-		scr += m->screen.brow * 3;
+		scr += mem->screenBrow * 3;
 		
 	} while (--i, 0 != i);
 }
 
 /*--------------------------------------------------------------------------*/
 
-void SmallFontDrawDigit(const MemoryDetails* m, ULONG screenOffset, const char digit)
+void SmallFontDrawDigit(ULONG screenOffset, const char digit)
 {
 	UBYTE font = digit - '0' + 28 + 1;
-	UBYTE* scr = (UBYTE*)(m->screen.address + screenOffset);
+	UBYTE* scr = (UBYTE*)(mem->screenAddress + screenOffset);
 
-	SmallFontDrawOne(m, scr, font);
+	SmallFontDrawOne(scr, font);
 }
 
 /*--------------------------------------------------------------------------*/
