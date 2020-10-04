@@ -38,11 +38,11 @@ typedef enum
 } HeroStates;
 
 
-void HeroHandleInput(Match* game, const MemoryDetails* m);
+void HeroHandleInput(Match* game);
 
 void HeroSetUp(HeroNumber number);
 void HeroInit(void);
-void HeroShow(const MemoryDetails* m);
+void HeroShow(void);
 
 
 void HeroSetPosition(UWORD x, UWORD y);

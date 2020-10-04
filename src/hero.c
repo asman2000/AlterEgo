@@ -25,7 +25,7 @@ static struct Hero* hero;
 
 
 void HeroStateSetLadderIdle(void);
-void HeroCollectItems(Match* game, const MemoryDetails* m);
+void HeroCollectItems(Match* game);
 /*--------------------------------------------------------------------------*/
 
 void HeroSetUp(HeroNumber number)
@@ -220,10 +220,10 @@ static void HeroStateSetExchange(void)
 
 /*--------------------------------------------------------------------------*/
 
-static UBYTE HeroIsFall(const MemoryDetails* m)
+static UBYTE HeroIsFall(void)
 {
-	UBYTE tile = MapCheck(hero->man.x, hero->man.y + 8, m);
-	UBYTE bottom = MapCheck(hero->man.x, hero->man.y + 16, m);
+	UBYTE tile = MapCheck(hero->man.x, hero->man.y + 8);
+	UBYTE bottom = MapCheck(hero->man.x, hero->man.y + 16);
 
 	if (!(bottom & TILE_FLOOR) && !(tile & TILE_LADDER))
 	{
@@ -235,9 +235,9 @@ static UBYTE HeroIsFall(const MemoryDetails* m)
 
 /*--------------------------------------------------------------------------*/
 
-static UBYTE HeroCanLeft(const MemoryDetails* m)
+static UBYTE HeroCanLeft(void)
 {
-	if (MapCheck(hero->man.x - 8, hero->man.y + 8, m) & TILE_WALL)
+	if (MapCheck(hero->man.x - 8, hero->man.y + 8) & TILE_WALL)
 	{
 		return FALSE;
 	}
@@ -247,9 +247,9 @@ static UBYTE HeroCanLeft(const MemoryDetails* m)
 
 /*--------------------------------------------------------------------------*/
 
-static UBYTE HeroCanRight(const MemoryDetails* m)
+static UBYTE HeroCanRight(void)
 {
-	if (MapCheck(hero->man.x + 8, hero->man.y + 8, m) & TILE_WALL)
+	if (MapCheck(hero->man.x + 8, hero->man.y + 8) & TILE_WALL)
 	{
 		return FALSE;
 	}
@@ -259,10 +259,10 @@ static UBYTE HeroCanRight(const MemoryDetails* m)
 
 /*--------------------------------------------------------------------------*/
 
-static UBYTE HeroCanUp(const MemoryDetails* m)
+static UBYTE HeroCanUp(void)
 {
-	UBYTE ladder = MapCheck(hero->man.x, hero->man.y + 8, m);
-	UBYTE above = MapCheck(hero->man.x, hero->man.y, m);
+	UBYTE ladder = MapCheck(hero->man.x, hero->man.y + 8);
+	UBYTE above = MapCheck(hero->man.x, hero->man.y);
 
 	if ((ladder & TILE_LADDER) && (above & TILE_LADDER))
 	{
@@ -274,10 +274,10 @@ static UBYTE HeroCanUp(const MemoryDetails* m)
 
 /*--------------------------------------------------------------------------*/
 
-static UBYTE HeroCanDown(const MemoryDetails* m)
+static UBYTE HeroCanDown(void)
 {
-	UBYTE ladder = MapCheck(hero->man.x, hero->man.y + 8, m);
-	UBYTE above = MapCheck(hero->man.x, hero->man.y + 16, m);
+	UBYTE ladder = MapCheck(hero->man.x, hero->man.y + 8);
+	UBYTE above = MapCheck(hero->man.x, hero->man.y + 16);
 
 	if ((ladder & TILE_LADDER) || (above & TILE_LADDER))
 	{
@@ -292,7 +292,7 @@ static UBYTE HeroCanDown(const MemoryDetails* m)
 
 /*--------------------------------------------------------------------------*/
 
-static UBYTE HeroTryExchange(const MemoryDetails* m)
+static UBYTE HeroTryExchange(void)
 {
 	if (0 == hero->swaps)
 	{
@@ -300,7 +300,7 @@ static UBYTE HeroTryExchange(const MemoryDetails* m)
 		return FALSE;
 	}
 
-	UBYTE tile = MapCheck(hero->ego.x, hero->ego.y + 8, m);
+	UBYTE tile = MapCheck(hero->ego.x, hero->ego.y + 8);
 
 	if (tile & TILE_WALL)
 	{
@@ -328,9 +328,9 @@ static void HeroMoveOneStep(void)
 
 /*--------------------------------------------------------------------------*/
 
-UBYTE HeroJoyRight(const MemoryDetails* m)
+UBYTE HeroJoyRight(void)
 {
-	if ((JOY_RIGHT & hero->input) && (TRUE == HeroCanRight(m)))
+	if ((JOY_RIGHT & hero->input) && (TRUE == HeroCanRight()))
 	{
 		HeroStateSetWalkingRight();
 		return TRUE;
@@ -341,9 +341,9 @@ UBYTE HeroJoyRight(const MemoryDetails* m)
 
 /*--------------------------------------------------------------------------*/
 
-UBYTE HeroJoyLeft(const MemoryDetails* m)
+UBYTE HeroJoyLeft(void)
 {
-	if ((JOY_LEFT & hero->input) && (TRUE == HeroCanLeft(m)))
+	if ((JOY_LEFT & hero->input) && (TRUE == HeroCanLeft()))
 	{
 		HeroStateSetWalkingLeft();
 		return TRUE;
@@ -354,9 +354,9 @@ UBYTE HeroJoyLeft(const MemoryDetails* m)
 
 /*--------------------------------------------------------------------------*/
 
-static UBYTE HeroJoyUp(const MemoryDetails* m)
+static UBYTE HeroJoyUp(void)
 {
-	if ((JOY_UP & hero->input) && (TRUE == HeroCanUp(m)))
+	if ((JOY_UP & hero->input) && (TRUE == HeroCanUp()))
 	{
 		HeroStateSetClimbUp();
 		return TRUE;
@@ -367,9 +367,9 @@ static UBYTE HeroJoyUp(const MemoryDetails* m)
 
 /*--------------------------------------------------------------------------*/
 
-static UBYTE HeroJoyDown(const MemoryDetails* m)
+static UBYTE HeroJoyDown(void)
 {
-	if (JOY_DOWN & hero->input && (TRUE == HeroCanDown(m)))
+	if (JOY_DOWN & hero->input && (TRUE == HeroCanDown()))
 	{
 		HeroStateSetClimbDown();
 		return TRUE;
@@ -380,35 +380,35 @@ static UBYTE HeroJoyDown(const MemoryDetails* m)
 
 /*--------------------------------------------------------------------------*/
 
-static void HeroStateIdle(const MemoryDetails* m)
+static void HeroStateIdle(void)
 {
-	if (TRUE == HeroIsFall(m))
+	if (TRUE == HeroIsFall())
 	{
 		HeroStateSetFall();
 		return;
 	}
 
-	if (TRUE == HeroJoyRight(m))
+	if (TRUE == HeroJoyRight())
 	{
 		return;
 	}
 
-	if (TRUE == HeroJoyLeft(m))
+	if (TRUE == HeroJoyLeft())
 	{
 		return;
 	}
 
-	if (TRUE == HeroJoyUp(m))
+	if (TRUE == HeroJoyUp())
 	{
 		return;
 	}
 
-	if (TRUE == HeroJoyDown(m))
+	if (TRUE == HeroJoyDown())
 	{
 		return;
 	}
 
-	if ((JOY_BUTTON_RED & hero->input) && (TRUE == HeroTryExchange(m)))
+	if ((JOY_BUTTON_RED & hero->input) && (TRUE == HeroTryExchange()))
 	{
 		HeroStateSetExchange();
 		return;
@@ -428,7 +428,7 @@ static void HeroStateIdle(const MemoryDetails* m)
 
 /*--------------------------------------------------------------------------*/
 
-static void HeroStateWalk(const MemoryDetails* m)
+static void HeroStateWalk(void)
 {
 	hero->man.frameOffset = (hero->man.x >> 1) & 3;
 	HeroMoveOneStep();
@@ -438,18 +438,18 @@ static void HeroStateWalk(const MemoryDetails* m)
 		return;
 	}
 
-	if (TRUE == HeroIsFall(m))
+	if (TRUE == HeroIsFall())
 	{
 		HeroStateSetFall();
 		return;
 	}
 
-	if (TRUE == HeroJoyRight(m))
+	if (TRUE == HeroJoyRight())
 	{
 		return;
 	}
 
-	if (TRUE == HeroJoyLeft(m))
+	if (TRUE == HeroJoyLeft())
 	{
 		return;
 	}
@@ -459,7 +459,7 @@ static void HeroStateWalk(const MemoryDetails* m)
 
 /*--------------------------------------------------------------------------*/
 
-static void HeroStateLadder(const MemoryDetails* m)
+static void HeroStateLadder(void)
 {
 	hero->man.frameOffset = (hero->man.y >> 2) & 1;
 	HeroMoveOneStep();
@@ -469,12 +469,12 @@ static void HeroStateLadder(const MemoryDetails* m)
 		return;
 	}
 
-	if (TRUE == HeroJoyUp(m))
+	if (TRUE == HeroJoyUp())
 	{
 		return;
 	}
 
-	if (TRUE == HeroJoyDown(m))
+	if (TRUE == HeroJoyDown())
 	{
 		return;
 	}
@@ -484,29 +484,29 @@ static void HeroStateLadder(const MemoryDetails* m)
 
 /*--------------------------------------------------------------------------*/
 
-void HeroStateLadderIdle(const MemoryDetails* m)
+void HeroStateLadderIdle(void)
 {
-	if (TRUE == HeroJoyUp(m))
+	if (TRUE == HeroJoyUp())
 	{
 		return;
 	}
 
-	if (TRUE == HeroJoyDown(m))
+	if (TRUE == HeroJoyDown())
 	{
 		return;
 	}
 
-	if (TRUE == HeroJoyRight(m))
+	if (TRUE == HeroJoyRight())
 	{
 		return;
 	}
 
-	if (TRUE == HeroJoyLeft(m))
+	if (TRUE == HeroJoyLeft())
 	{
 		return;
 	}
 
-	if ((JOY_BUTTON_RED & hero->input) && (TRUE == HeroTryExchange(m)))
+	if ((JOY_BUTTON_RED & hero->input) && (TRUE == HeroTryExchange()))
 	{
 		HeroStateSetExchange();
 		return;
@@ -529,7 +529,7 @@ void HeroStateSetLadderIdle(void)
 
 /*--------------------------------------------------------------------------*/
 
-void HeroStateFall(const MemoryDetails* m)
+void HeroStateFall(void)
 {
 	hero->man.frameOffset = (hero->man.y >> 2) & 1;
 	HeroMoveOneStep();
@@ -541,7 +541,7 @@ void HeroStateFall(const MemoryDetails* m)
 
 	hero->steps = 8;
 
-	if (FALSE == HeroIsFall(m))
+	if (FALSE == HeroIsFall())
 	{
 		HeroStateSetIdle();
 		hero->steps = 8;
@@ -555,7 +555,7 @@ void HeroStateFall(const MemoryDetails* m)
 
 /*--------------------------------------------------------------------------*/
 
-static void HeroStateExchange(const MemoryDetails* m)
+static void HeroStateExchange(void)
 {
 	HeroMoveOneStep();
 
@@ -564,7 +564,7 @@ static void HeroStateExchange(const MemoryDetails* m)
 		return;
 	}
 
-	if ((JOY_BUTTON_RED & hero->input) && (TRUE == HeroTryExchange(m)))
+	if ((JOY_BUTTON_RED & hero->input) && (TRUE == HeroTryExchange()))
 	{
 		HeroStateSetExchange();
 		return;
@@ -572,7 +572,7 @@ static void HeroStateExchange(const MemoryDetails* m)
 
 	HeroStateSetIdle();
 
-	UBYTE tile = MapCheck(hero->man.x, hero->man.y + 8, m);
+	UBYTE tile = MapCheck(hero->man.x, hero->man.y + 8);
 
 	if (tile & TILE_LADDER)
 	{
@@ -584,45 +584,45 @@ static void HeroStateExchange(const MemoryDetails* m)
 
 /*--------------------------------------------------------------------------*/
 
-void HeroHandleInput(Match* game, const MemoryDetails* m)
+void HeroHandleInput(Match* game)
 {
 	hero->input = InputJoystickGetState();
 
 	switch (hero->state)
 	{
 		case HERO_STATE_IDLE:
-			HeroStateIdle(m);
-			HeroCollectItems(game, m);
+			HeroStateIdle();
+			HeroCollectItems(game);
 			break;
 
 		case HERO_STATE_WALK:
-			HeroStateWalk(m);
-			HeroCollectItems(game, m);
+			HeroStateWalk();
+			HeroCollectItems(game);
 			break;
 
 		case HERO_STATE_LADDER:
-			HeroStateLadder(m);
-			HeroCollectItems(game, m);
+			HeroStateLadder();
+			HeroCollectItems(game);
 			break;
 
 		case HERO_STATE_LADDER_IDLE:
-			HeroStateLadderIdle(m);
+			HeroStateLadderIdle();
 			break;
 
 		case HERO_STATE_FALL:
-			HeroStateFall(m);
-			HeroCollectItems(game, m);
+			HeroStateFall();
+			HeroCollectItems(game);
 			break;
 
 		case HERO_STATE_EXCHANGE:
-			HeroStateExchange(m);
+			HeroStateExchange();
 			break;
 	}
 
-	HeroShow(m);
+	HeroShow();
 
 	{
-		UBYTE tile = MapCheck(hero->man.x, hero->man.y + 8, m);
+		UBYTE tile = MapCheck(hero->man.x, hero->man.y + 8);
 	
 		if (TILE_WATER == tile)
 		{
@@ -634,35 +634,35 @@ void HeroHandleInput(Match* game, const MemoryDetails* m)
 
 /*--------------------------------------------------------------------------*/
 
-void HeroCollectItems(Match* game, const MemoryDetails* m)
+void HeroCollectItems(Match* game)
 {
-	UBYTE tile = MapCheck(hero->man.x, hero->man.y + 8, m);
+	UBYTE tile = MapCheck(hero->man.x, hero->man.y + 8);
 
 	if (TILE_ITEM1 == tile)
 	{
 		SfxPlay(SFX_ITEM1);
-		ItemTake(hero->man.x / 8, hero->man.y + 8, m);
+		ItemTake(hero->man.x / 8, hero->man.y + 8);
 		game->itemsToCollect--;
-		MapClearTile(hero->man.x, hero->man.y + 8, m);
+		MapClearTile(hero->man.x, hero->man.y + 8);
 	}
 
-	tile = MapCheck(hero->ego.x, hero->ego.y + 8, m);
+	tile = MapCheck(hero->ego.x, hero->ego.y + 8);
 
 	if (TILE_ITEM2 == tile)
 	{
 		SfxPlay(SFX_ITEM2);
-		ItemTake(hero->ego.x / 8, hero->ego.y + 8, m);
+		ItemTake(hero->ego.x / 8, hero->ego.y + 8);
 		game->itemsToCollect--;
-		MapClearTile(hero->ego.x, hero->ego.y + 8, m);
+		MapClearTile(hero->ego.x, hero->ego.y + 8);
 	}
 }
 
 /*--------------------------------------------------------------------------*/
 
-void HeroShow(const MemoryDetails* m)
+void HeroShow(void)
 {
-	SpriteDrawHero(&hero->man, m);
-	SpriteDrawEgo(&hero->ego, m);
+	SpriteDrawHero(&hero->man);
+	SpriteDrawEgo(&hero->ego);
 }
 
 /*--------------------------------------------------------------------------*/
