@@ -20,11 +20,11 @@ static void ubyteToAscii(UBYTE n)
 	msgUbyte[1] = digits[n & 15];
 }
 
-void DbgScreenUbyte(const MemoryDetails *m, ULONG scrOffset, UBYTE n)
+void DbgScreenUbyte(ULONG scrOffset, UBYTE n)
 {
 	ubyteToAscii(n);
 
-	SmallFontDrawString(m, scrOffset, msgUbyte, 2);
+	SmallFontDrawString(scrOffset, msgUbyte, 2);
 }
 
 static char msgUword[4] = { 0, 0, 0, 0 };
@@ -37,11 +37,11 @@ static void uwordToAscii(UWORD n)
 	msgUword[3] = digits[n & 15];
 }
 
-void DbgScreenUword(const MemoryDetails *m, ULONG scrOffset, UWORD n)
+void DbgScreenUword(ULONG scrOffset, UWORD n)
 {
 	uwordToAscii(n);
 
-	SmallFontDrawString(m, scrOffset, msgUword, 4);
+	SmallFontDrawString(scrOffset, msgUword, 4);
 
 }
 

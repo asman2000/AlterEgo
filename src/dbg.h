@@ -9,12 +9,12 @@
 
 
 
-void DbgScreenUbyte(const MemoryDetails *m, ULONG scrOffset, UBYTE n);
-void DbgScreenUword(const MemoryDetails *m, ULONG scrOffset, UWORD n);
+void DbgScreenUbyte(ULONG scrOffset, UBYTE n);
+void DbgScreenUword(ULONG scrOffset, UWORD n);
 #else
 
-#define DbgScreenUbyte(m, s, n)
-#define DbgScreenUword(m, s, n)
+#define DbgScreenUbyte(s, n)
+#define DbgScreenUword(s, n)
 
 #endif /* GAME_DEBUG */
 
