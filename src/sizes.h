@@ -13,9 +13,16 @@
 
 // sprites in chip
 // 8 bytes - fake sprite 
+#define SPRITES_FAKE 8
+
 // 18 * 4 * 2 - hero and ego sprite
+#define SPRITES_HERO 18*4
+#define SPRITES_EGO 18*4
+
 // 18 * 4 * 8 - enemies sprites
-#define SPRITES_SIZE 728
+#define SPRITES_ENEMIES 18*4*8
+
+//#define SPRITES_SIZE 728
 
 #define MEMORY_CHIP_SIZE (200*1024)
 

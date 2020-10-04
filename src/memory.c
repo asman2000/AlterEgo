@@ -99,13 +99,13 @@ void MemoryInitialize(void)
 	mem->copperAddress = chip;
 	chip += COPPER_SIZE;
 	mem->spriteFakeAddress = chip;
-	chip += 8;
+	chip += SPRITES_FAKE;
 	mem->spriteHeroAddress = chip;
-	chip += 18*4;
+	chip += SPRITES_HERO;
 	mem->spriteEgoAddress = chip;
-	chip += 18*4;
+	chip += SPRITES_EGO;
 	mem->spriteEnemyAddress = chip;
-	chip += 18*4*8;
+	chip += SPRITES_ENEMIES;
 	mem->musicAddress = chip;
 	chip += MUSIC_SIZE;
 	mem->sfxAddress = chip;
