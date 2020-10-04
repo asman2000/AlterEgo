@@ -8,8 +8,8 @@
 void ItemInit(void);
 void ItemAdd(ULONG scrOffset, UBYTE tileNumber);
 void ItemAnimate(void);
-void ItemDraw(const MemoryDetails* m);
-void ItemTake(UWORD x, UWORD y, const MemoryDetails* m);
+void ItemDraw(void);
+void ItemTake(UWORD x, UWORD y);
 
 /*--------------------------------------------------------------------------*/
 

@@ -2,7 +2,7 @@
 
 #include "gfxtile.h"
 #include "map.h"
-//#include "screen.h"
+
 
 typedef struct
 {
@@ -36,7 +36,7 @@ void ItemAdd(ULONG scrOffset, UBYTE tileNumber)
 
 /*--------------------------------------------------------------------------*/
 
-void ItemDraw(const MemoryDetails* m)
+void ItemDraw(void)
 {
 	ItemAnimate();
 
@@ -44,7 +44,7 @@ void ItemDraw(const MemoryDetails* m)
 
 	while (item != current)
 	{
-		GfxTileDrawOne(item->scrOffset, item->tileNumber, m);
+		GfxTileDrawOne(item->scrOffset, item->tileNumber);
 
 		item++;
 	}
@@ -52,9 +52,9 @@ void ItemDraw(const MemoryDetails* m)
 
 /*--------------------------------------------------------------------------*/
 
-void ItemTake(UWORD x, UWORD y, const MemoryDetails* m)
+void ItemTake(UWORD x, UWORD y)
 {
-	const ULONG scrOffset = x + y * m->screen.bpl * m->screen.brow;
+	const ULONG scrOffset = x + y * mem->screenBpl * mem->screenBrow;
 
 	AnimItem* item = &items[0];
 
