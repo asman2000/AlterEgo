@@ -18,8 +18,8 @@ typedef struct
 } Sprite;
 
 void SpriteDraw(Sprite* sprite);
-void SpriteDrawHero(Sprite* sprite, const MemoryDetails* memory);
-void SpriteDrawEgo(Sprite* sprite, const MemoryDetails* memory);
+void SpriteDrawHero(Sprite* sprite);
+void SpriteDrawEgo(Sprite* sprite);
 
 void SpritesOn(void);
 void SpritesOff(void);

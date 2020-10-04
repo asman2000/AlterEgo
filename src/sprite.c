@@ -40,33 +40,28 @@ void SpriteDraw(Sprite* sprite)
 
 /*--------------------------------------------------------------------------*/
 
-void SpriteDrawHero(Sprite* sprite, const MemoryDetails* memory)
+void SpriteDrawHero(Sprite* sprite)
 {
 	UWORD frame = sprite->frame + sprite->frameOffset;
-	sprite->src = memory->sprites.data + frame * 16 * 4;
-	sprite->dst = memory->sprites.hero;
+	sprite->src = mem->spritesData+ frame * 16 * 4;
+	sprite->dst = mem->spriteHeroAddress;
 	SpriteDraw(sprite);
 
-	ULONG copperSprite = memory->copper.address + 9 * 4 + 2 + 5 * 8;
-	CopperUpdateAddress(copperSprite, memory->sprites.hero);
+	ULONG copperSprite = mem->copperAddress + 9 * 4 + 2 + 5 * 8;
+	CopperUpdateAddress(copperSprite, mem->spriteHeroAddress);
 }
 
 /*--------------------------------------------------------------------------*/
 
-void SpriteDrawEgo(Sprite* sprite, const MemoryDetails* memory)
+void SpriteDrawEgo(Sprite* sprite)
 {
 	UWORD frame = sprite->frame + sprite->frameOffset;
-	sprite->src = memory->sprites.data + frame * 16 * 4;
-	sprite->dst = memory->sprites.ego;
+	sprite->src = mem->spritesData + frame * 16 * 4;
+	sprite->dst = mem->spriteEgoAddress;
 	SpriteDraw(sprite);
 
-	ULONG hero = memory->sprites.hero;
-	ULONG ego = memory->sprites.ego;
-
-	hero = ego;
-
-	ULONG copperSprite = memory->copper.address + 9 * 4 + 2 + 4 * 8;
-	CopperUpdateAddress(copperSprite, memory->sprites.ego);
+	ULONG copperSprite = mem->copperAddress + 9 * 4 + 2 + 4 * 8;
+	CopperUpdateAddress(copperSprite, mem->spriteEgoAddress);
 }
 
 /*--------------------------------------------------------------------------*/
