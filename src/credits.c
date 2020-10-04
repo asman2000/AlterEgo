@@ -10,10 +10,10 @@
 
 /*--------------------------------------------------------------------------*/
 
-static void CreditsDrawTexts(const MemoryDetails* m)
+static void CreditsDrawTexts(void)
 {
 	ULONG scr = 0;
-	UBYTE* txt = (UBYTE*)m->creditsText;
+	UBYTE* txt = (UBYTE*)mem->creditsText;
 
 	while (TRUE)
 	{
@@ -28,18 +28,18 @@ static void CreditsDrawTexts(const MemoryDetails* m)
 		txt +=2;
 		size = *txt++;
 
-		SmallFontDrawString(m, scr + offset, txt, size);
+		SmallFontDrawString(scr + offset, txt, size);
 		txt += size;
 	}
 }
 
 /*--------------------------------------------------------------------------*/
 
-void CreditsMain(struct MainState* state)
+void CreditsMain(void)
 {
 	UWORD wait = 300;
 
-	ColorsFadeIn(state->memory->palette, 16);
+	ColorsFadeIn(16);
 
 	do
 	{
@@ -53,31 +53,31 @@ void CreditsMain(struct MainState* state)
 
 		if (InputMouseLeftButton())
 		{
-			state->exitToOs = TRUE;
+			mem->mainState.exitToOs = TRUE;
 			break;
 		}
 
 
 	} while (--wait, 0 != wait);
 
-	ColorsFadeOut(state->memory->palette, 16);
+	ColorsFadeOut(16);
 	ScreenOff();
 
-	state->run = Title;
+	mem->mainState.run = Title;
 }
 
 /*--------------------------------------------------------------------------*/
 
-void Credits(struct MainState* state)
+void Credits(void)
 {
-	AssetsCredits(state->memory);
+	AssetsCredits();
 
-	ScreenClear(&state->memory->screen);
-	CreditsDrawTexts(state->memory);
+	ScreenClear();
+	CreditsDrawTexts();
 
 	ScreenOn();
 
-	state->run = CreditsMain;
+	mem->mainState.run = CreditsMain;
 }
 
 /*--------------------------------------------------------------------------*/

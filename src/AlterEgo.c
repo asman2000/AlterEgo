@@ -10,17 +10,7 @@
 #include "screen.h"
 #include "sfx.h"
 
-#include "input.h"
-
 /*--------------------------------------------------------------------------*/
-
-void AETest(void)
-{
-	if (InputMouseLeftButton())
-	{
-		mem->mainState.exitToOs = TRUE;
-	}
-}
 
 void AlterEgo(void)
 {
@@ -32,7 +22,7 @@ void AlterEgo(void)
 		MemoryInitialize();
 
 		mem->mainState.exitToOs = FALSE;
-		mem->mainState.run = AETest;
+		mem->mainState.run = Credits;
 
 		result = AssetsLoad("data.bin");
 
@@ -42,7 +32,7 @@ void AlterEgo(void)
 			ScreenInit();
 			MusicSetUp();
 			SfxInit();
-			// AssetsSfx(state.memory);
+			AssetsSfx();
 
 			while (TRUE)
 			{
