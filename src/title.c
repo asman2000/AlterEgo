@@ -15,7 +15,7 @@ extern struct Custom* custom;
 
 /*--------------------------------------------------------------------------*/
 
-void TitleLoop(struct MainState* state)
+void TitleLoop(void)
 {
 	ScreenWaitForVerticallBlank();
 	SpritesOff();
@@ -24,7 +24,7 @@ void TitleLoop(struct MainState* state)
 	custom->color[2] = 0x888;
 	custom->color[3] = 0xaaa;
 
-	MusicStart(state->memory);
+	MusicStart();
 
 	while (TRUE)
 	{
@@ -32,7 +32,7 @@ void TitleLoop(struct MainState* state)
 
 		if (TRUE == InputMouseLeftButton())
 		{
-			state->exitToOs = TRUE;
+			mem->mainState.exitToOs = TRUE;
 			break;
 		}
 
@@ -40,7 +40,7 @@ void TitleLoop(struct MainState* state)
 		{
 			MusicStop();
 			InputJoystickReleaseRedButton();
-			state->run = Game;
+			mem->mainState.run = Game;
 			break;
 		}
 	}
@@ -55,25 +55,21 @@ void TitleLoop(struct MainState* state)
 
 	} while (--wait != 0xffff);
 
-
-
 	ScreenOff();
 	SpritesOn();
-
-	
 }
 
 /*--------------------------------------------------------------------------*/
 
-void Title(struct MainState* state)
+void Title(void)
 {
-	AssetsTitle(state->memory);
-	ScreenClear(&state->memory->screen);
-	SmallFontDrawString(state->memory, 0, "TITLE", 5);
+	AssetsTitle();
+	ScreenClear();
+	SmallFontDrawString(0, "TITLE", 5);
 
 	ScreenOn();
 
-	state->run = TitleLoop;
+	mem->mainState.run = TitleLoop;
 }
 
 /*--------------------------------------------------------------------------*/
