@@ -22,13 +22,13 @@ typedef struct
 
 #define TILE_FLOOR			(TILE_WALL|TILE_LADDER|TILE_BRIDGE)
 
-UWORD MapProcess(UWORD levelNumber, const MemoryDetails* memory);
+UWORD MapProcess(UWORD levelNumber);
 
-void MapDraw(UBYTE* map, const MemoryDetails* m);
+void MapDraw(UBYTE* map);
 
-UBYTE MapCheck(UWORD x, UWORD y, const MemoryDetails* m);
+UBYTE MapCheck(UWORD x, UWORD y);
 
-void MapClearTile(UWORD x, UWORD y, const MemoryDetails* m);
+void MapClearTile(UWORD x, UWORD y);
 
 /*--------------------------------------------------------------------------*/
 #endif /* ALTEREGO_MAP_H */

@@ -15,11 +15,11 @@ UWORD mapItemsToCollect;
 
 /*--------------------------------------------------------------------------*/
 
-UWORD MapProcess(UWORD levelNumber, const MemoryDetails* m)
+UWORD MapProcess(UWORD levelNumber)
 {
-	Lvl* level = (Lvl*)m->game.level;
+	Lvl* level = (Lvl*)mem->gameLevel;
 
-	AssetsMap(m, levelNumber);
+	AssetsMap(levelNumber);
 
 	mapItemsToCollect = 0;
 	EnemyInitCnt();
@@ -30,7 +30,7 @@ UWORD MapProcess(UWORD levelNumber, const MemoryDetails* m)
 
 	UBYTE* map = level->colMap;
 
-	const ULONG yOffset = 8 * m->screen.bpl * m->screen.brow;
+	const ULONG yOffset = 8 * mem->screenBpl * mem->screenBrow;
 
 	for (int y = 0; y < MAP_HEIGHT; ++y)
 	{
@@ -68,14 +68,14 @@ UWORD MapProcess(UWORD levelNumber, const MemoryDetails* m)
 		}
 	}
 	
-	MapDraw(level->gfxMap, m);
+	MapDraw(level->gfxMap);
 
 	return mapItemsToCollect;
 }
 
 /*--------------------------------------------------------------------------*/
 
-void MapDraw(UBYTE* map, const MemoryDetails* m)
+void MapDraw(UBYTE* map)
 {
 	ULONG scrOffset = 0;
 
@@ -83,7 +83,7 @@ void MapDraw(UBYTE* map, const MemoryDetails* m)
 	{
 		for (int j = 0; j < MAP_WIDTH; ++j)
 		{
-			GfxTileDrawOne(scrOffset, *map++, m);
+			GfxTileDrawOne(scrOffset, *map++);
 			scrOffset += 1;
 		}
 
@@ -94,24 +94,24 @@ void MapDraw(UBYTE* map, const MemoryDetails* m)
 
 /*--------------------------------------------------------------------------*/
 
-UBYTE MapCheck(UWORD x, UWORD y, const MemoryDetails* m)
+UBYTE MapCheck(UWORD x, UWORD y)
 {
 	UWORD posX = x >> 3;
 	UWORD posY = y >> 3;
 
-	Lvl* level = (Lvl*)m->game.level;
+	Lvl* level = (Lvl*)mem->gameLevel;
 
 	return level->colMap[(posY * 40) + posX];
 }
 
 /*--------------------------------------------------------------------------*/
 
-void MapClearTile(UWORD x, UWORD y, const MemoryDetails* m)
+void MapClearTile(UWORD x, UWORD y)
 {
 	UWORD posX = x >> 3;
 	UWORD posY = y >> 3;
 
-	Lvl* level = (Lvl*)m->game.level;
+	Lvl* level = (Lvl*)mem->gameLevel;
 
 	level->colMap[(posY * 40) + posX] = TILE_EMPTY;
 }
