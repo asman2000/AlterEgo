@@ -10,7 +10,7 @@ void MusicKill(void);
 void MusicSetUp(void);
 void MusicDestroy(void);
 
-void MusicStart(const MemoryDetails* m);
+void MusicStart(void);
 void MusicStop(void);
 /*--------------------------------------------------------------------------*/
 #endif /* ALTEREGO_MUSIC_H */

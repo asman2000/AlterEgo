@@ -30,9 +30,9 @@ void MusicDestroy(void)
 
 /*----------------------------------------------------------------------------*/
 
-void MusicStart(const MemoryDetails* m)
+void MusicStart(void)
 {
-	mt_init(0xdff000, m->music, 0, 0);
+	mt_init(0xdff000, mem->musicAddress, 0, 0);
 	mt_Enable = 1;
 	mt_mastervol(4);
 }
