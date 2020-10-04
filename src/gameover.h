@@ -4,7 +4,7 @@
 
 #include "types.h"
 
-void GameOver(struct MainState* state);
+void GameOver(void);
 
 /*--------------------------------------------------------------------------*/
 #endif /* ALTEREGO_GAMEOVER_H */

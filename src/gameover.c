@@ -14,14 +14,14 @@ extern struct Custom* custom;
 
 /*--------------------------------------------------------------------------*/
 
-static void GameOverLoop(struct MainState* state)
+static void GameOverLoop(void)
 {
 	custom->color[1] = 0x555;
 	custom->color[2] = 0x888;
 	custom->color[3] = 0xaaa;
 
-	SmallFontDrawString(state->memory, 0, "GAME OVER", 9);
-	MusicStart(state->memory);
+	SmallFontDrawString(0, "GAME OVER", 9);
+	MusicStart();
 
 	while (TRUE)
 	{
@@ -29,14 +29,14 @@ static void GameOverLoop(struct MainState* state)
 
 		if (TRUE == InputMouseLeftButton())
 		{
-			state->exitToOs = TRUE;
+			mem->mainState.exitToOs = TRUE;
 			break;
 		}
 
 		if (TRUE == InputJoystickRedButton())
 		{
 			InputJoystickReleaseRedButton();
-			state->run = Title;
+			mem->mainState.run = Title;
 			break;
 		}
 	}
@@ -46,13 +46,14 @@ static void GameOverLoop(struct MainState* state)
 }
 
 /*--------------------------------------------------------------------------*/
-void GameOver(struct MainState* state)
+
+void GameOver(void)
 {
-	AssetsGameOver(state->memory);
+	AssetsGameOver();
 
 	ScreenOn();
 
-	GameOverLoop(state);
+	mem->mainState.run = GameOverLoop;
 }
 
 /*--------------------------------------------------------------------------*/
