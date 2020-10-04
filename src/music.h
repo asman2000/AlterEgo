@@ -12,5 +12,6 @@ void MusicDestroy(void);
 
 void MusicStart(void);
 void MusicStop(void);
+
 /*--------------------------------------------------------------------------*/
 #endif /* ALTEREGO_MUSIC_H */
