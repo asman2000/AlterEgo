@@ -4,7 +4,7 @@
 
 #include "types.h"
 
-void Welldone(struct MainState* state);
+void Welldone(void);
 
 /*--------------------------------------------------------------------------*/
 #endif /* ALTEREGO_WELLDONE_H */
