@@ -39,7 +39,7 @@ void CreditsMain(void)
 {
 	UWORD wait = 300;
 
-	ColorsFadeIn(16);
+	ColorsFadeIn(mem->palette, 16);
 
 	do
 	{
@@ -60,7 +60,7 @@ void CreditsMain(void)
 
 	} while (--wait, 0 != wait);
 
-	ColorsFadeOut(16);
+	ColorsFadeOut(mem->palette,16);
 	ScreenOff();
 
 	mem->mainState.run = Title;
