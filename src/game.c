@@ -28,13 +28,13 @@ static ULONG mapsData;
 
 
 
-void GameNextLevel(struct MainState* state);
-void GameLevelFail(struct MainState* state);
-static void GameLoop(struct MainState* state);
+void GameNextLevel(void);
+void GameLevelFail(void);
+static void GameLoop(void);
 
 /*--------------------------------------------------------------------------*/
 
-void GameInit(const MemoryDetails* m)
+void GameInit(void)
 {
 	currentMatch.levelNumber = 0;
 	currentMatch.worldNumber = 0;
@@ -43,36 +43,36 @@ void GameInit(const MemoryDetails* m)
 	currentMatch.livesNumber = 1;
 
 
-	AssetsGameTiles(m);
-	AssetsGameSprites(m);
+	AssetsGameTiles();
+	AssetsGameSprites();
 
 	HeroSetUp(HERO_ONE);
 
 	ScreenOff();
-	ScreenClear(&m->screen);
+	ScreenClear();
 	ColorsSetAllToBlack();
 }
 
 /*--------------------------------------------------------------------------*/
 
-static void GameLoop(struct MainState* state)
+static void GameLoop(void)
 {
-	AssetsGameWorldPalette(state->memory, currentMatch.worldNumber);
-	AssetsGameWorldMusic(state->memory, currentMatch.worldNumber);
+	AssetsGameWorldPalette(currentMatch.worldNumber);
+	AssetsGameWorldMusic(currentMatch.worldNumber);
 	
 	UBYTE number = currentMatch.levelNumber + currentMatch.worldNumber * 5;
 
-	currentMatch.itemsToCollect = MapProcess(number, state->memory);
+	currentMatch.itemsToCollect = MapProcess(number);
 	EnemyInit();
 
-	HeroShow(state->memory);
+	HeroShow();
 
 	ScreenOn();
-	ColorsFadeIn(state->memory->palette, 32);
+	ColorsFadeIn(mem->palette, 32);
 
 	UBYTE frame_cnt = 0;
 
-	MusicStart(state->memory);
+	MusicStart();
 
 	//game logic
 	while (TRUE)
@@ -80,87 +80,87 @@ static void GameLoop(struct MainState* state)
 		ScreenWaitForVerticallBlank();
 		frame_cnt++;
 
-		ItemDraw(state->memory);
+		ItemDraw();
 
-		EnemyDraw(state->memory);
+		EnemyDraw();
 
-		HeroHandleInput(&currentMatch, state->memory);
+		HeroHandleInput(&currentMatch);
 
 		if (GAME_STATE_NOTHING == currentMatch.state)
 		{
 			struct Hero* hero = HeroGet();
-			currentMatch.state = EnemyProcess(hero, frame_cnt, state);
+			currentMatch.state = EnemyProcess(hero, frame_cnt);
 		}
 
 		if (InputMouseLeftButton())
 		{
-			state->exitToOs = TRUE;
+			mem->mainState.exitToOs = TRUE;
 			break;
 		}
 
 		if (0 == currentMatch.itemsToCollect)
 		{
-			state->run = GameNextLevel;
+			mem->mainState.run = GameNextLevel;
 			return;
 		}
 
 		if (GAME_STATE_FAIL == currentMatch.state)
 		{
 			SfxPlay(SFX_HIT);
-			state->run = GameLevelFail;
+			mem->mainState.run = GameLevelFail;
 			break;
 		}
 	}
 
 	MusicStop();
 
-	ColorsFadeOut(state->memory->palette, 32);
+	ColorsFadeOut(mem->palette, 32);
 	ScreenOff();
-	ScreenClear(&state->memory->screen);
+	ScreenClear();
 	ColorsSetAllToBlack();
 }
 
 /*--------------------------------------------------------------------------*/
 
-void Game(struct MainState* state)
+void Game(void)
 {
-	GameInit(state->memory);
-	GameLoop(state);
+	GameInit();
+	GameLoop();
 }
 
 /*--------------------------------------------------------------------------*/
 
-void GameFailed(struct MainState* state)
+void GameFailed(void)
 {
-	state->run = GameOver;
+	mem->mainState.run = GameOver;
 }
 
 /*--------------------------------------------------------------------------*/
 
-void GameLevelFail(struct MainState* state)
+void GameLevelFail(void)
 {
 	currentMatch.livesNumber--;
 
 	if (0 == currentMatch.livesNumber)
 	{
-		state->run = GameFailed;
+		mem->mainState.run = GameFailed;
 		return;
 	}
 
-	state->run = GameLoop;
+	mem->mainState.run = GameLoop;
 }
 
 /*--------------------------------------------------------------------------*/
 
-void GameNextLevel(struct MainState* state)
+void GameNextLevel(void)
 {
-	state->run = GameLoop;
+	mem->mainState.run = GameLoop;
 	
 	MusicStop();
 
-	AssetsGameLevelClear(state->memory);
+	AssetsGameLevelClear();
 
-	MusicStart(state->memory);
+	MusicStart();
 
 	UWORD counter = 200;
 
@@ -181,7 +181,7 @@ void GameNextLevel(struct MainState* state)
 
 		if (WORLD_MAX_NUMBER == currentMatch.worldNumber)
 		{
-			state->run = Welldone;
+			mem->mainState.run = Welldone;
 		}
 	}
 }

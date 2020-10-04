@@ -15,9 +15,10 @@ typedef struct
 } Match;
 
 /*--------------------------------------------------------------------------*/
-void GameInit(const MemoryDetails* memory);
 
-void Game(struct MainState* state);
+void GameInit(void);
+
+void Game(void);
 
 /*--------------------------------------------------------------------------*/
 
