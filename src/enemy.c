@@ -12,9 +12,8 @@
 #include <hardware/custom.h>
 
 extern struct Custom* custom;
+
 /*--------------------------------------------------------------------------*/
-
-
 
 typedef struct
 {
@@ -30,11 +29,6 @@ EnemySprite Enemies[ENEMY_MAX_AMOUNT];
 
 ULONG* spriteAdress[ENEMY_MAX_AMOUNT];
 
-typedef struct
-{
-	UWORD Index;
-	UWORD PosY;
-} SortEntry;
 
 ULONG* sprites[4];
 
@@ -246,7 +240,7 @@ void EnemyDraw(void)
 
 /*---------------------------------------------------------------------------*/
 
-void SpritesClearEnemyBuffer(void)
+void EnemyClearSpritesBuffer(void)
 {
 	ULONG* memory = (ULONG*)mem->spriteEnemyAddress;
 
@@ -258,14 +252,14 @@ void SpritesClearEnemyBuffer(void)
 
 /*---------------------------------------------------------------------------*/
 
-SortEntry sortY[ENEMY_MAX_AMOUNT];
+//SortEntry sortY[ENEMY_MAX_AMOUNT];
 
 void SortCopyPositionWithIndex(void)
 {
 	int k = enemy_cnt;
 	int i = 0;
 
-	SortEntry* sort = sortY;
+	SortEntry* sort = mem->sortY;
 
 	while (k > 0)
 	{
@@ -281,14 +275,16 @@ void SortInsertion(void)
 {
 	for (int i = 1; i < enemy_cnt; i++)
 	{
-		SortEntry tmp = sortY[i];
+		SortEntry tmp = mem->sortY[i];
 		int j = i - 1;
-		while (j >= 0 && tmp.PosY < sortY[j].PosY)
+
+		while (j >= 0 && tmp.PosY < mem->sortY[j].PosY)
 		{
-			sortY[j + 1] = sortY[j];
+			mem->sortY[j + 1] = mem->sortY[j];
 			j = j - 1;
 		}
-		sortY[j + 1] = tmp;
+
+		mem->sortY[j + 1] = tmp;
 	}
 }
 
@@ -310,12 +306,12 @@ void SpritesMultiplexed(void)
 
 		for (int k = 0; k < enemy_cnt; ++k)
 		{
-			if (sortY[k].PosY > lastY)
+			if (mem->sortY[k].PosY > lastY)
 			{
-				spriteAdress[sortY[k].Index] = spriteData;
+				spriteAdress[mem->sortY[k].Index] = spriteData;
 				spriteData += 17; //add 17 longs
-				lastY = sortY[k].PosY + 16;
-				sortY[k].PosY = 0;
+				lastY = mem->sortY[k].PosY + 16;
+				mem->sortY[k].PosY = 0;
 			}
 		}
 

@@ -12,7 +12,7 @@ void EnemyDraw(void);
 void EnemyInitCnt(void);
 
 
-extern void SpritesClearEnemyBuffer(void);
+extern void EnemyClearSpritesBuffer(void);
 
 
 

@@ -11,6 +11,7 @@
 #endif
 
 #include <exec/types.h>
+#include "sizes.h"
 
 #define ARRAY_SIZE(array) (sizeof(array) / sizeof(array[0]))
 
@@ -35,6 +36,13 @@ struct GlobalMainState
 
 #define GAME_STATE_FAIL 1
 #define GAME_STATE_NOTHING 0
+
+
+typedef struct
+{
+	UWORD Index;
+	UWORD PosY;
+} SortEntry;
 
 /*--------------------------------------------------------------------------*/
 
@@ -66,6 +74,8 @@ typedef struct _Memories
 	UWORD screenHeight;
 
 	struct GlobalMainState mainState;
+
+	SortEntry sortY[ENEMY_MAX_AMOUNT];
 } Memories;
 
 extern Memories* mem;
