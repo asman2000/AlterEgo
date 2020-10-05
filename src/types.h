@@ -44,6 +44,15 @@ typedef struct
 	UWORD PosY;
 } SortEntry;
 
+typedef struct
+{
+	UWORD PosX;
+	UWORD PosY;
+	UWORD Frame;
+	UWORD Direction;
+
+} EnemySprite;
+
 /*--------------------------------------------------------------------------*/
 
 typedef struct _Memories
@@ -76,6 +85,15 @@ typedef struct _Memories
 	struct GlobalMainState mainState;
 
 	SortEntry sortY[ENEMY_MAX_AMOUNT];
+	EnemySprite Enemies[ENEMY_MAX_AMOUNT];
+	ULONG* spriteAdress[ENEMY_MAX_AMOUNT];
+
+	ULONG* sprites[4];
+
+	UBYTE enemy_cnt;
+	UBYTE enemy_move_cnt;
+
+
 } Memories;
 
 extern Memories* mem;

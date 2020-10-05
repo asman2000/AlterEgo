@@ -6,7 +6,7 @@
 #include "hero.h"
 #include "map.h"
 #include "memory.h"
-#include "sizes.h"
+#include "sort.h"
 
 
 #include <hardware/custom.h>
@@ -14,30 +14,6 @@
 extern struct Custom* custom;
 
 /*--------------------------------------------------------------------------*/
-
-typedef struct
-{
-	UWORD PosX;
-	UWORD PosY;
-	UWORD Frame;
-	UWORD Direction;
-
-} EnemySprite;
-
-EnemySprite Enemies[ENEMY_MAX_AMOUNT];
-
-
-ULONG* spriteAdress[ENEMY_MAX_AMOUNT];
-
-
-ULONG* sprites[4];
-
-
-//enemy vars
-
-UBYTE enemy_cnt;
-UBYTE enemy_move_cnt;
-
 
 void SpritesMultiplexed(void);
 void SpritesDrawEnemies(void);
@@ -48,7 +24,7 @@ void EnemyCheckBlockCollision(void);
 
 void  EnemyInit(void)
 {
-	enemy_move_cnt = 8;
+	mem->enemy_move_cnt = 8;
 }
 
 /*--------------------------------------------------------------------------*/
@@ -63,7 +39,7 @@ void EnemyAnimation(EnemySprite* enemy, UWORD frame_cnt)
 		enemy->Frame = 4 + spr;
 		enemy->PosX--;
 
-		if (0 == enemy_move_cnt)
+		if (0 == mem->enemy_move_cnt)
 		{
 			UWORD px = enemy->PosX;
 			UWORD py = enemy->PosY;
@@ -83,7 +59,7 @@ void EnemyAnimation(EnemySprite* enemy, UWORD frame_cnt)
 		enemy->Frame = spr;
 		enemy->PosX++;
 
-		if (0 == enemy_move_cnt)
+		if (0 == mem->enemy_move_cnt)
 		{
 			UWORD px = enemy->PosX;
 			UWORD py = enemy->PosY;
@@ -102,7 +78,7 @@ void EnemyAnimation(EnemySprite* enemy, UWORD frame_cnt)
 		enemy->Frame = 8 + spr;
 		enemy->PosY--;
 
-		if (0 == enemy_move_cnt)
+		if (0 == mem->enemy_move_cnt)
 		{
 			UWORD px = enemy->PosX;
 			UWORD py = enemy->PosY;
@@ -121,7 +97,7 @@ void EnemyAnimation(EnemySprite* enemy, UWORD frame_cnt)
 		enemy->Frame = 8 + spr;
 		enemy->PosY++;
 
-		if (0 == enemy_move_cnt)
+		if (0 == mem->enemy_move_cnt)
 		{
 			UWORD px = enemy->PosX;
 			UWORD py = enemy->PosY;
@@ -146,9 +122,9 @@ UBYTE EnemyProcess(struct Hero* hero, UBYTE frame_cnt)
 
 	UWORD x = hero->man.x + 8;
 	UWORD y = hero->man.y + 16;
-	EnemySprite* enemy = Enemies;
+	EnemySprite* enemy = mem->Enemies;
 
-	for (UBYTE i = 0; i < enemy_cnt; i++)
+	for (UBYTE i = 0; i < mem->enemy_cnt; i++)
 	{
 		UWORD py = enemy->PosY;
 
@@ -168,12 +144,12 @@ UBYTE EnemyProcess(struct Hero* hero, UBYTE frame_cnt)
 		enemy++;
 	}
 
-	if (enemy_move_cnt == 0)
+	if (mem->enemy_move_cnt == 0)
 	{
-		enemy_move_cnt = 8;
+		mem->enemy_move_cnt = 8;
 	}
 
-	enemy_move_cnt--;
+	mem->enemy_move_cnt--;
 
 	EnemySkullAnimation(frame_cnt);
 
@@ -215,19 +191,19 @@ void EnemyAdd(UWORD x, UWORD y, UWORD dir)
 		frame = 0;
 	}
 
-	Enemies[enemy_cnt].PosX = x;
-	Enemies[enemy_cnt].PosY = y;
-	Enemies[enemy_cnt].Frame = frame;
-	Enemies[enemy_cnt].Direction = dir;
+	mem->Enemies[mem->enemy_cnt].PosX = x;
+	mem->Enemies[mem->enemy_cnt].PosY = y;
+	mem->Enemies[mem->enemy_cnt].Frame = frame;
+	mem->Enemies[mem->enemy_cnt].Direction = dir;
 
-	enemy_cnt++;
+	mem->enemy_cnt++;
 }
 
 /*--------------------------------------------------------------------------*/
 
 void EnemyInitCnt(void)
 {
-	enemy_cnt = 0;
+	mem->enemy_cnt = 0;
 }
 
 /*--------------------------------------------------------------------------*/
@@ -252,42 +228,6 @@ void EnemyClearSpritesBuffer(void)
 
 /*---------------------------------------------------------------------------*/
 
-//SortEntry sortY[ENEMY_MAX_AMOUNT];
-
-void SortCopyPositionWithIndex(void)
-{
-	int k = enemy_cnt;
-	int i = 0;
-
-	SortEntry* sort = mem->sortY;
-
-	while (k > 0)
-	{
-		sort->PosY = Enemies[i].PosY;
-		sort->Index = i;
-		sort++;
-		++i;
-		--k;
-	}
-}
-
-void SortInsertion(void)
-{
-	for (int i = 1; i < enemy_cnt; i++)
-	{
-		SortEntry tmp = mem->sortY[i];
-		int j = i - 1;
-
-		while (j >= 0 && tmp.PosY < mem->sortY[j].PosY)
-		{
-			mem->sortY[j + 1] = mem->sortY[j];
-			j = j - 1;
-		}
-
-		mem->sortY[j + 1] = tmp;
-	}
-}
-
 void SpritesMultiplexed(void)
 {
 	//0. copy y position with index
@@ -302,13 +242,13 @@ void SpritesMultiplexed(void)
 	do
 	{
 		UWORD lastY = 0;
-		sprites[3 - i] = spriteData;
+		mem->sprites[3 - i] = spriteData;
 
-		for (int k = 0; k < enemy_cnt; ++k)
+		for (int k = 0; k < mem->enemy_cnt; ++k)
 		{
 			if (mem->sortY[k].PosY > lastY)
 			{
-				spriteAdress[mem->sortY[k].Index] = spriteData;
+				mem->spriteAdress[mem->sortY[k].Index] = spriteData;
 				spriteData += 17; //add 17 longs
 				lastY = mem->sortY[k].PosY + 16;
 				mem->sortY[k].PosY = 0;
@@ -327,13 +267,13 @@ void SpritesMultiplexed(void)
 
 void SpritesDrawEnemies(void)
 {
-	for (int i = 0; i < enemy_cnt; ++i)
+	for (int i = 0; i < mem->enemy_cnt; ++i)
 	{
-		ULONG sprite = (ULONG)spriteAdress[i];
+		ULONG sprite = (ULONG)mem->spriteAdress[i];
 
-		UWORD x = Enemies[i].PosX;
-		UWORD y = Enemies[i].PosY - 8;
-		UBYTE charNr = Enemies[i].Frame;
+		UWORD x = mem->Enemies[i].PosX;
+		UWORD y = mem->Enemies[i].PosY - 8;
+		UBYTE charNr = mem->Enemies[i].Frame;
 
 		ULONG gfxSprites = mem->spritesData + charNr * 16 * 4;
 
@@ -348,7 +288,7 @@ void SpritesDrawEnemies(void)
 
 	for (int i = 0; i < 4; ++i)
 	{
-		ULONG sprite = (ULONG)sprites[i];
+		ULONG sprite = (ULONG)mem->sprites[i];
 		ULONG copperSprite = mem->copperAddress + 9 * 4 + 2 + i * 8;
 		CopperUpdateAddress(copperSprite, sprite);
 	}
