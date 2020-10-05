@@ -20,7 +20,9 @@
 #define SPRITES_EGO 18*4
 
 // 18 * 4 * 8 - enemies sprites
-#define SPRITES_ENEMIES 18*4*8
+#define ENEMY_MAX_AMOUNT 8
+
+#define SPRITES_ENEMIES 18*4*ENEMY_MAX_AMOUNT
 
 //#define SPRITES_SIZE 728
 

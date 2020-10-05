@@ -6,6 +6,7 @@
 #include "hero.h"
 #include "map.h"
 #include "memory.h"
+#include "sizes.h"
 
 
 #include <hardware/custom.h>
@@ -13,7 +14,7 @@
 extern struct Custom* custom;
 /*--------------------------------------------------------------------------*/
 
-#define ENEMY_MAX_AMOUNT 8
+
 
 typedef struct
 {
@@ -26,7 +27,6 @@ typedef struct
 
 EnemySprite Enemies[ENEMY_MAX_AMOUNT];
 
-ULONG* enemySpritesMemory = NULL;
 
 ULONG* spriteAdress[ENEMY_MAX_AMOUNT];
 
@@ -248,9 +248,9 @@ void EnemyDraw(void)
 
 void SpritesClearEnemyBuffer(void)
 {
-	ULONG* memory = enemySpritesMemory;
+	ULONG* memory = (ULONG*)mem->spriteEnemyAddress;
 
-	for (int i = 0; i < (ENEMY_MAX_AMOUNT * 18 * 4) / 4; ++i)
+	for (int i = 0; i < SPRITES_ENEMIES / 4; ++i)
 	{
 		*memory++ = 0;
 	}
