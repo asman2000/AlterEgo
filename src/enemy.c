@@ -29,88 +29,109 @@ void  EnemyInit(void)
 
 /*--------------------------------------------------------------------------*/
 
-void EnemyAnimation(EnemySprite* enemy, UWORD frame_cnt)
+void EnemyWalkLeft(EnemySprite* enemy)
 {
-	UWORD j = enemy->Direction;
+	UWORD spr = (mem->frameCounter >> 2) & 3;
+	enemy->Frame = 4 + spr;
+	enemy->PosX--;
 
-	if (TILE_NUM_ENEMY_L == j)
+	if (0 == mem->enemy_move_cnt)
 	{
-		UWORD spr = (frame_cnt >> 2) & 3;
-		enemy->Frame = 4 + spr;
-		enemy->PosX--;
-
-		if (0 == mem->enemy_move_cnt)
-		{
-			UWORD px = enemy->PosX;
-			UWORD py = enemy->PosY;
-
-			if (!(MapCheck(px, py + 8) & TILE_FLOOR) || (MapCheck(px - 8, py) & TILE_WALL))
-			{
-				enemy->Direction = TILE_NUM_ENEMY_R;
-			}
-		}
-
-		return;
-	}
-	
-	if (TILE_NUM_ENEMY_R == j)
-	{
-		UWORD spr = (frame_cnt >> 2) & 3;
-		enemy->Frame = spr;
-		enemy->PosX++;
-
-		if (0 == mem->enemy_move_cnt)
-		{
-			UWORD px = enemy->PosX;
-			UWORD py = enemy->PosY;
-			if (!(MapCheck(px + 8, py + 8) & TILE_FLOOR) || (MapCheck(px + 8, py) & TILE_WALL))
-			{
-				enemy->Direction = TILE_NUM_ENEMY_L;
-			}			
-		}
-
 		return;
 	}
 
-	if (TILE_NUM_ENEMY_U == j)
+	UWORD px = enemy->PosX;
+	UWORD py = enemy->PosY;
+
+	if (!(MapCheck(px, py + 8) & TILE_FLOOR) || (MapCheck(px - 8, py) & TILE_WALL))
 	{
-		UWORD spr = (frame_cnt >> 4) & 3;
-		enemy->Frame = 8 + spr;
-		enemy->PosY--;
-
-		if (0 == mem->enemy_move_cnt)
-		{
-			UWORD px = enemy->PosX;
-			UWORD py = enemy->PosY;
-			if (MapCheck(px, py - 8) & (TILE_WALL | TILE_BRIDGE | TILE_WATER))
-			{
-				enemy->Direction = TILE_NUM_ENEMY_D;
-			}
-		}
-
-		return;
-	}
-
-	if (TILE_NUM_ENEMY_D == j)
-	{
-		UWORD spr = (frame_cnt >> 4) & 3;
-		enemy->Frame = 8 + spr;
-		enemy->PosY++;
-
-		if (0 == mem->enemy_move_cnt)
-		{
-			UWORD px = enemy->PosX;
-			UWORD py = enemy->PosY;
-
-			if (MapCheck(px, py + 8) & (TILE_WALL | TILE_BRIDGE | TILE_WATER))
-			{
-				enemy->Direction = TILE_NUM_ENEMY_U;
-			}
-		}
-
-		return;
+		enemy->Direction = TILE_NUM_ENEMY_R;
 	}
 }
+
+/*--------------------------------------------------------------------------*/
+
+void EnemyWalkRight(EnemySprite* enemy)
+{
+	UWORD spr = (mem->frameCounter >> 2) & 3;
+	enemy->Frame = spr;
+	enemy->PosX++;
+
+	if (0 != mem->enemy_move_cnt)
+	{
+		return;
+	}
+
+	UWORD px = enemy->PosX;
+	UWORD py = enemy->PosY;
+	if (!(MapCheck(px + 8, py + 8) & TILE_FLOOR) || (MapCheck(px + 8, py) & TILE_WALL))
+	{
+		enemy->Direction = TILE_NUM_ENEMY_L;
+	}
+}
+
+/*--------------------------------------------------------------------------*/
+void EnemyWalkUp(EnemySprite* enemy)
+{
+	UWORD spr = (mem->frameCounter >> 4) & 3;
+	enemy->Frame = 8 + spr;
+	enemy->PosY--;
+
+	if (0 != mem->enemy_move_cnt)
+	{
+		return;
+	}
+
+	UWORD px = enemy->PosX;
+	UWORD py = enemy->PosY;
+	if (MapCheck(px, py - 8) & (TILE_WALL | TILE_BRIDGE | TILE_WATER))
+	{
+		enemy->Direction = TILE_NUM_ENEMY_D;
+	}
+}
+
+/*--------------------------------------------------------------------------*/
+
+void EnemyWalkDown(EnemySprite* enemy)
+{
+	UWORD spr = (mem->frameCounter >> 4) & 3;
+	enemy->Frame = 8 + spr;
+	enemy->PosY++;
+
+	if (0 != mem->enemy_move_cnt)
+	{
+		return;
+	}
+
+	UWORD px = enemy->PosX;
+	UWORD py = enemy->PosY;
+
+	if (MapCheck(px, py + 8) & (TILE_WALL | TILE_BRIDGE | TILE_WATER))
+	{
+		enemy->Direction = TILE_NUM_ENEMY_U;
+	}
+}
+
+/*--------------------------------------------------------------------------*/
+void EnemyAnimation(EnemySprite* enemy, UWORD frame_cnt)
+{
+	switch (enemy->Direction)
+	{
+		case TILE_NUM_ENEMY_L:
+			EnemyWalkLeft(enemy);
+			break;
+		case TILE_NUM_ENEMY_R:
+			EnemyWalkRight(enemy);
+			break;
+		case TILE_NUM_ENEMY_U:
+			EnemyWalkUp(enemy);
+			break;
+		case TILE_NUM_ENEMY_D:
+			EnemyWalkDown(enemy);
+			break;
+	}
+}
+
 /*--------------------------------------------------------------------------*/
 
 UBYTE EnemyProcess(struct Hero* hero, UBYTE frame_cnt)
@@ -269,19 +290,13 @@ void SpritesDrawEnemies(void)
 {
 	for (int i = 0; i < mem->enemy_cnt; ++i)
 	{
-		ULONG sprite = (ULONG)mem->spriteAdress[i];
-
-		UWORD x = mem->Enemies[i].PosX;
-		UWORD y = mem->Enemies[i].PosY - 8;
-		UBYTE charNr = mem->Enemies[i].Frame;
-
-		ULONG gfxSprites = mem->spritesData + charNr * 16 * 4;
-
 		Sprite spr;
-		spr.x = x;
-		spr.y = y;
-		spr.src = gfxSprites;
-		spr.dst = sprite;
+		spr.dst = (ULONG)mem->spriteAdress[i];
+		spr.x = mem->Enemies[i].PosX;
+		spr.y = mem->Enemies[i].PosY - 8;
+
+		UBYTE charNr = mem->Enemies[i].Frame;
+		spr.src = mem->spritesData + charNr * 16 * 4;
 
 		SpriteDraw(&spr);
 	}

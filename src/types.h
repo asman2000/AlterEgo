@@ -82,6 +82,8 @@ typedef struct _Memories
 	UWORD screenBrow;
 	UWORD screenHeight;
 
+	UWORD frameCounter;
+
 	struct GlobalMainState mainState;
 
 	SortEntry sortY[ENEMY_MAX_AMOUNT];
