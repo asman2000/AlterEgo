@@ -6,7 +6,7 @@
 #include "hero.h"
 
 void EnemyInit(void);
-UBYTE EnemyProcess(struct Hero* player, UBYTE frame_cnt);
+UBYTE EnemyProcess(struct Hero* player);
 void EnemyAdd(UWORD x, UWORD y, UWORD dir);
 void EnemyDraw(void);
 void EnemyInitCnt(void);

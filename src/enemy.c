@@ -8,7 +8,6 @@
 #include "memory.h"
 #include "sort.h"
 
-
 #include <hardware/custom.h>
 
 extern struct Custom* custom;
@@ -134,9 +133,9 @@ void EnemyAnimation(EnemySprite* enemy)
 
 /*--------------------------------------------------------------------------*/
 
-UBYTE EnemyProcess(struct Hero* hero, UBYTE frame_cnt)
+UBYTE EnemyProcess(struct Hero* hero)
 {
-	if ( !(frame_cnt & 1) || hero->state == HERO_STATE_EXCHANGE)
+	if ( !(mem->frameCounter & 1) || hero->state == HERO_STATE_EXCHANGE)
 	{
 		return GAME_STATE_NOTHING;
 	}

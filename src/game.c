@@ -70,8 +70,6 @@ static void GameLoop(void)
 	ScreenOn();
 	ColorsFadeIn(mem->palette, 32);
 
-	UBYTE frame_cnt = 0;
-
 	MusicStart();
 
 	//game logic
@@ -79,8 +77,6 @@ static void GameLoop(void)
 	{
 		ScreenWaitForVerticallBlank();
 		mem->frameCounter++;
-		
-		frame_cnt++;
 
 		ItemDraw();
 
@@ -91,7 +87,7 @@ static void GameLoop(void)
 		if (GAME_STATE_NOTHING == currentMatch.state)
 		{
 			struct Hero* hero = HeroGet();
-			currentMatch.state = EnemyProcess(hero, frame_cnt);
+			currentMatch.state = EnemyProcess(hero);
 		}
 
 		if (InputMouseLeftButton())
