@@ -15,10 +15,9 @@ extern struct Custom* custom;
 
 /*--------------------------------------------------------------------------*/
 
-void SpritesMultiplexed(void);
-void SpritesDrawEnemies(void);
-void EnemySkullAnimation(UBYTE frameCounter);
-void EnemyCheckBlockCollision(void);
+void EnemySpritesMultiplexing(void);
+void EnemySpritesDraw(void);
+void EnemySkullAnimation(void);
 
 /*--------------------------------------------------------------------------*/
 
@@ -71,6 +70,7 @@ void EnemyWalkRight(EnemySprite* enemy)
 }
 
 /*--------------------------------------------------------------------------*/
+
 void EnemyWalkUp(EnemySprite* enemy)
 {
 	UWORD spr = (mem->frameCounter >> 4) & 3;
@@ -113,7 +113,7 @@ void EnemyWalkDown(EnemySprite* enemy)
 }
 
 /*--------------------------------------------------------------------------*/
-void EnemyAnimation(EnemySprite* enemy, UWORD frame_cnt)
+void EnemyAnimation(EnemySprite* enemy)
 {
 	switch (enemy->Direction)
 	{
@@ -160,7 +160,7 @@ UBYTE EnemyProcess(struct Hero* hero, UBYTE frame_cnt)
 		}
 
 		//do animation of enemy (movement too)
-		EnemyAnimation(enemy, frame_cnt);
+		EnemyAnimation(enemy);
 
 		enemy++;
 	}
@@ -172,7 +172,7 @@ UBYTE EnemyProcess(struct Hero* hero, UBYTE frame_cnt)
 
 	mem->enemy_move_cnt--;
 
-	EnemySkullAnimation(frame_cnt);
+	EnemySkullAnimation();
 
 	return GAME_STATE_NOTHING;
 }
@@ -181,11 +181,11 @@ UBYTE EnemyProcess(struct Hero* hero, UBYTE frame_cnt)
 
 UWORD AnimColors[] = { 0x0A20, 0x0E00, 0x0E80 ,0x0E00 };
 
-void EnemySkullAnimation(UBYTE frameCounter)
+void EnemySkullAnimation(void)
 {
 	//palette animation for eyes of enemies
 
-	UBYTE index = (frameCounter >> 4) & 3;
+	UBYTE index = (mem->frameCounter >> 4) & 3;
 
 	//sprite colors
 	// spr0 i spr1: 16-bg, 17,18,19
@@ -231,8 +231,8 @@ void EnemyInitCnt(void)
 
 void EnemyDraw(void)
 {
-	SpritesMultiplexed();
-	SpritesDrawEnemies();
+	EnemySpritesMultiplexing();
+	EnemySpritesDraw();
 }
 
 /*---------------------------------------------------------------------------*/
@@ -249,7 +249,7 @@ void EnemyClearSpritesBuffer(void)
 
 /*---------------------------------------------------------------------------*/
 
-void SpritesMultiplexed(void)
+void EnemySpritesMultiplexing(void)
 {
 	//0. copy y position with index
 	SortCopyPositionWithIndex();
@@ -286,7 +286,7 @@ void SpritesMultiplexed(void)
 
 /*---------------------------------------------------------------------------*/
 
-void SpritesDrawEnemies(void)
+void EnemySpritesDraw(void)
 {
 	for (int i = 0; i < mem->enemy_cnt; ++i)
 	{
